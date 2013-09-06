@@ -1,0 +1,20 @@
+package com.prodyna.pac.mmonshausen.conference.service;
+
+import java.util.List;
+
+import com.prodyna.pac.mmonshausen.conference.model.Room;
+
+/**
+ * 
+ * @author Martin Monshausen, PRODYNA AG
+ */
+public interface RoomService {
+	public Room createRoom(Room room);
+	
+	public Room getRoomById(long id);
+	public List<Room> listAllRooms();
+	
+	public Room updateRoom(Room room);
+	
+	public void deleteRoom(long id);
+}
