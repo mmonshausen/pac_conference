@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
@@ -32,6 +34,11 @@ public class Room implements Serializable {
 
 	@Min(value=1)
 	private int capacity;
+	
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name="location_id", referencedColumnName="id")
+	private Location location;
 
 	@NotNull
 	@OneToMany(mappedBy="room")
@@ -46,6 +53,14 @@ public class Room implements Serializable {
 
 	public Room() {
 		super();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(final Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -64,6 +79,14 @@ public class Room implements Serializable {
 		this.capacity = capacity;
 	}
 
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(final Location location) {
+		this.location = location;
+	}
+
 	public List<Talk> getTalks() {
 		return talks;
 	}
@@ -72,16 +95,14 @@ public class Room implements Serializable {
 		this.talks = talks;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + capacity;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((talks == null) ? 0 : talks.hashCode());
 		return result;
@@ -102,6 +123,11 @@ public class Room implements Serializable {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
 			return false;
 		if (name == null) {
 			if (other.name != null)

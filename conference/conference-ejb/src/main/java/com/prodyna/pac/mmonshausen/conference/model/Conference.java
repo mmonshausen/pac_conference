@@ -5,9 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -30,6 +33,11 @@ public class Conference implements Serializable {
 	private String name;
 	
 	@NotNull
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="id")
+	private Location location;
+	
+	@NotNull
 	@Size(min=1)
 	private String description;
 	
@@ -40,37 +48,53 @@ public class Conference implements Serializable {
 	private Date endDate;
 	
 	@NotNull
-	
 	@OneToMany(mappedBy="conference")
 	private List<Talk> talks;
 
-	public Conference(String name, String description, Date startDate,
-			Date endDate, List<Talk> talks) {
+	public Conference(final String name, final Location location, final String description,
+			final Date startDate, final Date endDate, final List<Talk> talks) {
 		super();
 		this.name = name;
+		this.location = location;
 		this.description = description;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.talks = talks;
 	}
-	
+
 	public Conference() {
 		super();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(final Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(final Location location) {
+		this.location = location;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -78,7 +102,7 @@ public class Conference implements Serializable {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(final Date startDate) {
 		this.startDate = startDate;
 	}
 
@@ -86,7 +110,7 @@ public class Conference implements Serializable {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(final Date endDate) {
 		this.endDate = endDate;
 	}
 
@@ -94,12 +118,8 @@ public class Conference implements Serializable {
 		return talks;
 	}
 
-	public void setTalks(List<Talk> talks) {
+	public void setTalks(final List<Talk> talks) {
 		this.talks = talks;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	@Override
@@ -110,6 +130,8 @@ public class Conference implements Serializable {
 				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
@@ -118,14 +140,14 @@ public class Conference implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Conference other = (Conference) obj;
+		final Conference other = (Conference) obj;
 		if (description == null) {
 			if (other.description != null)
 				return false;
@@ -140,6 +162,11 @@ public class Conference implements Serializable {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -161,8 +188,8 @@ public class Conference implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Conference [id=" + id + ", name=" + name + ", description="
-				+ description + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", talks=" + talks + "]";
+		return "Conference [id=" + id + ", name=" + name + ", location="
+				+ location + ", description=" + description + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", talks=" + talks + "]";
 	}
 }

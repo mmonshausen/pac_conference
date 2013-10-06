@@ -12,7 +12,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -39,13 +40,16 @@ public class Talk implements Serializable {
 	private String description;
 
 	@NotNull
-	private Date startDateTime;
+	@Temporal(TemporalType.DATE)
+	private Date date;
+	
+	@NotNull
+	@Temporal(TemporalType.TIME)
+	private Date startTime;
 
 	@NotNull
-	private Date endDateTime;
-
-	@Min(value=1)
-	private int durationInDays;
+	@Temporal(TemporalType.TIME)
+	private Date endTime;
 
 	@NotNull
 	@ManyToOne
@@ -64,15 +68,15 @@ public class Talk implements Serializable {
 	inverseJoinColumns={@JoinColumn(name="speaker_id", referencedColumnName="id")})
 	private List<Speaker> speakers;
 
-	public Talk(final String name, final String description, final Date startDateTime,
-			final Date endDateTime, final int durationInDays, final Conference conference,
-			final Room room, final List<Speaker> speakers) {
+	public Talk(final String name, final String description, final Date date, final Date startTime,
+			final Date endTime, final Conference conference, final Room room,
+			final List<Speaker> speakers) {
 		super();
 		this.name = name;
 		this.description = description;
-		this.startDateTime = startDateTime;
-		this.endDateTime = endDateTime;
-		this.durationInDays = durationInDays;
+		this.date = date;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.conference = conference;
 		this.room = room;
 		this.speakers = speakers;
@@ -80,6 +84,14 @@ public class Talk implements Serializable {
 
 	public Talk() {
 		super();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(final Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -98,28 +110,28 @@ public class Talk implements Serializable {
 		this.description = description;
 	}
 
-	public Date getStartDateTime() {
-		return startDateTime;
+	public Date getDate() {
+		return date;
 	}
 
-	public void setStartDateTime(final Date startDateTime) {
-		this.startDateTime = startDateTime;
+	public void setDate(final Date date) {
+		this.date = date;
 	}
 
-	public Date getEndDateTime() {
-		return endDateTime;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setEndDateTime(final Date endDateTime) {
-		this.endDateTime = endDateTime;
+	public void setStartTime(final Date startTime) {
+		this.startTime = startTime;
 	}
 
-	public int getDurationInDays() {
-		return durationInDays;
+	public Date getEndTime() {
+		return endTime;
 	}
 
-	public void setDurationInDays(final int durationInDays) {
-		this.durationInDays = durationInDays;
+	public void setEndTime(final Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public Conference getConference() {
@@ -146,28 +158,23 @@ public class Talk implements Serializable {
 		this.speakers = speakers;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
 				+ ((conference == null) ? 0 : conference.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + durationInDays;
-		result = prime * result
-				+ ((endDateTime == null) ? 0 : endDateTime.hashCode());
+		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((room == null) ? 0 : room.hashCode());
 		result = prime * result
 				+ ((speakers == null) ? 0 : speakers.hashCode());
 		result = prime * result
-				+ ((startDateTime == null) ? 0 : startDateTime.hashCode());
+				+ ((startTime == null) ? 0 : startTime.hashCode());
 		return result;
 	}
 
@@ -185,17 +192,20 @@ public class Talk implements Serializable {
 				return false;
 		} else if (!conference.equals(other.conference))
 			return false;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
+			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (durationInDays != other.durationInDays)
-			return false;
-		if (endDateTime == null) {
-			if (other.endDateTime != null)
+		if (endTime == null) {
+			if (other.endTime != null)
 				return false;
-		} else if (!endDateTime.equals(other.endDateTime))
+		} else if (!endTime.equals(other.endTime))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -217,10 +227,10 @@ public class Talk implements Serializable {
 				return false;
 		} else if (!speakers.equals(other.speakers))
 			return false;
-		if (startDateTime == null) {
-			if (other.startDateTime != null)
+		if (startTime == null) {
+			if (other.startTime != null)
 				return false;
-		} else if (!startDateTime.equals(other.startDateTime))
+		} else if (!startTime.equals(other.startTime))
 			return false;
 		return true;
 	}
@@ -228,9 +238,8 @@ public class Talk implements Serializable {
 	@Override
 	public String toString() {
 		return "Talk [id=" + id + ", name=" + name + ", description="
-				+ description + ", startDateTime=" + startDateTime
-				+ ", endDateTime=" + endDateTime + ", durationInDays="
-				+ durationInDays + ", conference=" + conference + ", room="
-				+ room + ", speakers=" + speakers + "]";
+				+ description + ", date=" + date + ", startTime=" + startTime
+				+ ", endTime=" + endTime + ", conference=" + conference
+				+ ", room=" + room + ", speakers=" + speakers + "]";
 	}
 }
