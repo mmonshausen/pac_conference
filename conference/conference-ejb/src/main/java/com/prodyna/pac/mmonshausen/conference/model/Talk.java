@@ -69,17 +69,14 @@ public class Talk implements Serializable {
 	private List<Speaker> speakers;
 
 	public Talk(final String name, final String description, final Date date, final Date startTime,
-			final Date endTime, final Conference conference, final Room room,
-			final List<Speaker> speakers) {
+			final Date endTime, final Room room) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.conference = conference;
 		this.room = room;
-		this.speakers = speakers;
 	}
 
 	public Talk() {

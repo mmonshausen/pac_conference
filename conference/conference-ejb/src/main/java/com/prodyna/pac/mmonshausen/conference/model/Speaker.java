@@ -37,11 +37,10 @@ public class Speaker implements Serializable {
 	@ManyToMany (mappedBy="speakers")
 	private List<Talk> talks;
 
-	public Speaker(final String name, final String description, final List<Talk> talks) {
+	public Speaker(final String name, final String description) {
 		super();
 		this.name = name;
 		this.description = description;
-		this.talks = talks;
 	}
 	
 	public Speaker() {
