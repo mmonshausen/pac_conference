@@ -43,7 +43,7 @@ public class ConferenceServiceBean implements ConferenceService {
 
 		return conference;
 	}
-
+	
 	@Override
 	public List<Conference> listAllConferences() {
 		final String queryString = "SELECT conference FROM Conference conference";

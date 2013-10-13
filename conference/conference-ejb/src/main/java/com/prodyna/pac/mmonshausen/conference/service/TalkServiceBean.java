@@ -1,13 +1,11 @@
 package com.prodyna.pac.mmonshausen.conference.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import com.prodyna.pac.mmonshausen.conference.model.Talk;
@@ -45,11 +43,11 @@ public class TalkServiceBean implements TalkService {
 	}
 
 	@Override
-	public List<Talk> getTalksByDate(final Date date) {
-		final String queryString = "SELECT talk FROM Talk talk where talk.date = :date order by talk.startTime";
+	public List<Talk> getConferenceTalksOrderedByDateTime(Long conferenceId) {
+		final String queryString = "SELECT talk FROM Talk talk where talk.conference.id = :conferenceId ordered by talk.date, talk.startTime";
 		final TypedQuery<Talk> query = em.createQuery(queryString,
 				Talk.class);
-		query.setParameter("date", date, TemporalType.DATE);
+		query.setParameter("conferenceId", conferenceId);
 		final List<Talk> resultList = query.getResultList();
 
 		if(resultList.isEmpty()) {
