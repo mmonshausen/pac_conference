@@ -13,9 +13,8 @@ body {
   border-left: 5px solid #8c8f91;
   border-right: 5px solid #8c8f91;
   border-bottom: 25px solid #8c8f91;
-  width: 865px; /* subtract 40px from banner width for padding */
+  width: 965px;
   background: #FFFFFF;
-  background-image: url(#{request.contextPath}/resources/ing/headerbkg.png);
   background-repeat: repeat-x;
   padding-top: 30px;
   box-shadow: 3px 3px 15px #d5d5d5;
@@ -23,20 +22,8 @@ body {
 
 #content {
   float: left;
-  width: 500px;
+  width: 700px;
   margin: 20px;
-}
-
-#aside {
-  font-size: 0.9em;
-  width: 275px;
-  float: left;
-  margin: 20px 0px;
-  border: 1px solid #D5D5D5;
-  background: #F1F1F1;
-  background-image: url(#{request.contextPath}/resources/img/asidebkg.png);
-  background-repeat: repeat-x;
-  padding: 20px;
 }
 
 #aside ul {
@@ -141,7 +128,6 @@ input {
 }
 
 .simpletablestyle th {
-	background: url(#{request.contextPath}/resources/img/bkg-blkheader.png) black repeat-x top left;
   font-size:12px;
   font-weight:normal;
   padding:0 10px 0 5px;
@@ -149,7 +135,6 @@ input {
 }
 
 .simpletablestyle thead {
-  background: url(#{request.contextPath}/resources/img/bkg-blkheader.png) black repeat-x top left;
   height:31px;
   font-size:10px;
   font-weight:bold;
