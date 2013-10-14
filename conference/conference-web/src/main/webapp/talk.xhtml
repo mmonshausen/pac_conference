@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   template="/WEB-INF/templates/default.xhtml">
+   <ui:define name="content">
+      <h1>Details zum Talk #{talk.name}</h1>
+      
+      <h2>Name</h2>
+      <h:outputText>#{talk.name}</h:outputText>
+            
+      <h2>Beschreibung</h2>
+      <h:outputText>#{talk.description}</h:outputText>
+      
+      <h2>Datum</h2>
+      <h:outputText value="#{talk.date}" >
+              <f:convertDateTime pattern="dd.MM.yyyy" />
+      </h:outputText>
+      
+      <h2>Beginn</h2>
+      <h:outputText value="#{talk.startTime}" >
+              <f:convertDateTime pattern="H:mm" />
+      </h:outputText>
+      
+      <h2>Ende</h2>
+      <h:outputText value="#{talk.endTime}" >
+              <f:convertDateTime pattern="H:mm" />
+      </h:outputText>
+      
+      <h2>Raum</h2>
+      <h:outputText value="#{talk.room}" >
+      <h:link value="Details" outcome="room" >
+      	<f:param name="id" value="#{talk.room.id}" />
+      </h:link>
+
+      <h2>Speaker</h2>
+      <ui:repeat var="speaker" value="#{talk.speakers}">
+      	<li>
+      		<h:outputText>#{speaker.name}</h:outputText>      		
+      		<h:link value="Details" outcome="speaker" >
+            	<f:param name="id" value="#{speaker.id}" />
+            </h:link>		
+      	</li>
+      </ui:repeat>	
+   </ui:define>
+   <ui:define name="aside">
+   	<p>Details zum Talk #{talk.name}.</p>
+   	<p>F&uuml;r weitere Details zu dem Raum und den Speakern bitte auf die Details-Links klicken.</p>
+   </ui:define>
+</ui:composition>
