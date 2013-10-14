@@ -31,10 +31,10 @@
       </h:outputText>
       
       <h2>Konferenz-&Uuml;bersicht</h2>
-      <h:panelGroup rendered="#{empty talksByDay}">
+      <h:panelGroup rendered="#{empty conference.talksByDay}">
          <em>sind in Planung...</em>
       </h:panelGroup>
-      <c:forEach items="#{talksByDay}" var="entry">
+      <c:forEach items="#{conference.talksByDay}" var="entry">
       	<h3>
       		<h:outputText value="#{entry.key}" >
               <f:convertDateTime pattern="E dd.MM" />
