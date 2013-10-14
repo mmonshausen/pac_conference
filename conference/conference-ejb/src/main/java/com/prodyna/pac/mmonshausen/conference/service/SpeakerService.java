@@ -5,6 +5,7 @@ import java.util.List;
 import com.prodyna.pac.mmonshausen.conference.model.Speaker;
 
 /**
+ * interface specification for SpeakerService
  * 
  * @author Martin Monshausen, PRODYNA AG
  */

@@ -47,8 +47,6 @@ public class ConferenceController {
 		}
 	}
 	
-	@Produces
-	@Named
 	public Map<Date, List<Talk>> getTalksByDay() {
 		final List<Talk> talks = talkService.getConferenceTalksOrderedByDateTime(id);
 		

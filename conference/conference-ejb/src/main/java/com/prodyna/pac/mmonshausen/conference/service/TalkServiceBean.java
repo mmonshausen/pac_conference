@@ -51,7 +51,22 @@ public class TalkServiceBean implements TalkService {
 		final List<Talk> resultList = query.getResultList();
 
 		if(resultList.isEmpty()) {
-			logger.warning("no talks for that day existing!");
+			logger.warning("no talks for that parameters existing!");
+		}
+
+		return resultList;
+	}
+	
+	@Override
+	public List<Talk> getRoomTalksOrderedByDateTime(Long roomId) {
+		final String queryString = "SELECT talk FROM Talk talk where talk.room.id = :roomId ordered by talk.date, talk.startTime";
+		final TypedQuery<Talk> query = em.createQuery(queryString,
+				Talk.class);
+		query.setParameter("roomId", roomId);
+		final List<Talk> resultList = query.getResultList();
+
+		if(resultList.isEmpty()) {
+			logger.warning("no talks for that parameters existing!");
 		}
 
 		return resultList;

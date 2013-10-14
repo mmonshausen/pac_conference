@@ -5,6 +5,7 @@ import java.util.List;
 import com.prodyna.pac.mmonshausen.conference.model.Room;
 
 /**
+ * interface specification for RoomService
  * 
  * @author Martin Monshausen, PRODYNA AG
  */

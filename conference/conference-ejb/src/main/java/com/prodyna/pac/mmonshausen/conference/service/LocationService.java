@@ -5,7 +5,7 @@ import java.util.List;
 import com.prodyna.pac.mmonshausen.conference.model.Location;
 
 /**
- * 
+ * interface specification for LocationService
  * 
  * @author Martin Monshausen, PRODYNA AG
  */

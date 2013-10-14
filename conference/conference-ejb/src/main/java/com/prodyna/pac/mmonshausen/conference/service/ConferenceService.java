@@ -5,6 +5,7 @@ import java.util.List;
 import com.prodyna.pac.mmonshausen.conference.model.Conference;
 
 /**
+ * interface specification for ConferenceService
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
