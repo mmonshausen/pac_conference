@@ -42,13 +42,13 @@
       	</h3>
 			<ul>
 				<c:forEach items="#{entry.value}" var="talk" varStatus="loop">
-					<li><h:outputText value="#{item.startDate}">
+					<li><h:outputText value="#{item.startTime}">
 							<f:convertDateTime pattern="H:mm" />
 						</h:outputText> - 
-						<h:outputText value="#{item.endDate}">
+						<h:outputText value="#{item.endTime}">
 							<f:convertDateTime pattern="H:mm" />
 						</h:outputText> - 
-						#{item.name} - 
+						<h:outputText value="#{item.name} - "/>
 						<h:link value="Details" outcome="talk" >
             				<f:param name="id" value="#{item.id}" />
             			</h:link>
