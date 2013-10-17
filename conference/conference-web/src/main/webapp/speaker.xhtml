@@ -14,7 +14,7 @@
       <h2>Beschreibung</h2>
       <h:outputText>#{speaker.description}</h:outputText>
             
-      <h2>&Uuml;bersicht der Talks</h2>
+      <h2>Übersicht der Talks</h2>
       <ul>
       <ui:repeat var="talk" value="#{speaker.talks}">
       	<li>
@@ -28,9 +28,5 @@
       	</li>
       </ui:repeat>
       </ul>	
-   </ui:define>
-   <ui:define name="aside">
-   	<p>Details zum Speaker #{speaker.name} mit der Liste seiner Talks.</p>
-   	<p>F&uuml;r weitere Details zu den Talks bitte auf den Details-Link klicken.</p>
    </ui:define>
 </ui:composition>

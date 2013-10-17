@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   template="/WEB-INF/templates/default.xhtml">
+   <ui:define name="content">
+      <h1>Willkommen bei der Admin-Oberfläche des PRODYNA PAC Konferenz Portals</h1>
+
+      <h2>Aktionen</h2>
+      <ul>
+      	<li><h:link value="Locations verwalten" outcome="location_admin" /></li>
+      	<li><h:link value="Räume verwalten" outcome="room_admin" /></li>
+      	<li><h:link value="Konferenzen verwalten" outcome="conference_admin" /></li>
+      	<li><h:link value="Speaker verwalten" outcome="speaker_admin" /></li>
+      	<li><h:link value="Talks verwalten" outcome="talk_admin" ></li>
+      </ul>
+   </ui:define>
+</ui:composition>

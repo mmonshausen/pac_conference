@@ -15,16 +15,12 @@ import com.prodyna.pac.mmonshausen.conference.service.LocationService;
  */
 @Model
 public class LocationController {
-	
 	@Inject
 	private LocationService locationService;
 	
 	private Location location;
 	private Long id;
-	
-	public void createLocation() {
-		locationService.saveLocation(location);
-	}
+	private String mode;
 	
 	@Produces
 	@Named
@@ -36,22 +32,36 @@ public class LocationController {
 		}
 	}
 	
+	public void createLocation() {
+		locationService.saveLocation(location);
+	}
+	
 	public void saveChanges() {
 		locationService.updateLocation(location);
 	}
 	
-	public void deleteChanges() {
+	public void deleteLocation(long id) {
 		locationService.deleteLocation(id);
 	}
 	
 	private void initialize() {
 		if((id != null) && (id !=0)) {
 			location = locationService.getLocationById(id);			
+		} else {
+			location = new Location();
 		}
 	}
 		
 	public void setId(final Long id) {
 		this.id = id;
 		initialize();
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 }

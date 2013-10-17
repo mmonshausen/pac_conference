@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Raum-Verwaltung</h1>
+
+		<h:panelGroup
+			rendered="#{(roomController.mode == 'edit') or (roomController.mode == 'create')}">
+			<h:form>
+				<h2>Name</h2>
+				<h:inputText id="name" value="#{room.name}" />
+
+				<h2>Raumgröße</h2>
+				<h:inputText id="capacity" value="#{room.capacity}" />
+				
+				<h2>Location</h2>
+				<h:selectOneMenu value="#{roomController.locationId}" name="location">
+					<f:selectItems value="#{roomController.locationList}" var="l"
+						itemLabel="#{l.name}" itemValue="#{l.id}" />
+				</h:selectOneMenu>
+
+				<h:messages styleClass="messages" errorClass="invalid"
+					infoClass="valid" warnClass="warning" globalOnly="true" />
+
+				<h:commandButton value="erstellen"
+					action="#{roomController.createRoom}"
+					rendered="#{roomController.mode == 'create'}" />
+				<h:commandButton value="speichern"
+					action="#{roomController.saveChanges}"
+					rendered="#{roomController.mode == 'edit'}" />
+			</h:form>
+		</h:panelGroup>
+
+		<h2>
+			<h:outputText>Liste der Räume</h:outputText>
+		</h2>
+		<h:panelGroup rendered="#{empty rooms}">
+			<em>sind in Planung...</em>
+		</h:panelGroup>
+		<h:link value="Raum anlegen" outcome="room_admin">
+			<f:param name="mode" value="create" />
+		</h:link>
+		<h:dataTable var="currentRoom" value="#{rooms}"
+			rendered="#{not empty rooms}" styleClass="simpletablestyle">
+			<h:column>
+				<f:facet name="header">Name</f:facet>
+                #{currentRoom.name}
+          	</h:column>
+			<h:column>
+				<f:facet name="header">Raumgröße</f:facet>
+                #{currentRoom.capacity}
+         	</h:column>
+         	<h:column>
+				<f:facet name="header">Location</f:facet>
+                #{currentRoom.location.name}
+         	</h:column>
+			<h:column>
+				<f:facet name="header">Aktionen</f:facet>
+				<h:link value="bearbeiten" outcome="room_admin">
+					<f:param name="id" value="#{currentRoom.id}" />
+					<f:param name="mode" value="edit" />
+				</h:link>
+				<h:commandButton
+					action="#{roomController.deleteRoom(currentRoom.id)}" />
+			</h:column>
+		</h:dataTable>
+	</ui:define>
+</ui:composition>

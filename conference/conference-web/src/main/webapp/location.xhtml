@@ -16,20 +16,16 @@
       <h:outputText>#{location.adress.zipCode} #{location.adress.city}</h:outputText>
       <h:outputText>#{location.adress.country}</h:outputText>
 	  
-      <h2>&Uuml;bersicht der R&auml;ume</h2>
+      <h2>Übersicht der Räume</h2>
       <ul>
       <ui:repeat var="room" value="#{location.rooms}">
       	<li>
-      		<h:outputText>#{room.name} (Kapazit&auml;t: #{room.capacity}) - </h:outputText>
+      		<h:outputText>#{room.name} (Kapazität: #{room.capacity}) - </h:outputText>
       		<h:link value="Details" outcome="room" >
             	<f:param name="id" value="#{room.id}" />
             </h:link>		
       	</li>
       </ui:repeat>
       </ul>	
-   </ui:define>
-   <ui:define name="aside">
-   	<p>Details zur Location #{location.name} mit einer Liste der R&auml;ume.</p>
-   	<p>F&uuml;r weitere Details zu den R&auml;umen bitte auf den Details-Link klicken.</p>
    </ui:define>
 </ui:composition>

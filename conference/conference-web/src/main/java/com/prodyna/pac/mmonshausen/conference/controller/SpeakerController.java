@@ -21,10 +21,7 @@ public class SpeakerController {
 	
 	private Speaker speaker;
 	private Long id;
-	
-	public void createConference() {
-		speakerService.saveSpeaker(speaker);
-	}
+	private String mode;
 	
 	@Produces
 	@Named
@@ -36,11 +33,15 @@ public class SpeakerController {
 		}
 	}
 	
+	public void createConference() {
+		speakerService.saveSpeaker(speaker);
+	}
+	
 	public void saveChanges() {
 		speakerService.updateSpeaker(speaker);
 	}
 	
-	public void deleteChanges() {
+	public void deleteChanges(long id) {
 		speakerService.deleteSpeaker(id);
 	}
 	
@@ -53,5 +54,13 @@ public class SpeakerController {
 	public void setId(final Long id) {
 		this.id = id;
 		initialize();
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 }

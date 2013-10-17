@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Konferenz-Verwaltung</h1>
+
+		<h:panelGroup
+			rendered="#{(conferenceController.mode == 'edit') or (conferenceCOntroller.mode == 'create')}">
+			<h:form>
+				<h2>Name</h2>
+				<h:inputText id="name" value="#{conference.name}" />
+
+				<h2>Ort</h2>
+				<h:selectOneMenu value="#{conferenceController.locationId}" name="location">
+					<f:selectItems value="#{conferenceController.locationList}" var="l"
+						itemLabel="#{l.name}" itemValue="#{l.id}" />
+				</h:selectOneMenu>
+
+				<h2>Beschreibung</h2>
+				<h:inputText value="#{conference.description}" name="description" />
+
+				<h2>Beginn</h2>
+				<h:inputText value="#{conference.startDate}">
+					<f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:inputText>
+
+				<h2>Ende</h2>
+				<h:inputText value="#{conference.endDate}">
+					<f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:inputText>
+
+				<h:messages styleClass="messages" errorClass="invalid"
+					infoClass="valid" warnClass="warning" globalOnly="true" />
+
+				<h:commandButton value="erstellen"
+					action="#{conferenceController.createConference}"
+					rendered="#{conferenceController.mode == 'create'}" />
+				<h:commandButton value="speichern"
+					action="#{conferenceController.saveChanges}"
+					rendered="#{conferenceController.mode == 'edit'}" />
+			</h:form>
+		</h:panelGroup>
+
+		<h2>
+			<h:outputText>Liste der Konferenzen</h:outputText>
+		</h2>
+		<h:panelGroup rendered="#{empty conferences}">
+			<em>sind in Planung...</em>
+		</h:panelGroup>
+		<h:link value="Konferenz anlegen" outcome="conference_admin">
+			<f:param name="mode" value="create" />
+		</h:link>
+		<h:dataTable var="currentConference" value="#{conferences}"
+			rendered="#{not empty conferences}" styleClass="simpletablestyle">
+			<h:column>
+				<f:facet name="header">Name</f:facet>
+                #{currentConference.name}
+          </h:column>
+			<h:column>
+				<f:facet name="header">Zeitraum</f:facet>
+                #{currentConference.startDate} - #{currentConference.endDate}
+         </h:column>
+			<h:column>
+				<f:facet name="header">Ort</f:facet>
+                #{currentConference.location.name}
+         </h:column>
+			<h:column>
+				<f:facet name="header">Aktionen</f:facet>
+				<h:link value="bearbeiten" outcome="conference_admin">
+					<f:param name="id" value="#{currentConference.id}" />
+					<f:param name="mode" value="edit" />
+				</h:link>
+				<h:commandButton
+					action="#{conferenceController.deleteConference(currentConference.id)}" />
+			</h:column>
+		</h:dataTable>
+	</ui:define>
+</ui:composition>

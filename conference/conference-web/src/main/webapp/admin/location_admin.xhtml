@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Location-Verwaltung</h1>
+
+		<h:panelGroup
+			rendered="#{(locationController.mode == 'edit') or (locationController.mode == 'create')}">
+			<h:form>
+				<h2>Name</h2>
+				<h:inputText id="name" value="#{location.name}" />
+
+				<h2>Adresse</h2>
+				<h3>Straße</h3>
+				<h:inputText id="street" value="#{location.adress.street}" />
+				<h3>Postleitzahl</h3>
+				<h:inputText id="zipCode" value="#{location.adress.zipCode}" />
+				<h3>Stadt</h3>
+				<h:inputText id="city" value="#{location.adress.city}" />
+				<h3>Land</h3>
+				<h:inputText id="country" value="#{location.adress.country}" />
+
+				<h:messages styleClass="messages" errorClass="invalid"
+					infoClass="valid" warnClass="warning" globalOnly="true" />
+
+				<h:commandButton value="erstellen"
+					action="#{locationController.createLocation}"
+					rendered="#{locationController.mode == 'create'}" />
+				<h:commandButton value="speichern"
+					action="#{locationController.saveChanges}"
+					rendered="#{locationController.mode == 'edit'}" />
+			</h:form>
+		</h:panelGroup>
+
+		<h2>
+			<h:outputText>Liste der Locations</h:outputText>
+		</h2>
+		<h:panelGroup rendered="#{empty locations}">
+			<em>sind in Planung...</em>
+		</h:panelGroup>
+		<h:link value="Location anlegen" outcome="location_admin">
+			<f:param name="mode" value="create" />
+		</h:link>
+		<h:dataTable var="currentLocation" value="#{locations}"
+			rendered="#{not empty locations}" styleClass="simpletablestyle">
+			<h:column>
+				<f:facet name="header">Name</f:facet>
+                #{currentLocation.name}
+          </h:column>
+			<h:column>
+				<f:facet name="header">Straße</f:facet>
+                #{currentLocation.adress.street}
+         </h:column>
+			<h:column>
+				<f:facet name="header">PLZ</f:facet>
+                #{currentLocation.adress.zipCode}
+         </h:column>
+			<h:column>
+				<f:facet name="header">Stadt</f:facet>
+                #{currentLocation.adress.city}
+         </h:column>
+			<h:column>
+				<f:facet name="header">Land</f:facet>
+                #{currentLocation.adress.country}
+         </h:column>
+			<h:column>
+				<f:facet name="header">Aktionen</f:facet>
+				<h:link value="bearbeiten" outcome="location_admin">
+					<f:param name="id" value="#{currentLocation.id}" />
+					<f:param name="mode" value="edit" />
+				</h:link>
+				<h:commandButton
+					action="#{locationController.deleteLocation(currentLocation.id)}" />
+			</h:column>
+		</h:dataTable>
+	</ui:define>
+</ui:composition>

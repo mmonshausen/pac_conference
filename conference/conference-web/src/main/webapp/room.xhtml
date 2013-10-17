@@ -11,17 +11,17 @@
       <h2>Name</h2>
       <h:outputText>#{room.name}</h:outputText>
       
-      <h2>Raumgr&ouml;&szlig;e</h2>
+      <h2>Raumgröße</h2>
       <h:outputText>#{room.capacity}</h:outputText>
       
       <h2>Location</h2>
       <h:outputText>#{room.location.name}</h:outputText>
 	  
-      <h2>&Uuml;bersicht der stattfindenden Talks</h2>
+      <h2>Übersicht der stattfindenden Talks</h2>
       <h:panelGroup rendered="#{empty room.talksByDay}">
          <em>sind in Planung...</em>
       </h:panelGroup>
-      <c:forEach items="#{room.talksByDay}" var="entry">
+      <c:forEach items="#{roomController.talksByDay}" var="entry">
       	<h3>
       		<h:outputText value="#{entry.key}" >
               <f:convertDateTime pattern="E dd.MM" />
@@ -44,9 +44,5 @@
 			</ul>
 			<br>
 		<c:forEach>	
-   </ui:define>
-   <ui:define name="aside">
-   	<p>Details zu dem Raum #{room.name}.</p>
-   	<p>F&uuml;r weitere Details zu den Talks bitte auf den Details-Link klicken.</p>
    </ui:define>
 </ui:composition>

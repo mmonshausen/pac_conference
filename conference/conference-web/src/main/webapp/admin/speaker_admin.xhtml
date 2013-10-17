@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Speaker-Verwaltung</h1>
+
+		<h:panelGroup
+			rendered="#{(speakerController.mode == 'edit') or (speakerController.mode == 'create')}">
+			<h:form>
+				<h2>Name</h2>
+				<h:inputText id="name" value="#{speaker.name}" />
+
+				<h2>Beschreibung</h2>
+				<h:inputTextarea id="capacity" value="#{speaker.description}"
+					cols="40" rows="5" />
+
+				<h:messages styleClass="messages" errorClass="invalid"
+					infoClass="valid" warnClass="warning" globalOnly="true" />
+
+				<h:commandButton value="erstellen"
+					action="#{speakerController.createSpeaker}"
+					rendered="#{speakerController.mode == 'create'}" />
+				<h:commandButton value="speichern"
+					action="#{speakerController.saveChanges}"
+					rendered="#{speakerController.mode == 'edit'}" />
+			</h:form>
+		</h:panelGroup>
+
+		<h2>
+			<h:outputText>Liste der Speaker</h:outputText>
+		</h2>
+		<h:panelGroup rendered="#{empty speakers}">
+			<em>sind in Planung...</em>
+		</h:panelGroup>
+		<h:link value="Speaker anlegen" outcome="speaker_admin">
+			<f:param name="mode" value="create" />
+		</h:link>
+		<h:dataTable var="currentSpeaker" value="#{speakers}"
+			rendered="#{not empty speakers}" styleClass="simpletablestyle">			
+			<h:column>
+				<f:facet name="header">Name</f:facet>
+                #{currentSpeaker.name}
+          	</h:column>
+			<h:column>
+				<f:facet name="header">Beschreibung</f:facet>
+                #{currentSpeaker.description}
+         	</h:column>
+			<h:column>
+				<f:facet name="header">Aktionen</f:facet>
+				<h:link value="bearbeiten" outcome="speaker_admin">
+					<f:param name="id" value="#{currentSpeaker.id}" />
+					<f:param name="mode" value="edit" />
+				</h:link>
+				<h:commandButton
+					action="#{speakerController.deleteSpeaker(currentSpeaker.id)}" />
+			</h:column>
+		</h:dataTable>
+	</ui:define>
+</ui:composition>
