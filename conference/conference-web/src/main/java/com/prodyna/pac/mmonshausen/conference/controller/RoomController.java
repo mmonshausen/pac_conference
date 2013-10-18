@@ -80,20 +80,21 @@ public class RoomController {
 	}
 	
 	public void createRoom() {
-		final Location location = locationService.getLocationById(locationId);
-		room.setLocation(location);
-		
+		resolveIdsToObjects();
 		roomService.createRoom(room);
 	}
 	
 	public void saveChanges() {
-		final Location location = locationService.getLocationById(locationId);
-		room.setLocation(location);
-		
+		resolveIdsToObjects();
 		roomService.updateRoom(room);
 	}
+
+	private void resolveIdsToObjects() {
+		final Location location = locationService.getLocationById(locationId);
+		room.setLocation(location);
+	}
 	
-	public void deleteRoom(long id) {
+	public void deleteRoom(final long id) {
 		roomService.deleteRoom(id);
 	}
 	
@@ -115,7 +116,15 @@ public class RoomController {
 		return mode;
 	}
 
-	public void setMode(String mode) {
+	public void setMode(final String mode) {
 		this.mode = mode;
+	}
+	
+	public Long getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(Long locationId) {
+		this.locationId = locationId;
 	}
 }

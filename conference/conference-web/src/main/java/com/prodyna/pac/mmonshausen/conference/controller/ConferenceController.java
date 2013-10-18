@@ -81,17 +81,19 @@ public class ConferenceController {
 	}
 	
 	public void createConference() {
-		final Location location = locationService.getLocationById(locationId);
-		conference.setLocation(location);
-		
+		resolveIdsToObjects();
 		conferenceService.saveConference(conference);
 	}
+
 	
 	public void saveChanges() {
+		resolveIdsToObjects();
+		conferenceService.updateConference(conference);
+	}
+	
+	private void resolveIdsToObjects() {
 		final Location location = locationService.getLocationById(locationId);
 		conference.setLocation(location);
-		
-		conferenceService.updateConference(conference);
 	}
 	
 	public void deleteConference(final long id) {

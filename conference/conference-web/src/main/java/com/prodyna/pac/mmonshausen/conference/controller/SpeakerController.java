@@ -33,7 +33,7 @@ public class SpeakerController {
 		}
 	}
 	
-	public void createConference() {
+	public void createSpeaker() {
 		speakerService.saveSpeaker(speaker);
 	}
 	

@@ -62,7 +62,12 @@
           </h:column>
 			<h:column>
 				<f:facet name="header">Zeitraum</f:facet>
-                #{currentConference.startDate} - #{currentConference.endDate}
+				<h:outputText value="#{currentConference.startDate}" >
+              		<f:convertDateTime pattern="dd.MM.yyyy" />
+      			</h:outputText> - 
+      			<h:outputText value="#{currentConference.endDate}" >
+              		<f:convertDateTime pattern="dd.MM.yyyy" />
+      			</h:outputText>
          </h:column>
 			<h:column>
 				<f:facet name="header">Ort</f:facet>

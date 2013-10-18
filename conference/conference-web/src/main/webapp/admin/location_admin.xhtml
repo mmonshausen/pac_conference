@@ -7,6 +7,11 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Location-Verwaltung</h1>
+		
+		<f:metadata>
+			<f:viewParam name="id" value="#{locationController.id}" ></f:viewParam>
+			<f:viewParam name="mode" value="#{locationController.mode}" ></f:viewParam>
+		</f:metadata> 
 
 		<h:panelGroup
 			rendered="#{(locationController.mode == 'edit') or (locationController.mode == 'create')}">
@@ -40,9 +45,9 @@
 			<h:outputText>Liste der Locations</h:outputText>
 		</h2>
 		<h:panelGroup rendered="#{empty locations}">
-			<em>sind in Planung...</em>
+			<em>sind in Planung...</em><br/>
 		</h:panelGroup>
-		<h:link value="Location anlegen" outcome="location_admin">
+		<h:link value="Location anlegen" outcome="location_admin" includeViewParams="true">
 			<f:param name="mode" value="create" />
 		</h:link>
 		<h:dataTable var="currentLocation" value="#{locations}"

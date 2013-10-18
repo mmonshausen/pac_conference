@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Talk-Verwaltung</h1>
+            
+      <h2>Speaker</h2>
+      <ui:repeat var="speaker" value="#{talk.speakers}">
+      	<li>
+      		<h:outputText>#{speaker.name}</h:outputText>      		
+      		<h:link value="Details" outcome="speaker" >
+            	<f:param name="id" value="#{speaker.id}" />
+            </h:link>		
+      	</li>
+      </ui:repeat>
+
+		<h:panelGroup
+			rendered="#{(talkController.mode == 'edit') or (talkController.mode == 'create')}">
+			<h:form>
+				<h2>Name</h2>
+				<h:inputText id="name" value="#{talk.name}" />
+
+				<h2>Beschreibung</h2>
+				<h:inputTextarea id="description" value="#{talk.description}"
+					cols="40" rows="5" />
+				
+				<h2>Datum</h2>	
+				<h:inputText value="#{talk.date}">
+					<f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:inputText>
+				
+				<h2>Beginn</h2>
+				<h:inputText value="#{talk.startTime}">
+						<f:convertDateTime pattern="H:mm" />
+				</h:inputText>
+
+				<h2>Ende</h2>
+      			<h:inputText value="#{talk.endTime}" >
+              		<f:convertDateTime pattern="H:mm" />
+      			</h:inputText>
+								
+				<h2>Raum</h2>
+				<h:selectOneMenu value="#{talkController.roomId}" name="room">
+					<f:selectItems value="#{talkController.roomList}" var="r"
+						itemLabel="#{r.name}" itemValue="#{r.id}" />
+				</h:selectOneMenu>
+				
+				<h2>Speaker</h2>
+				<h:selectManyListbox size="3" value="#{talkController.speakerIds}" name="speakers">
+					<f:selectItems value="#{talkController.speakerList}" var="s"
+						itemLabel="#{s.name}" itemValue="#{s.id}" />
+				</h:selectOneMenu>
+
+				<h:messages styleClass="messages" errorClass="invalid"
+					infoClass="valid" warnClass="warning" globalOnly="true" />
+
+				<h:commandButton value="erstellen"
+					action="#{talkController.createTalk}"
+					rendered="#{talkController.mode == 'create'}" />
+				<h:commandButton value="speichern"
+					action="#{talkController.saveChanges}"
+					rendered="#{talkController.mode == 'edit'}" />
+			</h:form>
+		</h:panelGroup>
+
+		<h2>
+			<h:outputText>Liste der Talk</h:outputText>
+		</h2>
+		<h:panelGroup rendered="#{empty talks}">
+			<em>sind in Planung...</em>
+		</h:panelGroup>
+		<h:link value="Talk anlegen" outcome="talk_admin">
+			<f:param name="mode" value="create" />
+		</h:link>
+		<h:dataTable var="currentTalk" value="#{talks}"
+			rendered="#{not empty talks}" styleClass="simpletablestyle">
+		
+
+						
+			<h:column>
+				<f:facet name="header">Name</f:facet>
+                #{currentTalk.name}
+          	</h:column>
+			<h:column>
+				<f:facet name="header">Beschreibung</f:facet>
+                #{currentTalk.description}
+         	</h:column>
+         	<h:column>
+				<f:facet name="header">Datum</f:facet>
+				<h:outputText value="#{currentTalk.date}" >
+              		<f:convertDateTime pattern="dd.MM.yyyy" />
+      			</h:outputText>
+         	</h:column>
+         	<h:column>
+				<f:facet name="header">Zeitraum</f:facet>
+				<h:outputText value="#{currentTalk.startTime}" >
+              		<f:convertDateTime pattern="H:mm" />
+      			</h:outputText> - 
+      			<h:outputText value="#{currentTalk.endTime}" >
+              		<f:convertDateTime pattern="H:mm" />
+      			</h:outputText>
+         	</h:column>
+         	<h:column>
+				<f:facet name="header">Raum</f:facet>
+                #{currentTalk.room}
+         	</h:column>
+         	<h:column>
+				<f:facet name="header">Speakers</f:facet>
+				    <ui:repeat var="speaker" value="#{currentTalk.speakers}" varStatus="status">
+      					<h:outputText>#{speaker.name}</h:outputText>
+      					<h:outputText rendered="#{not status.last}">, </h:outputText>
+      				</ui:repeat>
+         	</h:column>
+			<h:column>
+				<f:facet name="header">Aktionen</f:facet>
+				<h:link value="bearbeiten" outcome="talk_admin">
+					<f:param name="id" value="#{currentTalk.id}" />
+					<f:param name="mode" value="edit" />
+				</h:link>
+				<h:commandButton
+					action="#{talkController.deleteTalk(currentTalk.id)}" />
+			</h:column>
+		</h:dataTable>
+	</ui:define>
+</ui:composition>
