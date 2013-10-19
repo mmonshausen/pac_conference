@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -98,7 +99,8 @@ public class RoomController {
 		roomService.deleteRoom(id);
 	}
 	
-	private void initialize() {
+	@PostConstruct
+	public void initialize() {
 		if((id != null) && (id !=0)) {
 			room = roomService.getRoomById(id);
 			locationId = room.getLocation().getId();
@@ -110,6 +112,10 @@ public class RoomController {
 	public void setId(final Long id) {
 		this.id = id;
 		initialize();
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getMode() {

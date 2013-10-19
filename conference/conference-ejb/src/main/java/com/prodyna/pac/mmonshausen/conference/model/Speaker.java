@@ -33,7 +33,6 @@ public class Speaker implements Serializable {
 	@Size(min=1)
 	private String description;
 	
-	@NotNull
 	@ManyToMany (mappedBy="speakers")
 	private List<Talk> talks;
 

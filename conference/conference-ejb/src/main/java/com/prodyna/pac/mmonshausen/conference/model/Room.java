@@ -40,7 +40,6 @@ public class Room implements Serializable {
 	@JoinColumn(name="location_id", referencedColumnName="id")
 	private Location location;
 
-	@NotNull
 	@OneToMany(mappedBy="room")
 	private List<Talk> talks;
 

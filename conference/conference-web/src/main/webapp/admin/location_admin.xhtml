@@ -7,37 +7,47 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Location-Verwaltung</h1>
-		
+
 		<f:metadata>
-			<f:viewParam name="id" value="#{locationController.id}" ></f:viewParam>
-			<f:viewParam name="mode" value="#{locationController.mode}" ></f:viewParam>
-		</f:metadata> 
+			<f:viewParam name="id" value="#{locationController.id}"></f:viewParam>
+			<f:viewParam name="mode" value="#{locationController.mode}"></f:viewParam>
+		</f:metadata>
 
-		<h:panelGroup
-			rendered="#{(locationController.mode == 'edit') or (locationController.mode == 'create')}">
+		<h:panelGroup>
 			<h:form>
-				<h2>Name</h2>
-				<h:inputText id="name" value="#{location.name}" />
+				<h:panelGrid columns="3">
+					<h:outputLabel for="name" value="Name:" />
+					<h:inputText id="name" value="#{location.name}" />
+					<h:message for="name" errorClass="invalid" />
 
-				<h2>Adresse</h2>
-				<h3>Straße</h3>
-				<h:inputText id="street" value="#{location.adress.street}" />
-				<h3>Postleitzahl</h3>
-				<h:inputText id="zipCode" value="#{location.adress.zipCode}" />
-				<h3>Stadt</h3>
-				<h:inputText id="city" value="#{location.adress.city}" />
-				<h3>Land</h3>
-				<h:inputText id="country" value="#{location.adress.country}" />
+					<h:outputLabel for="street" value="Straße:" />
+					<h:inputText id="street" value="#{location.street}" />
+					<h:message for="street" errorClass="invalid" />
+
+					<h:outputLabel for="zipCode" value="Postleitzahl:" />
+					<h:inputText id="zipCode" value="#{location.zipCode}" />
+					<h:message for="zipCode" errorClass="invalid" />
+
+					<h:outputLabel for="city" value="Stadt:" />
+					<h:inputText id="city" value="#{location.city}" />
+					<h:message for="city" errorClass="invalid" />
+
+					<h:outputLabel for="country" value="Land:" />
+					<h:inputText id="country" value="#{location.country}" />
+					<h:message for="country" errorClass="invalid" />
+				</h:panelGrid>
 
 				<h:messages styleClass="messages" errorClass="invalid"
 					infoClass="valid" warnClass="warning" globalOnly="true" />
 
 				<h:commandButton value="erstellen"
-					action="#{locationController.createLocation}"
-					rendered="#{locationController.mode == 'create'}" />
+					action="#{locationController.createLocation}">
+					<f:param name="mode" value="create" />
+				</h:commandButton>
 				<h:commandButton value="speichern"
-					action="#{locationController.saveChanges}"
-					rendered="#{locationController.mode == 'edit'}" />
+					action="#{locationController.saveChanges}">
+					<f:param name="mode" value="edit" />
+				</h:commandButton>
 			</h:form>
 		</h:panelGroup>
 
@@ -45,9 +55,11 @@
 			<h:outputText>Liste der Locations</h:outputText>
 		</h2>
 		<h:panelGroup rendered="#{empty locations}">
-			<em>sind in Planung...</em><br/>
+			<em>sind in Planung...</em>
+			<br />
 		</h:panelGroup>
-		<h:link value="Location anlegen" outcome="location_admin" includeViewParams="true">
+		<h:link value="Location anlegen" outcome="location_admin"
+			includeViewParams="true">
 			<f:param name="mode" value="create" />
 		</h:link>
 		<h:dataTable var="currentLocation" value="#{locations}"
@@ -58,27 +70,27 @@
           </h:column>
 			<h:column>
 				<f:facet name="header">Straße</f:facet>
-                #{currentLocation.adress.street}
+                #{currentLocation.street}
          </h:column>
 			<h:column>
 				<f:facet name="header">PLZ</f:facet>
-                #{currentLocation.adress.zipCode}
+                #{currentLocation.zipCode}
          </h:column>
 			<h:column>
 				<f:facet name="header">Stadt</f:facet>
-                #{currentLocation.adress.city}
+                #{currentLocation.city}
          </h:column>
 			<h:column>
 				<f:facet name="header">Land</f:facet>
-                #{currentLocation.adress.country}
+                #{currentLocation.country}
          </h:column>
 			<h:column>
 				<f:facet name="header">Aktionen</f:facet>
-				<h:link value="bearbeiten" outcome="location_admin">
+				<h:link value="bearbeiten" outcome="location_admin" includeViewParams="true">
 					<f:param name="id" value="#{currentLocation.id}" />
 					<f:param name="mode" value="edit" />
 				</h:link>
-				<h:commandButton
+				<h:commandButton value="löschen"
 					action="#{locationController.deleteLocation(currentLocation.id)}" />
 			</h:column>
 		</h:dataTable>

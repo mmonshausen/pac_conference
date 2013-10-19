@@ -7,63 +7,80 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Talk-Verwaltung</h1>
-            
-      <h2>Speaker</h2>
-      <ui:repeat var="speaker" value="#{talk.speakers}">
-      	<li>
-      		<h:outputText>#{speaker.name}</h:outputText>      		
-      		<h:link value="Details" outcome="speaker" >
-            	<f:param name="id" value="#{speaker.id}" />
-            </h:link>		
-      	</li>
-      </ui:repeat>
 
-		<h:panelGroup
-			rendered="#{(talkController.mode == 'edit') or (talkController.mode == 'create')}">
+		<f:metadata>
+			<f:viewParam name="id" value="#{talkController.id}"></f:viewParam>
+			<f:viewParam name="mode" value="#{talkController.mode}"></f:viewParam>
+		</f:metadata>
+
+		<h2>Speaker</h2>
+		<ui:repeat var="speaker" value="#{talk.speakers}">
+			<li><h:outputText>#{speaker.name}</h:outputText> <h:link
+					value="Details" outcome="speaker">
+					<f:param name="id" value="#{speaker.id}" />
+				</h:link></li>
+		</ui:repeat>
+
+		<h:panelGroup>
 			<h:form>
-				<h2>Name</h2>
-				<h:inputText id="name" value="#{talk.name}" />
+				<h:panelGrid columns="3">
+					<h:outputLabel for="name" value="Name:" />
+					<h:inputText id="name" value="#{talk.name}" />
+					<h:message for="name" errorClass="invalid" />
 
-				<h2>Beschreibung</h2>
-				<h:inputTextarea id="description" value="#{talk.description}"
-					cols="40" rows="5" />
-				
-				<h2>Datum</h2>	
-				<h:inputText value="#{talk.date}">
-					<f:convertDateTime pattern="dd.MM.yyyy" />
-				</h:inputText>
-				
-				<h2>Beginn</h2>
-				<h:inputText value="#{talk.startTime}">
+					<h:outputLabel for="description" value="Beschreibung:" />
+					<h:inputTextarea id="description" value="#{talk.description}"
+						cols="40" rows="5" />
+					<h:message for="description" errorClass="invalid" />
+
+					<h:outputLabel for="date" value="Datum:" />
+					<h:inputText name="date" value="#{talk.date}">
+						<f:convertDateTime pattern="dd.MM.yyyy" />
+					</h:inputText>
+					<h:message for="date" errorClass="invalid" />
+
+					<h:outputLabel for="startTime" value="Beginn:" />
+					<h:inputText name="startTime" value="#{talk.startTime}">
 						<f:convertDateTime pattern="H:mm" />
-				</h:inputText>
+					</h:inputText>
+					<h:message for="startTime" errorClass="invalid" />
 
-				<h2>Ende</h2>
-      			<h:inputText value="#{talk.endTime}" >
-              		<f:convertDateTime pattern="H:mm" />
-      			</h:inputText>
-								
-				<h2>Raum</h2>
-				<h:selectOneMenu value="#{talkController.roomId}" name="room">
-					<f:selectItems value="#{talkController.roomList}" var="r"
-						itemLabel="#{r.name}" itemValue="#{r.id}" />
-				</h:selectOneMenu>
-				
-				<h2>Speaker</h2>
-				<h:selectManyListbox size="3" value="#{talkController.speakerIds}" name="speakers">
-					<f:selectItems value="#{talkController.speakerList}" var="s"
-						itemLabel="#{s.name}" itemValue="#{s.id}" />
-				</h:selectOneMenu>
+					<h:outputLabel for="endTime" value="Ende:" />
+					<h:inputText name="endTime" value="#{talk.endTime}">
+						<f:convertDateTime pattern="H:mm" />
+					</h:inputText>
+					<h:message for="endTime" errorClass="invalid" />
+					
+					<h:outputLabel for="conference" value="Konferenz:" />
+					<h:selectOneMenu value="#{talkController.conferenceId}" name="conference">
+						<f:selectItems value="#{talkController.conferenceList}" var="c"
+							itemLabel="#{c.name}" itemValue="#{c.id}" />
+					</h:selectOneMenu>
+					<h:message for="conference" errorClass="invalid" />
+
+					<h:outputLabel for="room" value="Raum:" />
+					<h:selectOneMenu value="#{talkController.roomId}" name="room">
+						<f:selectItems value="#{talkController.roomList}" var="r"
+							itemLabel="#{r.name}" itemValue="#{r.id}" />
+					</h:selectOneMenu>
+					<h:message for="room" errorClass="invalid" />
+
+					<h:outputLabel for="speakers" value="Speaker:" />
+					<h:selectManyListbox size="3" value="#{talkController.speakerIds}"
+						name="speakers">
+						<f:selectItems value="#{talkController.speakerList}" var="s"
+							itemLabel="#{s.name}" itemValue="#{s.id}" />
+					</h:selectManyListbox>
+					<h:message for="speakers" errorClass="invalid" />
+				</h:panelGrid>
 
 				<h:messages styleClass="messages" errorClass="invalid"
 					infoClass="valid" warnClass="warning" globalOnly="true" />
 
 				<h:commandButton value="erstellen"
-					action="#{talkController.createTalk}"
-					rendered="#{talkController.mode == 'create'}" />
+					action="#{talkController.createTalk}" />
 				<h:commandButton value="speichern"
-					action="#{talkController.saveChanges}"
-					rendered="#{talkController.mode == 'edit'}" />
+					action="#{talkController.saveChanges}" />
 			</h:form>
 		</h:panelGroup>
 
@@ -73,14 +90,13 @@
 		<h:panelGroup rendered="#{empty talks}">
 			<em>sind in Planung...</em>
 		</h:panelGroup>
-		<h:link value="Talk anlegen" outcome="talk_admin">
+		<h:link value="Talk anlegen" outcome="talk_admin"
+			includeViewParams="true">
 			<f:param name="mode" value="create" />
 		</h:link>
 		<h:dataTable var="currentTalk" value="#{talks}"
 			rendered="#{not empty talks}" styleClass="simpletablestyle">
-		
 
-						
 			<h:column>
 				<f:facet name="header">Name</f:facet>
                 #{currentTalk.name}
@@ -89,39 +105,41 @@
 				<f:facet name="header">Beschreibung</f:facet>
                 #{currentTalk.description}
          	</h:column>
-         	<h:column>
+			<h:column>
 				<f:facet name="header">Datum</f:facet>
-				<h:outputText value="#{currentTalk.date}" >
-              		<f:convertDateTime pattern="dd.MM.yyyy" />
-      			</h:outputText>
-         	</h:column>
-         	<h:column>
+				<h:outputText value="#{currentTalk.date}">
+					<f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:outputText>
+			</h:column>
+			<h:column>
 				<f:facet name="header">Zeitraum</f:facet>
-				<h:outputText value="#{currentTalk.startTime}" >
-              		<f:convertDateTime pattern="H:mm" />
-      			</h:outputText> - 
-      			<h:outputText value="#{currentTalk.endTime}" >
-              		<f:convertDateTime pattern="H:mm" />
-      			</h:outputText>
-         	</h:column>
-         	<h:column>
+				<h:outputText value="#{currentTalk.startTime}">
+					<f:convertDateTime pattern="H:mm" />
+				</h:outputText> - 
+      			<h:outputText value="#{currentTalk.endTime}">
+					<f:convertDateTime pattern="H:mm" />
+				</h:outputText>
+			</h:column>
+			<h:column>
 				<f:facet name="header">Raum</f:facet>
                 #{currentTalk.room}
          	</h:column>
-         	<h:column>
+			<h:column>
 				<f:facet name="header">Speakers</f:facet>
-				    <ui:repeat var="speaker" value="#{currentTalk.speakers}" varStatus="status">
-      					<h:outputText>#{speaker.name}</h:outputText>
-      					<h:outputText rendered="#{not status.last}">, </h:outputText>
-      				</ui:repeat>
-         	</h:column>
+				<ui:repeat var="speaker" value="#{currentTalk.speakers}"
+					varStatus="status">
+					<h:outputText>#{speaker.name}</h:outputText>
+					<h:outputText rendered="#{not status.last}">, </h:outputText>
+				</ui:repeat>
+			</h:column>
 			<h:column>
 				<f:facet name="header">Aktionen</f:facet>
-				<h:link value="bearbeiten" outcome="talk_admin">
+				<h:link value="bearbeiten" outcome="talk_admin"
+					includeViewParams="true">
 					<f:param name="id" value="#{currentTalk.id}" />
 					<f:param name="mode" value="edit" />
 				</h:link>
-				<h:commandButton
+				<h:commandButton value="löschen"
 					action="#{talkController.deleteTalk(currentTalk.id)}" />
 			</h:column>
 		</h:dataTable>

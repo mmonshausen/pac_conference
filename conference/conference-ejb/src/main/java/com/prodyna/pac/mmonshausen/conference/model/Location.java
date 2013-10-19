@@ -4,12 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,20 +31,33 @@ public class Location implements Serializable {
 	private String name;
 	
 	@NotNull
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="id")
-	private Address adress;
+	@Size(min=1)
+	private String street;
 	
 	@NotNull
+	private String zipCode;
+	
+	@NotNull
+	@Size(min=1)
+	private String city;
+	
+	@NotNull
+	@Size(min=1)
+	private String country;
+	
 	@OneToMany(mappedBy="location")
 	private List<Room> rooms;
-
-	public Location(final String name, final Address adress) {
+	
+	public Location(String name, String street, String zipCode, String city,
+			String country) {
 		super();
 		this.name = name;
-		this.adress = adress;
+		this.street = street;
+		this.zipCode = zipCode;
+		this.city = city;
+		this.country = country;
 	}
-	
+
 	public Location() {
 		super();
 	}
@@ -68,12 +78,36 @@ public class Location implements Serializable {
 		this.name = name;
 	}
 
-	public Address getAdress() {
-		return adress;
+	public String getStreet() {
+		return street;
 	}
 
-	public void setAdress(final Address adress) {
-		this.adress = adress;
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	public List<Room> getRooms() {
@@ -88,26 +122,34 @@ public class Location implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((adress == null) ? 0 : adress.hashCode());
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((rooms == null) ? 0 : rooms.hashCode());
+		result = prime * result + ((street == null) ? 0 : street.hashCode());
+		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final Location other = (Location) obj;
-		if (adress == null) {
-			if (other.adress != null)
+		Location other = (Location) obj;
+		if (city == null) {
+			if (other.city != null)
 				return false;
-		} else if (!adress.equals(other.adress))
+		} else if (!city.equals(other.city))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -124,12 +166,23 @@ public class Location implements Serializable {
 				return false;
 		} else if (!rooms.equals(other.rooms))
 			return false;
+		if (street == null) {
+			if (other.street != null)
+				return false;
+		} else if (!street.equals(other.street))
+			return false;
+		if (zipCode == null) {
+			if (other.zipCode != null)
+				return false;
+		} else if (!zipCode.equals(other.zipCode))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Location [id=" + id + ", name=" + name + ", adress=" + adress
-				+ ", rooms=" + rooms + "]";
+		return "Location [id=" + id + ", name=" + name + ", street=" + street
+				+ ", zipCode=" + zipCode + ", city=" + city + ", country="
+				+ country + ", rooms=" + rooms + "]";
 	}
 }

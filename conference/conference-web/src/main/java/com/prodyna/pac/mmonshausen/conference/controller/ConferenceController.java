@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -37,6 +38,7 @@ public class ConferenceController {
 	
 	private Conference conference;
 	private Long id;
+
 	private String mode;
 	private Long locationId;
 	
@@ -100,13 +102,18 @@ public class ConferenceController {
 		conferenceService.deleteConference(id);
 	}
 	
-	private void initialize() {
+	@PostConstruct
+	public void initialize() {
 		if((id != null) && (id !=0)) {
 			conference = conferenceService.getConferenceById(id);
 			locationId = conference.getLocation().getId();
 		} else {
 			conference = new Conference();
 		}
+	}
+	
+	public Long getId() {
+		return id;
 	}
 		
 	public void setId(final Long id) {
@@ -122,11 +129,11 @@ public class ConferenceController {
 		this.mode = mode;
 	}
 
-	public long getLocationId() {
+	public Long getLocationId() {
 		return locationId;
 	}
 
-	public void setLocationId(final long locationId) {
+	public void setLocationId(final Long locationId) {
 		this.locationId = locationId;
 	}
 }

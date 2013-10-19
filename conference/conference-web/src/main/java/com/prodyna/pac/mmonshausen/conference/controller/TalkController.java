@@ -3,14 +3,17 @@ package com.prodyna.pac.mmonshausen.conference.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.prodyna.pac.mmonshausen.conference.model.Conference;
 import com.prodyna.pac.mmonshausen.conference.model.Room;
 import com.prodyna.pac.mmonshausen.conference.model.Speaker;
 import com.prodyna.pac.mmonshausen.conference.model.Talk;
+import com.prodyna.pac.mmonshausen.conference.service.ConferenceService;
 import com.prodyna.pac.mmonshausen.conference.service.RoomService;
 import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
 import com.prodyna.pac.mmonshausen.conference.service.TalkService;
@@ -32,9 +35,13 @@ public class TalkController {
 	@Inject
 	private SpeakerService speakerService;
 	
+	@Inject
+	private ConferenceService conferenceService;
+	
 	private Talk talk;
 	private Long id;
 	private String mode;
+	private Long conferenceId;
 	private Long roomId;
 	private Long[] speakerIds; 
 	
@@ -50,6 +57,16 @@ public class TalkController {
 			return talk;
 		} else {
 			return new Talk();
+		}
+	}
+	
+	public Conference[] getConferenceList() {
+		final List<Conference> conferenceList = conferenceService.listAllConferences();
+		
+		if(conferenceList != null) {
+			return conferenceList.toArray(new Conference[conferenceList.size()]);
+		} else {
+			return new Conference[0];
 		}
 	}
 	
@@ -82,6 +99,9 @@ public class TalkController {
 		final Room room = roomService.getRoomById(roomId);
 		talk.setRoom(room);
 		
+		final Conference conference = conferenceService.getConferenceById(conferenceId);
+		talk.setConference(conference);
+		
 		final List<Speaker> speakers = new ArrayList<Speaker>();
 		for (final Long speakerId : speakerIds) {
 			speakers.add(speakerService.getSpeakerById(speakerId));
@@ -93,7 +113,8 @@ public class TalkController {
 		talkService.deleteTalk(id);
 	}
 	
-	private void initialize() {
+	@PostConstruct
+	public void initialize() {
 		if((id != null) && (id !=0)) {
 			talk = talkService.getTalkById(id);
 			roomId = talk.getRoom().getId();
@@ -121,6 +142,10 @@ public class TalkController {
 		initialize();
 	}
 
+	public Long getId() {
+		return id;
+	}
+
 	public String getMode() {
 		return mode;
 	}
@@ -143,5 +168,13 @@ public class TalkController {
 
 	public void setSpeakerIds(Long[] speakerIds) {
 		this.speakerIds = speakerIds;
+	}
+
+	public Long getConferenceId() {
+		return conferenceId;
+	}
+
+	public void setConferenceId(Long conferenceId) {
+		this.conferenceId = conferenceId;
 	}
 }

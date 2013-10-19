@@ -1,61 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:ui="http://java.sun.com/jsf/facelets"
-   xmlns:f="http://java.sun.com/jsf/core"
-   xmlns:h="http://java.sun.com/jsf/html"
-   xmlns:c="http://java.sun.com/jsp/jstl/core"
-   template="/WEB-INF/templates/default.xhtml">
-   <ui:define name="content">
-      <h1>Details zur Konferenz #{conference.name}</h1>
-      
-      <h2>Name</h2>
-      <h:outputText>#{conference.name}</h:outputText>
-      
-      <h2>Ort</h2>
-      <h:outputText>#{conference.location.name}, #{conference.location.adress.city}</h:outputText>
-      <h:link value="Details" outcome="location" >
-            	<f:param name="id" value="#{conference.location.id}" />
-      </h:link>
-      
-      <h2>Beschreibung</h2>
-      <h:outputText>#{conference.description}</h:outputText>
-      
-      <h2>Beginn</h2>
-      <h:outputText value="#{conference.startDate}" >
-              <f:convertDateTime pattern="dd.MM.yyyy" />
-      </h:outputText>
-      
-      <h2>Ende</h2>
-      <h:outputText value="#{conference.endDate}" >
-              <f:convertDateTime pattern="dd.MM.yyyy" />
-      </h:outputText>
-      
-      <h2><h:outputText>Konferenz-Übersicht</h:outputText></h2>
-      <h:panelGroup rendered="#{empty conference.talksByDay}">
-         <em>sind in Planung...</em>
-      </h:panelGroup>
-      <c:forEach items="#{conferenceController.talksByDay}" var="entry">
-      	<h3>
-      		<h:outputText value="#{entry.key}" >
-              <f:convertDateTime pattern="E dd.MM" />
-      		</h:outputText>
-      	</h3>
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Details zur Konferenz #{conference.name}</h1>
+
+		<f:metadata>
+			<f:viewParam name="id" value="#{conferenceController.id}"></f:viewParam>
+		</f:metadata>
+
+		<h2>Name</h2>
+		<h:outputText>#{conference.name}</h:outputText>
+
+		<h2>Ort</h2>
+		<h:outputText>#{conference.location.name}, #{conference.location.city}</h:outputText>
+		<h:link value="Details" outcome="location">
+			<f:param name="id" value="#{conference.location.id}" />
+		</h:link>
+
+		<h2>Beschreibung</h2>
+		<h:outputText>#{conference.description}</h:outputText>
+
+		<h2>Beginn</h2>
+		<h:outputText value="#{conference.startDate}">
+			<f:convertDateTime pattern="dd.MM.yyyy" />
+		</h:outputText>
+
+		<h2>Ende</h2>
+		<h:outputText value="#{conference.endDate}">
+			<f:convertDateTime pattern="dd.MM.yyyy" />
+		</h:outputText>
+
+		<h2>
+			<h:outputText>Konferenz-Übersicht</h:outputText>
+		</h2>
+		<h:panelGroup rendered="#{empty conference.talksByDay}">
+			<em>sind in Planung...</em>
+		</h:panelGroup>
+		<c:forEach items="#{conferenceController.talksByDay}" var="entry">
+			<h3>
+				<h:outputText value="#{entry.key}">
+					<f:convertDateTime pattern="E dd.MM" />
+				</h:outputText>
+			</h3>
 			<ul>
 				<c:forEach items="#{entry.value}" var="talk" varStatus="loop">
 					<li><h:outputText value="#{item.startTime}">
 							<f:convertDateTime pattern="H:mm" />
-						</h:outputText> - 
-						<h:outputText value="#{item.endTime}">
+						</h:outputText> - <h:outputText value="#{item.endTime}">
 							<f:convertDateTime pattern="H:mm" />
-						</h:outputText> - 
-						<h:outputText value="#{item.name} - "/>
-						<h:link value="Details" outcome="talk" >
-            				<f:param name="id" value="#{item.id}" />
-            			</h:link>
+						</h:outputText> - <h:outputText value="#{item.name} - " /> 
+						<h:link value="Details" outcome="talk" includeViewParams="true">
+							<f:param name="id" value="#{item.id}" />
+						</h:link>
 					</li>
 				</c:forEach>
 			</ul>
-			<br>
-		<c:forEach>	
-   </ui:define>
+			<br/>
+		</c:forEach>
+	</ui:define>
 </ui:composition>

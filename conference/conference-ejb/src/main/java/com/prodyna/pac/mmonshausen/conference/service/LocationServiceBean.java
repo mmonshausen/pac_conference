@@ -66,7 +66,10 @@ public class LocationServiceBean implements LocationService {
 
 			if(persistedLocation != null) {
 				persistedLocation.setName(location.getName());
-				persistedLocation.setAdress(location.getAdress());
+				persistedLocation.setStreet(location.getStreet());
+				persistedLocation.setZipCode(location.getZipCode());
+				persistedLocation.setCity(location.getCity());
+				persistedLocation.setCountry(location.getCountry());
 				persistedLocation.setRooms(location.getRooms());
 				
 				return em.merge(persistedLocation);

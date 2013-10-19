@@ -8,25 +8,31 @@
 	<ui:define name="content">
 		<h1>Speaker-Verwaltung</h1>
 
-		<h:panelGroup
-			rendered="#{(speakerController.mode == 'edit') or (speakerController.mode == 'create')}">
-			<h:form>
-				<h2>Name</h2>
-				<h:inputText id="name" value="#{speaker.name}" />
+		<f:metadata>
+			<f:viewParam name="id" value="#{speakerController.id}"></f:viewParam>
+			<f:viewParam name="mode" value="#{speakerController.mode}"></f:viewParam>
+		</f:metadata>
 
-				<h2>Beschreibung</h2>
-				<h:inputTextarea id="capacity" value="#{speaker.description}"
-					cols="40" rows="5" />
+		<h:panelGroup>
+			<h:form>
+				<h:panelGrid columns="3">
+					<h:outputLabel for="name" value="Name:" />
+					<h:inputText id="name" value="#{speaker.name}" />
+					<h:message for="name" errorClass="invalid" />
+
+					<h:outputLabel for="description" value="Beschreibung:" />
+					<h:inputTextarea id="description" value="#{speaker.description}"
+						cols="40" rows="5" />
+					<h:message for="description" errorClass="invalid" />
+				</h:panelGrid>
 
 				<h:messages styleClass="messages" errorClass="invalid"
 					infoClass="valid" warnClass="warning" globalOnly="true" />
 
 				<h:commandButton value="erstellen"
-					action="#{speakerController.createSpeaker}"
-					rendered="#{speakerController.mode == 'create'}" />
+					action="#{speakerController.createSpeaker}" />
 				<h:commandButton value="speichern"
-					action="#{speakerController.saveChanges}"
-					rendered="#{speakerController.mode == 'edit'}" />
+					action="#{speakerController.saveChanges}" />
 			</h:form>
 		</h:panelGroup>
 
@@ -36,11 +42,12 @@
 		<h:panelGroup rendered="#{empty speakers}">
 			<em>sind in Planung...</em>
 		</h:panelGroup>
-		<h:link value="Speaker anlegen" outcome="speaker_admin">
+		<h:link value="Speaker anlegen" outcome="speaker_admin"
+			includeViewParams="true">
 			<f:param name="mode" value="create" />
 		</h:link>
 		<h:dataTable var="currentSpeaker" value="#{speakers}"
-			rendered="#{not empty speakers}" styleClass="simpletablestyle">			
+			rendered="#{not empty speakers}" styleClass="simpletablestyle">
 			<h:column>
 				<f:facet name="header">Name</f:facet>
                 #{currentSpeaker.name}
@@ -51,11 +58,11 @@
          	</h:column>
 			<h:column>
 				<f:facet name="header">Aktionen</f:facet>
-				<h:link value="bearbeiten" outcome="speaker_admin">
+				<h:link value="bearbeiten" outcome="speaker_admin" includeViewParams="true">
 					<f:param name="id" value="#{currentSpeaker.id}" />
 					<f:param name="mode" value="edit" />
 				</h:link>
-				<h:commandButton
+				<h:commandButton value="löschen"
 					action="#{speakerController.deleteSpeaker(currentSpeaker.id)}" />
 			</h:column>
 		</h:dataTable>

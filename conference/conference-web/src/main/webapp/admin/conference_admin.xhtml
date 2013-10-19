@@ -7,40 +7,50 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Konferenz-Verwaltung</h1>
+		
+		<f:metadata>
+			<f:viewParam name="id" value="#{conferenceController.id}"></f:viewParam>
+			<f:viewParam name="mode" value="#{conferenceController.mode}"></f:viewParam>
+		</f:metadata>
 
-		<h:panelGroup
-			rendered="#{(conferenceController.mode == 'edit') or (conferenceCOntroller.mode == 'create')}">
+		<h:panelGroup>
 			<h:form>
-				<h2>Name</h2>
-				<h:inputText id="name" value="#{conference.name}" />
+				<h:panelGrid columns="3">
+					<h:outputLabel for="name" value="Name:" />
+					<h:inputText id="name" value="#{conference.name}" />
+					<h:message for="name" errorClass="invalid" />
 
-				<h2>Ort</h2>
-				<h:selectOneMenu value="#{conferenceController.locationId}" name="location">
-					<f:selectItems value="#{conferenceController.locationList}" var="l"
-						itemLabel="#{l.name}" itemValue="#{l.id}" />
-				</h:selectOneMenu>
+					<h:outputLabel for="location" value="Ort:" />
+					<h:selectOneMenu value="#{conferenceController.locationId}"
+						name="location">
+						<f:selectItems value="#{conferenceController.locationList}"
+							var="l" itemLabel="#{l.name}" itemValue="#{l.id}" />
+					</h:selectOneMenu>
+					<h:message for="location" errorClass="invalid" />
 
-				<h2>Beschreibung</h2>
-				<h:inputText value="#{conference.description}" name="description" />
+					<h:outputLabel for="description" value="Beschreibung:" />
+					<h:inputText value="#{conference.description}" name="description" />
+					<h:message for="description" errorClass="invalid" />
 
-				<h2>Beginn</h2>
-				<h:inputText value="#{conference.startDate}">
-					<f:convertDateTime pattern="dd.MM.yyyy" />
-				</h:inputText>
+					<h:outputLabel for="startDate" value="Beginn:" />
+					<h:inputText name="startDate" value="#{conference.startDate}">
+						<f:convertDateTime pattern="dd.MM.yyyy" />
+					</h:inputText>
+					<h:message for="startDate" errorClass="invalid" />
 
-				<h2>Ende</h2>
-				<h:inputText value="#{conference.endDate}">
-					<f:convertDateTime pattern="dd.MM.yyyy" />
-				</h:inputText>
+					<h:outputLabel for="endDate" value="Ende:" />
+					<h:inputText name="endDate" value="#{conference.endDate}">
+						<f:convertDateTime pattern="dd.MM.yyyy" />
+					</h:inputText>
+					<h:message for="endDate" errorClass="invalid" />
+				</h:panelGrid>
 
 				<h:messages styleClass="messages" errorClass="invalid"
 					infoClass="valid" warnClass="warning" globalOnly="true" />
 
 				<h:commandButton value="erstellen"
-					action="#{conferenceController.createConference}"
-					rendered="#{conferenceController.mode == 'create'}" />
+					action="#{conferenceController.createConference}" />
 				<h:commandButton value="speichern"
-					action="#{conferenceController.saveChanges}"
 					rendered="#{conferenceController.mode == 'edit'}" />
 			</h:form>
 		</h:panelGroup>
@@ -51,7 +61,7 @@
 		<h:panelGroup rendered="#{empty conferences}">
 			<em>sind in Planung...</em>
 		</h:panelGroup>
-		<h:link value="Konferenz anlegen" outcome="conference_admin">
+		<h:link value="Konferenz anlegen" outcome="conference_admin" includeViewParams="true">
 			<f:param name="mode" value="create" />
 		</h:link>
 		<h:dataTable var="currentConference" value="#{conferences}"
@@ -62,24 +72,24 @@
           </h:column>
 			<h:column>
 				<f:facet name="header">Zeitraum</f:facet>
-				<h:outputText value="#{currentConference.startDate}" >
-              		<f:convertDateTime pattern="dd.MM.yyyy" />
-      			</h:outputText> - 
-      			<h:outputText value="#{currentConference.endDate}" >
-              		<f:convertDateTime pattern="dd.MM.yyyy" />
-      			</h:outputText>
-         </h:column>
+				<h:outputText value="#{currentConference.startDate}">
+					<f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:outputText> - 
+      			<h:outputText value="#{currentConference.endDate}">
+					<f:convertDateTime pattern="dd.MM.yyyy" />
+				</h:outputText>
+			</h:column>
 			<h:column>
 				<f:facet name="header">Ort</f:facet>
                 #{currentConference.location.name}
          </h:column>
 			<h:column>
 				<f:facet name="header">Aktionen</f:facet>
-				<h:link value="bearbeiten" outcome="conference_admin">
+				<h:link value="bearbeiten" outcome="conference_admin" includeViewParams="true">
 					<f:param name="id" value="#{currentConference.id}" />
 					<f:param name="mode" value="edit" />
 				</h:link>
-				<h:commandButton
+				<h:commandButton value="löschen"
 					action="#{conferenceController.deleteConference(currentConference.id)}" />
 			</h:column>
 		</h:dataTable>

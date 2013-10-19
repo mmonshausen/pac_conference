@@ -8,30 +8,38 @@
 	<ui:define name="content">
 		<h1>Raum-Verwaltung</h1>
 
-		<h:panelGroup
-			rendered="#{(roomController.mode == 'edit') or (roomController.mode == 'create')}">
-			<h:form>
-				<h2>Name</h2>
-				<h:inputText id="name" value="#{room.name}" />
+		<f:metadata>
+			<f:viewParam name="id" value="#{roomController.id}"></f:viewParam>
+			<f:viewParam name="mode" value="#{roomController.mode}"></f:viewParam>
+		</f:metadata>
 
-				<h2>Raumgröße</h2>
-				<h:inputText id="capacity" value="#{room.capacity}" />
-				
-				<h2>Location</h2>
-				<h:selectOneMenu value="#{roomController.locationId}" name="location">
-					<f:selectItems value="#{roomController.locationList}" var="l"
-						itemLabel="#{l.name}" itemValue="#{l.id}" />
-				</h:selectOneMenu>
+		<h:panelGroup>
+			<h:form>
+				<h:panelGrid columns="3">
+					<h:outputLabel for="name" value="Name:" />
+					<h:inputText id="name" value="#{room.name}" />
+					<h:message for="name" errorClass="invalid" />
+
+					<h:outputLabel for="capacity" value="Raumgröße:" />
+					<h:inputText id="capacity" value="#{room.capacity}" />
+					<h:message for="capacity" errorClass="invalid" />
+
+					<h:outputLabel for="location" value="Location:" />
+					<h:selectOneMenu
+						value="#{roomController.locationId}" name="location">
+						<f:selectItems value="#{roomController.locationList}" var="l"
+							itemLabel="#{l.name}" itemValue="#{l.id}" />
+					</h:selectOneMenu>
+					<h:message for="capacity" errorClass="invalid" />
+				</h:panelGrid>
 
 				<h:messages styleClass="messages" errorClass="invalid"
 					infoClass="valid" warnClass="warning" globalOnly="true" />
 
 				<h:commandButton value="erstellen"
-					action="#{roomController.createRoom}"
-					rendered="#{roomController.mode == 'create'}" />
+					action="#{roomController.createRoom}" />
 				<h:commandButton value="speichern"
-					action="#{roomController.saveChanges}"
-					rendered="#{roomController.mode == 'edit'}" />
+					action="#{roomController.saveChanges}" />
 			</h:form>
 		</h:panelGroup>
 
@@ -41,7 +49,8 @@
 		<h:panelGroup rendered="#{empty rooms}">
 			<em>sind in Planung...</em>
 		</h:panelGroup>
-		<h:link value="Raum anlegen" outcome="room_admin">
+		<h:link value="Raum anlegen" outcome="room_admin"
+			includeViewParams="true">
 			<f:param name="mode" value="create" />
 		</h:link>
 		<h:dataTable var="currentRoom" value="#{rooms}"
@@ -54,17 +63,17 @@
 				<f:facet name="header">Raumgröße</f:facet>
                 #{currentRoom.capacity}
          	</h:column>
-         	<h:column>
+			<h:column>
 				<f:facet name="header">Location</f:facet>
                 #{currentRoom.location.name}
          	</h:column>
 			<h:column>
 				<f:facet name="header">Aktionen</f:facet>
-				<h:link value="bearbeiten" outcome="room_admin">
+				<h:link value="bearbeiten" outcome="room_admin" includeViewParams="true">
 					<f:param name="id" value="#{currentRoom.id}" />
 					<f:param name="mode" value="edit" />
 				</h:link>
-				<h:commandButton
+				<h:commandButton value="löschen"
 					action="#{roomController.deleteRoom(currentRoom.id)}" />
 			</h:column>
 		</h:dataTable>

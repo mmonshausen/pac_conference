@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-   xmlns:ui="http://java.sun.com/jsf/facelets"
-   xmlns:f="http://java.sun.com/jsf/core"
-   xmlns:h="http://java.sun.com/jsf/html"
-   xmlns:c="http://java.sun.com/jsp/jstl/core"
-   template="/WEB-INF/templates/default.xhtml">
-   <ui:define name="content">
-      <h1>Details zum Speaker #{speaker.name}</h1>
-	
-      <h2>Name</h2>
-      <h:outputText>#{speaker.name}</h:outputText>
-      
-      <h2>Beschreibung</h2>
-      <h:outputText>#{speaker.description}</h:outputText>
-            
-      <h2>Übersicht der Talks</h2>
-      <ul>
-      <ui:repeat var="talk" value="#{speaker.talks}">
-      	<li>
-      		<h:outputText>#{talk.name} am </h:outputText>
-      		<h:outputText value="#{talk.date}" >
-              <f:convertDateTime pattern="dd.MM.yyyy" />
-      		</h:outputText>      		
-      		<h:link value="Details" outcome="talk" >
-            	<f:param name="id" value="#{talk.id}" />
-            </h:link>		
-      	</li>
-      </ui:repeat>
-      </ul>	
-   </ui:define>
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Details zum Speaker #{speaker.name}</h1>
+
+		<f:metadata>
+			<f:viewParam name="id" value="#{speakerController.id}"></f:viewParam>
+		</f:metadata>
+
+		<h2>Name</h2>
+		<h:outputText>#{speaker.name}</h:outputText>
+
+		<h2>Beschreibung</h2>
+		<h:outputText>#{speaker.description}</h:outputText>
+
+		<h2>Übersicht der Talks</h2>
+		<ul>
+			<ui:repeat var="talk" value="#{speaker.talks}">
+				<li><h:outputText>#{talk.name} am </h:outputText> <h:outputText
+						value="#{talk.date}">
+						<f:convertDateTime pattern="dd.MM.yyyy" />
+					</h:outputText>
+					<h:link value="Details" outcome="talk" includeViewParams="true">
+						<f:param name="id" value="#{talk.id}" />
+					</h:link>
+				</li>
+			</ui:repeat>
+		</ul>
+	</ui:define>
 </ui:composition>

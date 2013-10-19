@@ -1,5 +1,6 @@
 package com.prodyna.pac.mmonshausen.conference.controller;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -45,15 +46,22 @@ public class SpeakerController {
 		speakerService.deleteSpeaker(id);
 	}
 	
-	private void initialize() {
+	@PostConstruct
+	public void initialize() {
 		if((id != null) && (id !=0)) {
-			speakerService.getSpeakerById(id);			
+			speaker = speakerService.getSpeakerById(id);			
+		} else {
+			speaker = new Speaker();
 		}
 	}
 		
 	public void setId(final Long id) {
 		this.id = id;
 		initialize();
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getMode() {

@@ -47,7 +47,6 @@ public class Conference implements Serializable {
 	@NotNull
 	private Date endDate;
 	
-	@NotNull
 	@OneToMany(mappedBy="conference")
 	private List<Talk> talks;
 
