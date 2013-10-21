@@ -13,10 +13,10 @@
 		</f:metadata>
 
 		<h2>Name</h2>
-		<h:outputText>#{talk.name}</h:outputText>
+		<h:outputText value="#{talk.name}" />
 
 		<h2>Beschreibung</h2>
-		<h:outputText>#{talk.description}</h:outputText>
+		<h:outputText value="#{talk.description}" />
 
 		<h2>Datum</h2>
 		<h:outputText value="#{talk.date}">
@@ -34,18 +34,20 @@
 		</h:outputText>
 
 		<h2>Raum</h2>
-		<h:outputText value="#{talk.room}">
-			<h:link value="Details" outcome="room">
-				<f:param name="id" value="#{talk.room.id}" />
-			</h:link>
+		<h:outputText value="#{talk.room.name}" />
+		<h:link value="Details" outcome="room">
+			<f:param name="id" value="#{talk.room.id}" />
+		</h:link>
 
-			<h2>Speaker</h2>
-			<ui:repeat var="speaker" value="#{talk.speakers}">
-				<li><h:outputText>#{speaker.name}</h:outputText>
-				<h:link value="Details" outcome="speaker" includeViewParams="true">
-						<f:param name="id" value="#{speaker.id}" />
-					</h:link>
-				</li>
-			</ui:repeat>
+		<h2>Speaker</h2>
+		<ui:repeat var="speaker" value="#{talk.speakers}">
+			<li>
+				<h:outputText value="#{speaker.name}" />
+				<h:link
+					value="Details" outcome="speaker" includeViewParams="true">
+					<f:param name="id" value="#{speaker.id}" />
+				</h:link>
+			</li>
+		</ui:repeat>
 	</ui:define>
 </ui:composition>

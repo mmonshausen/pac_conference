@@ -73,10 +73,10 @@
 			<h:column>
 				<f:facet name="header">Zeitraum</f:facet>
 				<h:outputText value="#{currentConference.startDate}">
-					<f:convertDateTime pattern="dd.MM.yyyy" />
+					<f:convertDateTime pattern="dd.MM.yyyy" timeZone="UTC" />
 				</h:outputText> - 
       			<h:outputText value="#{currentConference.endDate}">
-					<f:convertDateTime pattern="dd.MM.yyyy" />
+					<f:convertDateTime pattern="dd.MM.yyyy" timeZone="UTC"/>
 				</h:outputText>
 			</h:column>
 			<h:column>

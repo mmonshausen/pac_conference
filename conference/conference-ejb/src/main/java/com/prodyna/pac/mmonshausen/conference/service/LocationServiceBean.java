@@ -70,7 +70,6 @@ public class LocationServiceBean implements LocationService {
 				persistedLocation.setZipCode(location.getZipCode());
 				persistedLocation.setCity(location.getCity());
 				persistedLocation.setCountry(location.getCountry());
-				persistedLocation.setRooms(location.getRooms());
 				
 				return em.merge(persistedLocation);
 			} else {

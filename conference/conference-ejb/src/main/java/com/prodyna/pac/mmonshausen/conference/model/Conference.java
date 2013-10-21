@@ -5,13 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,8 +34,8 @@ public class Conference implements Serializable {
 	private String name;
 	
 	@NotNull
-	@OneToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="id")
+	@ManyToOne
+	@JoinColumn(name="location_id", referencedColumnName="id")
 	private Location location;
 	
 	@NotNull
@@ -42,23 +43,24 @@ public class Conference implements Serializable {
 	private String description;
 	
 	@NotNull
+	@Temporal(TemporalType.DATE)
 	private Date startDate;
 	
 	@NotNull
+	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
 	@OneToMany(mappedBy="conference")
 	private List<Talk> talks;
 
 	public Conference(final String name, final Location location, final String description,
-			final Date startDate, final Date endDate, final List<Talk> talks) {
+			final Date startDate, final Date endDate) {
 		super();
 		this.name = name;
 		this.location = location;
 		this.description = description;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.talks = talks;
 	}
 
 	public Conference() {
@@ -113,14 +115,6 @@ public class Conference implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public List<Talk> getTalks() {
-		return talks;
-	}
-
-	public void setTalks(final List<Talk> talks) {
-		this.talks = talks;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -134,7 +128,6 @@ public class Conference implements Serializable {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
-		result = prime * result + ((talks == null) ? 0 : talks.hashCode());
 		return result;
 	}
 
@@ -177,11 +170,6 @@ public class Conference implements Serializable {
 				return false;
 		} else if (!startDate.equals(other.startDate))
 			return false;
-		if (talks == null) {
-			if (other.talks != null)
-				return false;
-		} else if (!talks.equals(other.talks))
-			return false;
 		return true;
 	}
 
@@ -189,6 +177,6 @@ public class Conference implements Serializable {
 	public String toString() {
 		return "Conference [id=" + id + ", name=" + name + ", location="
 				+ location + ", description=" + description + ", startDate="
-				+ startDate + ", endDate=" + endDate + ", talks=" + talks + "]";
+				+ startDate + ", endDate=" + endDate + "]";
 	}
 }

@@ -85,14 +85,6 @@ public class Room implements Serializable {
 		this.location = location;
 	}
 
-	public List<Talk> getTalks() {
-		return talks;
-	}
-
-	public void setTalks(final List<Talk> talks) {
-		this.talks = talks;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -102,7 +94,6 @@ public class Room implements Serializable {
 		result = prime * result
 				+ ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((talks == null) ? 0 : talks.hashCode());
 		return result;
 	}
 
@@ -132,17 +123,11 @@ public class Room implements Serializable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (talks == null) {
-			if (other.talks != null)
-				return false;
-		} else if (!talks.equals(other.talks))
-			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Room [id=" + id + ", name=" + name + ", capacity=" + capacity
-				+ ", talks=" + talks + "]";
+		return "Room [id=" + id + ", name=" + name + ", capacity=" + capacity + "]";
 	}
 }

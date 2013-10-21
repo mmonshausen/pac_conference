@@ -69,7 +69,6 @@ public class RoomServiceBean implements RoomService {
 			if(persistedRoom != null) {
 				persistedRoom.setCapacity(room.getCapacity());
 				persistedRoom.setName(room.getName());
-				persistedRoom.setTalks(room.getTalks());
 				
 				return em.merge(persistedRoom);
 			} else {
@@ -93,5 +92,20 @@ public class RoomServiceBean implements RoomService {
 			//TODO: error handling
 			logger.warning("room (id="+id+") not found; nothing deleted!");
 		}
+	}
+
+	@Override
+	public List<Room> getRoomsForLocation(long id) {
+		final String queryString = "SELECT room FROM Room room where room.location.id = :locationId";
+		final TypedQuery<Room> query = em.createQuery(queryString,
+				Room.class);
+		query.setParameter("locationId", id);
+		final List<Room> resultList = query.getResultList();
+
+		if(resultList.isEmpty()) {
+			logger.warning("no rooms for that parameters existing!");
+		}
+
+		return resultList;
 	}
 }

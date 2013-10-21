@@ -1,5 +1,7 @@
 package com.prodyna.pac.mmonshausen.conference.controller;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
@@ -9,7 +11,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.prodyna.pac.mmonshausen.conference.model.Location;
+import com.prodyna.pac.mmonshausen.conference.model.Room;
 import com.prodyna.pac.mmonshausen.conference.service.LocationService;
+import com.prodyna.pac.mmonshausen.conference.service.RoomService;
 
 /**
  * JSF-Controller for locations
@@ -20,6 +24,9 @@ import com.prodyna.pac.mmonshausen.conference.service.LocationService;
 public class LocationController {
 	@Inject
 	private LocationService locationService;
+	
+	@Inject
+	private RoomService roomService;
 	
 	@Inject
 	private FacesContext facesContext;
@@ -36,6 +43,10 @@ public class LocationController {
 		} else {
 			return new Location();
 		}
+	}
+	
+	public List<Room> getRooms() {
+		return roomService.getRoomsForLocation(id);
 	}
 	
 	public void createLocation() {

@@ -44,7 +44,7 @@ public class TalkServiceBean implements TalkService {
 
 	@Override
 	public List<Talk> getConferenceTalksOrderedByDateTime(Long conferenceId) {
-		final String queryString = "SELECT talk FROM Talk talk where talk.conference.id = :conferenceId ordered by talk.date, talk.startTime";
+		final String queryString = "SELECT talk FROM Talk talk where talk.conference.id = :conferenceId order by talk.date, talk.startTime";
 		final TypedQuery<Talk> query = em.createQuery(queryString,
 				Talk.class);
 		query.setParameter("conferenceId", conferenceId);
@@ -59,7 +59,7 @@ public class TalkServiceBean implements TalkService {
 	
 	@Override
 	public List<Talk> getRoomTalksOrderedByDateTime(Long roomId) {
-		final String queryString = "SELECT talk FROM Talk talk where talk.room.id = :roomId ordered by talk.date, talk.startTime";
+		final String queryString = "SELECT talk FROM Talk talk where talk.room.id = :roomId order by talk.date, talk.startTime";
 		final TypedQuery<Talk> query = em.createQuery(queryString,
 				Talk.class);
 		query.setParameter("roomId", roomId);

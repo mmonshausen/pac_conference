@@ -13,16 +13,17 @@
 		</f:metadata>
 
 		<h2>Name</h2>
-		<h:outputText>#{speaker.name}</h:outputText>
+		<h:outputText value="#{speaker.name}" />
 
 		<h2>Beschreibung</h2>
-		<h:outputText>#{speaker.description}</h:outputText>
+		<h:outputText value="#{speaker.description}" />
 
 		<h2>Übersicht der Talks</h2>
 		<ul>
 			<ui:repeat var="talk" value="#{speaker.talks}">
-				<li><h:outputText>#{talk.name} am </h:outputText> <h:outputText
-						value="#{talk.date}">
+				<li>
+					<h:outputText value="#{talk.name} am " />
+					<h:outputText value="#{talk.date}">
 						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputText>
 					<h:link value="Details" outcome="talk" includeViewParams="true">

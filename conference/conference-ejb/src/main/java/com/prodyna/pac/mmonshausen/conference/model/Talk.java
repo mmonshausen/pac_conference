@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -62,12 +64,12 @@ public class Talk implements Serializable {
 	private Room room;
 
 	@NotNull
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(name="TalkSpeakerMapping",
 	joinColumns={@JoinColumn(name="talk_id", referencedColumnName="id")},
 	inverseJoinColumns={@JoinColumn(name="speaker_id", referencedColumnName="id")})
 	private List<Speaker> speakers;
-
+	
 	public Talk(final String name, final String description, final Date date, final Date startTime,
 			final Date endTime, final Room room) {
 		super();

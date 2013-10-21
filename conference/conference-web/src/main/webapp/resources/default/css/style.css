@@ -1,5 +1,5 @@
 body {
-  margin: 0;
+  margin: 7px;
   padding: 0;
   background-color: #F1F1F1;
   font-size: 0.8em;
@@ -8,31 +8,28 @@ body {
 
 #container {
   margin: 0 auto;
-  padding: 0 20px 10px 20px;
-  border-top: 5px solid #000000;
+  padding: 10px 10px 10px 10px;
+  border-top: 5px solid #8c8f91;
   border-left: 5px solid #8c8f91;
   border-right: 5px solid #8c8f91;
-  border-bottom: 25px solid #8c8f91;
+  border-bottom: 5px solid #8c8f91;
   width: 965px;
   background: #FFFFFF;
   background-repeat: repeat-x;
-  padding-top: 30px;
+  padding-top: 10px;
   box-shadow: 3px 3px 15px #d5d5d5;
 }
 
 #content {
   float: left;
+  padding-top: 10px;
   width: 700px;
   margin: 20px;
 }
 
-#aside ul {
-  padding-left: 30px;
-}
-
 .dualbrand {
   float: right;
-  padding-right: 10px;
+  padding-right: 0px;
 }
 
 #footer {
@@ -40,10 +37,6 @@ body {
   text-align: center;
   color: #666666;
   font-size: 0.85em;
-}
-
-code {
-  font-size: 1.1em;
 }
 
 a {
@@ -85,9 +78,6 @@ span.invalid {
 
 form {
   padding: 1em;
-  font: 80%/1 sans-serif;
-  width: 375px;
-  border: 1px solid #D5D5D5;
 }
 
 label {
@@ -105,19 +95,10 @@ input {
   margin-bottom: 8px;
 }
 
-.register {
-  float: left;
-  margin-left: 85px;
-}
-
 .simpletablestyle {
   background-color:#E6E7E8;
   clear:both;
   width: 550px;
-}
-
-.simpletablestyle img {
-  border:0px;
 }
 
 .simpletablestyle td {
@@ -131,14 +112,13 @@ input {
   font-size:12px;
   font-weight:normal;
   padding:0 10px 0 5px;
-  border-bottom:#999999 dotted 1px;
 }
 
 .simpletablestyle thead {
   height:31px;
   font-size:10px;
   font-weight:bold;
-  color:#FFFFFF;
+  color:#000000;
   text-align:left;
 }
 

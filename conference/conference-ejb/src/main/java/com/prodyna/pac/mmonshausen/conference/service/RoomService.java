@@ -14,6 +14,7 @@ public interface RoomService {
 	
 	public Room getRoomById(long id);
 	public List<Room> listAllRooms();
+	public List<Room> getRoomsForLocation(long id);
 	
 	public Room updateRoom(Room room);
 	

@@ -14,6 +14,7 @@ public interface ConferenceService {
 	
 	public Conference getConferenceById(long id);
 	public List<Conference> listAllConferences();
+	public List<Conference> getConferenceForLocation(long id);
 	
 	public Conference updateConference(Conference conference);
 	

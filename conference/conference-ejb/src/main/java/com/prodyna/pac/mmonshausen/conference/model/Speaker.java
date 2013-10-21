@@ -3,9 +3,13 @@ package com.prodyna.pac.mmonshausen.conference.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -33,7 +37,10 @@ public class Speaker implements Serializable {
 	@Size(min=1)
 	private String description;
 	
-	@ManyToMany (mappedBy="speakers")
+	@ManyToMany (cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinTable(name="TalkSpeakerMapping",
+	joinColumns={@JoinColumn(name="speaker_id", referencedColumnName="id")},
+	inverseJoinColumns={@JoinColumn(name="talk_id", referencedColumnName="id")})
 	private List<Talk> talks;
 
 	public Speaker(final String name, final String description) {

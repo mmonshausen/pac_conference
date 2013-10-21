@@ -48,6 +48,9 @@ public class Location implements Serializable {
 	@OneToMany(mappedBy="location")
 	private List<Room> rooms;
 	
+	@OneToMany(mappedBy="location")
+	private List<Conference> conferences;
+	
 	public Location(String name, String street, String zipCode, String city,
 			String country) {
 		super();
@@ -110,14 +113,6 @@ public class Location implements Serializable {
 		this.country = country;
 	}
 
-	public List<Room> getRooms() {
-		return rooms;
-	}
-
-	public void setRooms(final List<Room> rooms) {
-		this.rooms = rooms;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -126,7 +121,6 @@ public class Location implements Serializable {
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((rooms == null) ? 0 : rooms.hashCode());
 		result = prime * result + ((street == null) ? 0 : street.hashCode());
 		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
 		return result;
@@ -161,11 +155,6 @@ public class Location implements Serializable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (rooms == null) {
-			if (other.rooms != null)
-				return false;
-		} else if (!rooms.equals(other.rooms))
-			return false;
 		if (street == null) {
 			if (other.street != null)
 				return false;
@@ -183,6 +172,6 @@ public class Location implements Serializable {
 	public String toString() {
 		return "Location [id=" + id + ", name=" + name + ", street=" + street
 				+ ", zipCode=" + zipCode + ", city=" + city + ", country="
-				+ country + ", rooms=" + rooms + "]";
+				+ country + "]";
 	}
 }

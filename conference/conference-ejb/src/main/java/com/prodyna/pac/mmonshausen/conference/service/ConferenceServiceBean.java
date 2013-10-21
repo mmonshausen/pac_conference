@@ -71,7 +71,6 @@ public class ConferenceServiceBean implements ConferenceService {
 				persistedConference.setEndDate(conference.getEndDate());
 				persistedConference.setName(conference.getName());
 				persistedConference.setStartDate(conference.getStartDate());
-				persistedConference.setTalks(conference.getTalks());
 
 				return em.merge(persistedConference);
 			} else {
@@ -94,5 +93,20 @@ public class ConferenceServiceBean implements ConferenceService {
 			//TODO: error handling
 			logger.warning("conference (id="+id+") not found. conference could not be deleted.");
 		}
+	}
+
+	@Override
+	public List<Conference> getConferenceForLocation(long id) {
+		final String queryString = "SELECT conference FROM Conference conference WHERE conference.location.id = :locationId";
+		final TypedQuery<Conference> query = em.createQuery(queryString,
+				Conference.class);
+		query.setParameter("locationId", id);
+		final List<Conference> resultList = query.getResultList();
+
+		if(resultList.isEmpty()) {
+			logger.warning("no conferences existing!");
+		}
+
+		return resultList;
 	}
 }
