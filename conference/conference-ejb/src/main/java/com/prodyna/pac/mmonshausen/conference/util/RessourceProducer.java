@@ -43,7 +43,7 @@ public class RessourceProducer {
 		try {
 			return new InitialContext();
 		} catch (final NamingException e) {
-			//TODO: How to handle exceptions in producers
+			System.out.println(e);
 		}
 		return null;
 	}
@@ -53,7 +53,7 @@ public class RessourceProducer {
 		try {
 			return (QueueConnectionFactory) produceContext().lookup("ConnectionFactory");
 		} catch (final NamingException e) {
-			//TODO: How to handle exceptions in producers
+			System.out.println(e);
 		}
 		return null;
 	}

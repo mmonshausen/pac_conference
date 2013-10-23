@@ -5,10 +5,12 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import com.prodyna.pac.mmonshausen.conference.model.Location;
+import com.prodyna.pac.mmonshausen.conference.util.MeasuringInterceptor;
 
 /**
  * service bean containing crud operations for locations 
@@ -16,6 +18,7 @@ import com.prodyna.pac.mmonshausen.conference.model.Location;
  * @author Martin Monshausen, PRODYNA AG
  */
 @Stateless
+@Interceptors(MeasuringInterceptor.class)
 public class LocationServiceBean implements LocationService {
 	
 	@Inject

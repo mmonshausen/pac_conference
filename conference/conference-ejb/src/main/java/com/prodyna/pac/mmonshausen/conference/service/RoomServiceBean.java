@@ -5,10 +5,12 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import com.prodyna.pac.mmonshausen.conference.model.Room;
+import com.prodyna.pac.mmonshausen.conference.util.MeasuringInterceptor;
 
 /**
  * service bean containing crud operations for rooms
@@ -16,6 +18,7 @@ import com.prodyna.pac.mmonshausen.conference.model.Room;
  * @author Martin Monshausen, PRODYNA AG
  */
 @Stateless
+@Interceptors(MeasuringInterceptor.class)
 public class RoomServiceBean implements RoomService {
 
 	@Inject

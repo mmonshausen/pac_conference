@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://jboss.org/schema/cdi/beans_1_0.xsd" >
-
+<beans xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://jboss.org/schema/cdi/beans_1_0.xsd">
+ <interceptors>
+  <class>com.prodyna.pac.mmonshausen.conference.util.MeasuringInterceptor</class>
+ </interceptors>
+ <decorators>
+  <class>com.prodyna.pac.mmonshausen.conference.service.ConferenceServiceDecorator</class>
+  <class>com.prodyna.pac.mmonshausen.conference.service.LocationServiceDecorator</class>
+  <class>com.prodyna.pac.mmonshausen.conference.service.RoomServiceDecorator</class>
+  <class>com.prodyna.pac.mmonshausen.conference.service.SpeakerServiceDecorator</class>
+  <class>com.prodyna.pac.mmonshausen.conference.service.TalkServiceDecorator</class>
+ </decorators>
 </beans>
