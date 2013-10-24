@@ -31,7 +31,6 @@ public class RoomServiceBean implements RoomService {
 	public Room createRoom(final Room room) {
 		//TODO: validation & error handling
 		em.persist(room);
-		logger.info("room successfully persisted");
 		return room;
 	}
 

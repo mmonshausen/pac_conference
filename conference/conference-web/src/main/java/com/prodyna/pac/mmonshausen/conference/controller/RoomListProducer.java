@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.prodyna.pac.mmonshausen.conference.model.Room;
+import com.prodyna.pac.mmonshausen.conference.service.Invaded;
 import com.prodyna.pac.mmonshausen.conference.service.RoomService;
 
 /**
@@ -30,7 +31,7 @@ public class RoomListProducer {
 		roomList = roomService.listAllRooms();
 	}
 	
-	public void onRoomListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Room room) {
+	public void onRoomListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) @Invaded final Room room) {
         retrieveRoomList();
     }
 	

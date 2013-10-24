@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.prodyna.pac.mmonshausen.conference.model.Location;
+import com.prodyna.pac.mmonshausen.conference.service.Invaded;
 import com.prodyna.pac.mmonshausen.conference.service.LocationService;
 
 /**
@@ -30,7 +31,7 @@ public class LocationListProducer {
 		locationList = locationService.listAllLocations();
 	}
 	
-	public void onLocationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Location location) {
+	public void onLocationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) @Invaded final Location location) {
         retrieveLocationList();
     }
 	

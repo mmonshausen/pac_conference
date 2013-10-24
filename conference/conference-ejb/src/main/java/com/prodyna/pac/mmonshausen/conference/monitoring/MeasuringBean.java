@@ -11,7 +11,7 @@ import java.util.List;
  * @author Martin Monshausen, PRODYNA AG
  */
 public class MeasuringBean implements MeasuringMXBean {
-	private HashMap<String, Entry> entries = new HashMap<String, Entry>();
+	private final HashMap<String, Entry> entries = new HashMap<String, Entry>();
 	
 	@Override
 	public void reset() {
@@ -19,8 +19,8 @@ public class MeasuringBean implements MeasuringMXBean {
 	}
 
 	@Override
-	public synchronized void report(String service, String method, long time) {
-		String key = service + ":" + method;
+	public synchronized void report(final String service, final String method, final long time) {
+		final String key = service + ":" + method;
 		
 		Entry entry = entries.get(key);
 		if(entry == null) {
@@ -42,12 +42,12 @@ public class MeasuringBean implements MeasuringMXBean {
 	
 	@Override
 	public Entry getSumEntry() {
-		Collection<Entry> entryCollection = entries.values();
+		final Collection<Entry> entryCollection = entries.values();
 		
 		long sum = 0;
 		Entry sumEntry = null;
-		for(Entry entry : entryCollection) {
-			long currSum = entry.getSum();
+		for(final Entry entry : entryCollection) {
+			final long currSum = entry.getSum();
 			if(currSum > sum) {
 				sum = currSum;
 				sumEntry = entry;
@@ -58,19 +58,19 @@ public class MeasuringBean implements MeasuringMXBean {
 	
 	@Override
 	public long getSumTime() {
-		Entry sumEntry = getSumEntry();
+		final Entry sumEntry = getSumEntry();
 		return sumEntry.getSum();
 	}
 	
 
 	@Override
 	public Entry getMinEntry() {
-		Collection<Entry> entryCollection = entries.values();
+		final Collection<Entry> entryCollection = entries.values();
 		
 		long minTime = -1;
 		Entry minEntry = null;
-		for(Entry entry : entryCollection) {
-			long currTime = entry.getMinTime();
+		for(final Entry entry : entryCollection) {
+			final long currTime = entry.getMinTime();
 			if((currTime < minTime) || (minTime == -1)) {
 				minTime = currTime;
 				minEntry = entry;
@@ -81,18 +81,18 @@ public class MeasuringBean implements MeasuringMXBean {
 	
 	@Override
 	public long getMinTime() {
-		Entry minEntry = getMinEntry();
+		final Entry minEntry = getMinEntry();
 		return minEntry.getMinTime();
 	}
 	
 	@Override
 	public Entry getMaxEntry() {
-		Collection<Entry> entryCollection = entries.values();
+		final Collection<Entry> entryCollection = entries.values();
 		
 		long worstTime = 0;
 		Entry worstEntry = null;
-		for(Entry entry : entryCollection) {
-			long maxTime = entry.getMaxTime();
+		for(final Entry entry : entryCollection) {
+			final long maxTime = entry.getMaxTime();
 			if(maxTime > worstTime) {
 				worstTime = maxTime;
 				worstEntry = entry;
@@ -103,18 +103,18 @@ public class MeasuringBean implements MeasuringMXBean {
 	
 	@Override
 	public long getMaxTime() {
-		Entry maxEntry = getMaxEntry();
+		final Entry maxEntry = getMaxEntry();
 		return maxEntry.getMaxTime();
 	}
 	
 	@Override
 	public Entry getAverageEntry() {
-		Collection<Entry> entryCollection = entries.values();
+		final Collection<Entry> entryCollection = entries.values();
 		
 		float average = 0f;
 		Entry averageEntry = null;
-		for(Entry entry : entryCollection) {
-			float averageTime = entry.getAverage();
+		for(final Entry entry : entryCollection) {
+			final float averageTime = entry.getAverage();
 			if(averageTime > average) {
 				average = averageTime;
 				averageEntry = entry;
@@ -125,7 +125,7 @@ public class MeasuringBean implements MeasuringMXBean {
 
 	@Override
 	public float getAverageTime() {
-		Entry averageEntry = getAverageEntry();
+		final Entry averageEntry = getAverageEntry();
 		return averageEntry.getAverage();
 	}
 }

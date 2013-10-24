@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.prodyna.pac.mmonshausen.conference.model.Talk;
+import com.prodyna.pac.mmonshausen.conference.service.Invaded;
 import com.prodyna.pac.mmonshausen.conference.service.TalkService;
 
 /**
@@ -30,7 +31,7 @@ public class TalkListProducer {
 		talkList = talkService.listAllTalks();
 	}
 	
-	public void onTalkListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Talk talk) {
+	public void onTalkListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) @Invaded final Talk talk) {
         retrieveTalkList();
     }
 	

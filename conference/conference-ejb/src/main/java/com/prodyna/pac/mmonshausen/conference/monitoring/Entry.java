@@ -14,12 +14,12 @@ public class Entry {
 	private long minTime = Long.MAX_VALUE;
 	private long maxTime = Long.MIN_VALUE;
 	
-	public Entry(String service, String method) {
+	public Entry(final String service, final String method) {
 		this.service = service;
 		this.method = method;
 	}
 	
-	public void report(long time) {
+	public void report(final long time) {
 		if(time < minTime) {
 			minTime = time;
 		}
@@ -41,7 +41,7 @@ public class Entry {
 		return count;
 	}
 
-	public void setCount(long count) {
+	public void setCount(final long count) {
 		this.count = count;
 	}
 
@@ -49,7 +49,7 @@ public class Entry {
 		return sum;
 	}
 
-	public void setSum(long sum) {
+	public void setSum(final long sum) {
 		this.sum = sum;
 	}
 
@@ -57,7 +57,7 @@ public class Entry {
 		return minTime;
 	}
 
-	public void setMinTime(long minTime) {
+	public void setMinTime(final long minTime) {
 		this.minTime = minTime;
 	}
 
@@ -65,7 +65,7 @@ public class Entry {
 		return maxTime;
 	}
 
-	public void setMaxTime(long maxTime) {
+	public void setMaxTime(final long maxTime) {
 		this.maxTime = maxTime;
 	}
 

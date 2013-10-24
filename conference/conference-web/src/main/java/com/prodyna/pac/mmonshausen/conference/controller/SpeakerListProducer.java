@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.prodyna.pac.mmonshausen.conference.model.Speaker;
+import com.prodyna.pac.mmonshausen.conference.service.Invaded;
 import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
 
 /**
@@ -30,7 +31,7 @@ public class SpeakerListProducer {
 		speakerList = speakerService.listAllSpeakers();
 	}
 	
-	public void onSpeakerListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Speaker speaker) {
+	public void onSpeakerListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) @Invaded final Speaker speaker) {
         retrieveSpeakerList();
     }
 	

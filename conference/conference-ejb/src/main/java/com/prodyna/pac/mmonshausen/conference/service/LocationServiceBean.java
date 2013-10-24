@@ -30,7 +30,6 @@ public class LocationServiceBean implements LocationService {
 	@Override
 	public Location saveLocation(final Location location) {
 		em.persist(location);
-		logger.info("location successfully persisted");
 		return location;
 	}
 

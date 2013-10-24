@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import com.prodyna.pac.mmonshausen.conference.model.Conference;
 import com.prodyna.pac.mmonshausen.conference.service.ConferenceService;
+import com.prodyna.pac.mmonshausen.conference.service.Invaded;
 
 /**
  * gets and holds List of conferences
@@ -30,7 +31,7 @@ public class ConferenceListProducer {
 		conferenceList = conferenceService.listAllConferences();
 	}
 	
-	public void onConferenceListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Conference conference) {
+	public void onConferenceListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) @Invaded final Conference conference) {
         retrieveConferenceList();
     }
 	

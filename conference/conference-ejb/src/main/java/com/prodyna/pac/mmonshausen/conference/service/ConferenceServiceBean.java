@@ -31,7 +31,6 @@ public class ConferenceServiceBean implements ConferenceService {
 	public Conference saveConference(final Conference conference) {
 		//TODO: validation & error handling
 		em.persist(conference);
-		logger.info("conference success");
 		return conference;
 	}
 
