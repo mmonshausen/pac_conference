@@ -1,16 +1,12 @@
 package com.prodyna.pac.mmonshausen.conference.rest;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,6 +21,7 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Conference;
 import com.prodyna.pac.mmonshausen.conference.service.ConferenceService;
+import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting conferences
@@ -34,7 +31,7 @@ import com.prodyna.pac.mmonshausen.conference.service.ConferenceService;
 @Path("/conference")
 public class ConferenceRestService {
 	@Inject
-	private Validator validator;
+	private InputValidator inputValidator;
 	
 	@Inject
 	private ConferenceService conferenceService;
@@ -45,7 +42,7 @@ public class ConferenceRestService {
 	public Response saveConference(final Conference conference) {
 		Response.ResponseBuilder builder;
 		try {
-			validateConference(conference);
+			inputValidator.validateConference(conference);
 			
 			conferenceService.saveConference(conference);
 			
@@ -91,7 +88,7 @@ public class ConferenceRestService {
 	public Response updateConference(final Conference conference) {
 		Response.ResponseBuilder builder;
 		try {
-			validateConference(conference);
+			inputValidator.validateConference(conference);
 			
 			conferenceService.updateConference(conference);
 			
@@ -110,15 +107,5 @@ public class ConferenceRestService {
 	@Path("{id}")
 	public void deleteConference(@PathParam("id") final long id) {
 		conferenceService.deleteConference(id);
-	}
-	
-	private void validateConference(final Conference conference) {
-		final Set<ConstraintViolation<Conference>> violations = validator
-				.validate(conference);
-
-		if (!violations.isEmpty()) {
-			throw new ConstraintViolationException(
-					new HashSet<ConstraintViolation<?>>(violations));
-		}
 	}
 }

@@ -1,16 +1,12 @@
 package com.prodyna.pac.mmonshausen.conference.rest;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,6 +21,7 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Room;
 import com.prodyna.pac.mmonshausen.conference.service.RoomService;
+import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting rooms
@@ -32,10 +29,9 @@ import com.prodyna.pac.mmonshausen.conference.service.RoomService;
  * @author Martin Monshausen, PRODYNA AG
  */
 @Path("/room")
-//@Stateless
 public class RoomRestService {
 	@Inject
-	private Validator validator;
+	private InputValidator inputValidator;
 	
 	@Inject
 	private RoomService roomService;
@@ -46,7 +42,7 @@ public class RoomRestService {
 	public Response createRoom(final Room room) {
 		Response.ResponseBuilder builder;
 		try {
-			validateRoom(room);
+			inputValidator.validateRoom(room);
 			
 			roomService.createRoom(room);
 			
@@ -92,7 +88,7 @@ public class RoomRestService {
 	public Response updateRoom(final Room room) {
 		Response.ResponseBuilder builder;
 		try {
-			validateRoom(room);
+			inputValidator.validateRoom(room);
 			
 			roomService.updateRoom(room);
 			
@@ -111,15 +107,5 @@ public class RoomRestService {
 	@Path("{id}")
 	public void deleteRoom(@PathParam("id") final long id) {
 		roomService.deleteRoom(id);
-	}
-	
-	private void validateRoom(final Room room) {
-		final Set<ConstraintViolation<Room>> violations = validator
-				.validate(room);
-
-		if (!violations.isEmpty()) {
-			throw new ConstraintViolationException(
-					new HashSet<ConstraintViolation<?>>(violations));
-		}
 	}
 }

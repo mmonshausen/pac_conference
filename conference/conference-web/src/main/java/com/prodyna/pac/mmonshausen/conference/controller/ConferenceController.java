@@ -9,8 +9,12 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 import com.prodyna.pac.mmonshausen.conference.model.Conference;
 import com.prodyna.pac.mmonshausen.conference.model.Location;
@@ -18,6 +22,8 @@ import com.prodyna.pac.mmonshausen.conference.model.Talk;
 import com.prodyna.pac.mmonshausen.conference.service.ConferenceService;
 import com.prodyna.pac.mmonshausen.conference.service.LocationService;
 import com.prodyna.pac.mmonshausen.conference.service.TalkService;
+import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
+import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
 /**
  * JSF-Controller for conferences
@@ -26,7 +32,15 @@ import com.prodyna.pac.mmonshausen.conference.service.TalkService;
  */
 @Model
 public class ConferenceController {
+	@Inject
+	private InputValidator inputValidator;
 	
+	@Inject
+	private FacesContext facesContext;
+	
+	@Inject
+	private JSFMessageHelper msgHelper;
+
 	@Inject
 	private ConferenceService conferenceService;
 	
@@ -83,14 +97,41 @@ public class ConferenceController {
 	}
 	
 	public void createConference() {
-		resolveIdsToObjects();
-		conferenceService.saveConference(conference);
+		try {
+			resolveIdsToObjects();
+			
+			inputValidator.validateConference(conference);
+			
+			conferenceService.saveConference(conference);
+        }  catch (final ConstraintViolationException e) {
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+            facesContext.addMessage(null, m);
+		} catch (final ValidationException e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+            facesContext.addMessage(null, m);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 
-	
 	public void saveChanges() {
-		resolveIdsToObjects();
-		conferenceService.updateConference(conference);
+		try {
+			resolveIdsToObjects();
+			
+			inputValidator.validateConference(conference);
+			
+			conferenceService.updateConference(conference);
+        }  catch (final ConstraintViolationException e) {
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+            facesContext.addMessage(null, m);
+		} catch (final ValidationException e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+            facesContext.addMessage(null, m);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }		
 	}
 	
 	private void resolveIdsToObjects() {
@@ -99,7 +140,12 @@ public class ConferenceController {
 	}
 	
 	public void deleteConference(final long id) {
-		conferenceService.deleteConference(id);
+		try {
+			conferenceService.deleteConference(id);
+        } catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 	
 	@PostConstruct

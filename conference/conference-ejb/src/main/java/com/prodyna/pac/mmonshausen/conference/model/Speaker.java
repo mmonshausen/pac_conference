@@ -75,6 +75,11 @@ public class Speaker implements Serializable {
 
 	public void setTalks(final List<Talk> talks) {
 		this.talks = talks;
+		for(Talk talk : talks) {
+			if(!talk.getSpeakers().contains(this)) {
+				talk.getSpeakers().add(this);
+			}
+		}
 	}
 
 	public Long getId() {

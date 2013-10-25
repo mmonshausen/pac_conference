@@ -83,6 +83,13 @@ public class Room implements Serializable {
 
 	public void setLocation(final Location location) {
 		this.location = location;
+		if (!location.getRooms().contains(this)) {
+            location.getRooms().add(this);
+        }
+	}
+	
+	public List<Talk> getTalks() {
+		return talks;
 	}
 
 	@Override

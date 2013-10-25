@@ -1,16 +1,12 @@
 package com.prodyna.pac.mmonshausen.conference.rest;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,6 +21,7 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Talk;
 import com.prodyna.pac.mmonshausen.conference.service.TalkService;
+import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting talks
@@ -34,7 +31,7 @@ import com.prodyna.pac.mmonshausen.conference.service.TalkService;
 @Path("/talk")
 public class TalkRestService {
 	@Inject
-	private Validator validator;
+	private InputValidator inputValidator;
 
 	@Inject
 	private TalkService talkService;
@@ -45,7 +42,7 @@ public class TalkRestService {
 	public Response createTalk(final Talk talk) {
 		Response.ResponseBuilder builder;
 		try {
-			validateTalk(talk);
+			inputValidator.validateTalk(talk);
 
 			talkService.createTalk(talk);
 
@@ -104,7 +101,7 @@ public class TalkRestService {
 	public Response updateTalk(final Talk talk) {
 		Response.ResponseBuilder builder;
 		try {
-			validateTalk(talk);
+			inputValidator.validateTalk(talk);
 
 			talkService.updateTalk(talk);
 
@@ -123,15 +120,5 @@ public class TalkRestService {
 	@Path("{id}")
 	public void deleteTalk(@PathParam("id") final long id) {
 		talkService.deleteTalk(id);
-	}
-
-	private void validateTalk(final Talk talk) {
-		final Set<ConstraintViolation<Talk>> violations = validator
-				.validate(talk);
-
-		if (!violations.isEmpty()) {
-			throw new ConstraintViolationException(
-					new HashSet<ConstraintViolation<?>>(violations));
-		}
 	}
 }

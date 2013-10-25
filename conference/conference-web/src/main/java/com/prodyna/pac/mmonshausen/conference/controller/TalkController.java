@@ -6,8 +6,12 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 import com.prodyna.pac.mmonshausen.conference.model.Conference;
 import com.prodyna.pac.mmonshausen.conference.model.Room;
@@ -17,6 +21,8 @@ import com.prodyna.pac.mmonshausen.conference.service.ConferenceService;
 import com.prodyna.pac.mmonshausen.conference.service.RoomService;
 import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
 import com.prodyna.pac.mmonshausen.conference.service.TalkService;
+import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
+import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
 /**
  * JSF-Controller for conferences
@@ -25,6 +31,14 @@ import com.prodyna.pac.mmonshausen.conference.service.TalkService;
  */
 @Model
 public class TalkController {
+	@Inject
+	private InputValidator inputValidator;
+	
+	@Inject
+	private FacesContext facesContext;
+	
+	@Inject
+	private JSFMessageHelper msgHelper;
 	
 	@Inject
 	private TalkService talkService;
@@ -45,10 +59,6 @@ public class TalkController {
 	private Long roomId;
 	private Long[] speakerIds; 
 	
-	public void createTalk() {
-		resolveIdsToObjects();
-		talkService.createTalk(talk);
-	}
 	
 	@Produces
 	@Named
@@ -90,9 +100,42 @@ public class TalkController {
 		}
 	}
 	
+	public void createTalk() {
+		try {
+			resolveIdsToObjects();
+			
+			inputValidator.validateTalk(talk);
+			
+			talkService.createTalk(talk);
+		}  catch (final ConstraintViolationException e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+			facesContext.addMessage(null, m);
+		} catch (final ValidationException e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+			facesContext.addMessage(null, m);
+		} catch (final Exception e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+			facesContext.addMessage(null, m);
+		}
+	}
+	
 	public void saveChanges() {
-		resolveIdsToObjects();
-		talkService.updateTalk(talk);
+		try {
+			resolveIdsToObjects();
+			
+			inputValidator.validateTalk(talk);
+			
+			talkService.updateTalk(talk);
+        }  catch (final ConstraintViolationException e) {
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+            facesContext.addMessage(null, m);
+		} catch (final ValidationException e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+            facesContext.addMessage(null, m);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 
 	private void resolveIdsToObjects() {
@@ -110,7 +153,12 @@ public class TalkController {
 	}
 	
 	public void deleteTalk(final Long id) {
-		talkService.deleteTalk(id);
+		try {
+			talkService.deleteTalk(id);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 	
 	@PostConstruct
@@ -158,7 +206,7 @@ public class TalkController {
 		return roomId;
 	}
 
-	public void setRoomId(Long roomId) {
+	public void setRoomId(final Long roomId) {
 		this.roomId = roomId;
 	}
 
@@ -166,7 +214,7 @@ public class TalkController {
 		return speakerIds;
 	}
 
-	public void setSpeakerIds(Long[] speakerIds) {
+	public void setSpeakerIds(final Long[] speakerIds) {
 		this.speakerIds = speakerIds;
 	}
 
@@ -174,7 +222,7 @@ public class TalkController {
 		return conferenceId;
 	}
 
-	public void setConferenceId(Long conferenceId) {
+	public void setConferenceId(final Long conferenceId) {
 		this.conferenceId = conferenceId;
 	}
 }

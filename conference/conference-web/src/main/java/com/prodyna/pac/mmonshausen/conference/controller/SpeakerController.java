@@ -3,11 +3,17 @@ package com.prodyna.pac.mmonshausen.conference.controller;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 import com.prodyna.pac.mmonshausen.conference.model.Speaker;
 import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
+import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
+import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
 /**
  * JSF-Controller for conferences
@@ -16,6 +22,14 @@ import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
  */
 @Model
 public class SpeakerController {
+	@Inject
+	private InputValidator inputValidator;
+	
+	@Inject
+	private FacesContext facesContext;
+	
+	@Inject
+	private JSFMessageHelper msgHelper;
 	
 	@Inject
 	private SpeakerService speakerService;
@@ -35,15 +49,44 @@ public class SpeakerController {
 	}
 	
 	public void createSpeaker() {
-		speakerService.saveSpeaker(speaker);
+		try {
+			inputValidator.validateSpeaker(speaker);
+			speakerService.saveSpeaker(speaker);
+        }  catch (final ConstraintViolationException e) {
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+            facesContext.addMessage(null, m);
+		} catch (final ValidationException e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+            facesContext.addMessage(null, m);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 	
 	public void saveChanges() {
-		speakerService.updateSpeaker(speaker);
+		try {
+			inputValidator.validateSpeaker(speaker);
+			speakerService.updateSpeaker(speaker);
+        }  catch (final ConstraintViolationException e) {
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+            facesContext.addMessage(null, m);
+		} catch (final ValidationException e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+            facesContext.addMessage(null, m);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 	
-	public void deleteChanges(long id) {
-		speakerService.deleteSpeaker(id);
+	public void deleteChanges(final long id) {
+		try {
+			speakerService.deleteSpeaker(id);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 	
 	@PostConstruct
@@ -68,7 +111,7 @@ public class SpeakerController {
 		return mode;
 	}
 
-	public void setMode(String mode) {
+	public void setMode(final String mode) {
 		this.mode = mode;
 	}
 }

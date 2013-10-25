@@ -10,7 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -64,10 +63,10 @@ public class Talk implements Serializable {
 	private Room room;
 
 	@NotNull
-	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinTable(name="TalkSpeakerMapping",
-	joinColumns={@JoinColumn(name="talk_id", referencedColumnName="id")},
-	inverseJoinColumns={@JoinColumn(name="speaker_id", referencedColumnName="id")})
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="talks")
+//	@JoinTable(name="TalkSpeakerMapping",
+//	joinColumns={@JoinColumn(name="talk_id", referencedColumnName="id")},
+//	inverseJoinColumns={@JoinColumn(name="speaker_id", referencedColumnName="id")})
 	private List<Speaker> speakers;
 	
 	public Talk(final String name, final String description, final Date date, final Date startTime,
@@ -139,6 +138,9 @@ public class Talk implements Serializable {
 
 	public void setConference(final Conference conference) {
 		this.conference = conference;
+		if (!conference.getTalks().contains(this)) {
+            conference.getTalks().add(this);
+        }
 	}
 
 	public Room getRoom() {
@@ -147,6 +149,9 @@ public class Talk implements Serializable {
 
 	public void setRoom(final Room room) {
 		this.room = room;
+		if (!room.getTalks().contains(this)) {
+            room.getTalks().add(this);
+        }
 	}
 
 	public List<Speaker> getSpeakers() {
@@ -155,6 +160,11 @@ public class Talk implements Serializable {
 
 	public void setSpeakers(final List<Speaker> speakers) {
 		this.speakers = speakers;
+		for(Speaker speaker : speakers) {
+			if(!speaker.getTalks().contains(this)) {
+				speaker.getTalks().add(this);
+			}
+		}
 	}
 
 	@Override

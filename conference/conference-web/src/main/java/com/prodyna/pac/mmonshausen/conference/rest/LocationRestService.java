@@ -1,16 +1,12 @@
 package com.prodyna.pac.mmonshausen.conference.rest;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,6 +21,7 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Location;
 import com.prodyna.pac.mmonshausen.conference.service.LocationService;
+import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting locations
@@ -32,10 +29,9 @@ import com.prodyna.pac.mmonshausen.conference.service.LocationService;
  * @author Martin Monshausen, PRODYNA AG
  */
 @Path("/location")
-//@Stateless
 public class LocationRestService {
 	@Inject
-	private Validator validator;
+	private InputValidator inputValidator;
 	
 	@Inject
 	private LocationService locationService;
@@ -46,7 +42,7 @@ public class LocationRestService {
 	public Response saveLocation(final Location location) {
 		Response.ResponseBuilder builder;
 		try {
-			validateLocation(location);
+			inputValidator.validateLocation(location);
 			
 			locationService.saveLocation(location);
 			
@@ -92,7 +88,7 @@ public class LocationRestService {
 	public Response updateLocation(final Location location) {
 		Response.ResponseBuilder builder;
 		try {
-			validateLocation(location);
+			inputValidator.validateLocation(location);
 			
 			locationService.updateLocation(location);
 			
@@ -111,15 +107,5 @@ public class LocationRestService {
 	@Path("{id}")
 	public void deleteLocation(@PathParam("id") final long id) {
 		locationService.deleteLocation(id);
-	}
-	
-	private void validateLocation(final Location location) {
-		final Set<ConstraintViolation<Location>> violations = validator
-				.validate(location);
-
-		if (!violations.isEmpty()) {
-			throw new ConstraintViolationException(
-					new HashSet<ConstraintViolation<?>>(violations));
-		}
 	}
 }

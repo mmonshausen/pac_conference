@@ -9,8 +9,12 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 import com.prodyna.pac.mmonshausen.conference.model.Location;
 import com.prodyna.pac.mmonshausen.conference.model.Room;
@@ -18,6 +22,8 @@ import com.prodyna.pac.mmonshausen.conference.model.Talk;
 import com.prodyna.pac.mmonshausen.conference.service.LocationService;
 import com.prodyna.pac.mmonshausen.conference.service.RoomService;
 import com.prodyna.pac.mmonshausen.conference.service.TalkService;
+import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
+import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
 /**
  * JSF-Controller for conferences
@@ -26,6 +32,14 @@ import com.prodyna.pac.mmonshausen.conference.service.TalkService;
  */
 @Model
 public class RoomController {
+	@Inject
+	private InputValidator inputValidator;
+	
+	@Inject
+	private FacesContext facesContext;
+	
+	@Inject
+	private JSFMessageHelper msgHelper;
 	
 	@Inject
 	private RoomService roomService;
@@ -81,13 +95,37 @@ public class RoomController {
 	}
 	
 	public void createRoom() {
-		resolveIdsToObjects();
-		roomService.createRoom(room);
+		try {
+			resolveIdsToObjects();
+			inputValidator.validateRoom(room);
+			roomService.createRoom(room);
+        }  catch (final ConstraintViolationException e) {
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+            facesContext.addMessage(null, m);
+		} catch (final ValidationException e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+            facesContext.addMessage(null, m);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 	
 	public void saveChanges() {
-		resolveIdsToObjects();
-		roomService.updateRoom(room);
+		try {
+			resolveIdsToObjects();
+			inputValidator.validateRoom(room);
+			roomService.updateRoom(room);
+        }  catch (final ConstraintViolationException e) {
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+            facesContext.addMessage(null, m);
+		} catch (final ValidationException e) {
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+            facesContext.addMessage(null, m);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 
 	private void resolveIdsToObjects() {
@@ -96,7 +134,12 @@ public class RoomController {
 	}
 	
 	public void deleteRoom(final long id) {
-		roomService.deleteRoom(id);
+		try {
+			roomService.deleteRoom(id);
+		} catch (final Exception e) {
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            facesContext.addMessage(null, m);
+        }
 	}
 	
 	@PostConstruct
@@ -130,7 +173,7 @@ public class RoomController {
 		return locationId;
 	}
 
-	public void setLocationId(Long locationId) {
+	public void setLocationId(final Long locationId) {
 		this.locationId = locationId;
 	}
 }

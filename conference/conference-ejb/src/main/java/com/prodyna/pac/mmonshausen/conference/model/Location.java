@@ -112,6 +112,14 @@ public class Location implements Serializable {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+	
+	public List<Room> getRooms() {
+		return rooms;
+	}
+
+	public List<Conference> getConferences() {
+		return conferences;
+	}
 
 	@Override
 	public int hashCode() {

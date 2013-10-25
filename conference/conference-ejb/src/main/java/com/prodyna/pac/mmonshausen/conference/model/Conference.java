@@ -89,6 +89,9 @@ public class Conference implements Serializable {
 
 	public void setLocation(final Location location) {
 		this.location = location;
+		if (!location.getConferences().contains(this)) {
+            location.getConferences().add(this);
+        }
 	}
 
 	public String getDescription() {
@@ -114,7 +117,11 @@ public class Conference implements Serializable {
 	public void setEndDate(final Date endDate) {
 		this.endDate = endDate;
 	}
-
+	
+	public List<Talk> getTalks() {
+		return talks;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

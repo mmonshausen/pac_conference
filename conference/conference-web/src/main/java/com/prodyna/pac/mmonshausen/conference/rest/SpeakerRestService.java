@@ -1,16 +1,12 @@
 package com.prodyna.pac.mmonshausen.conference.rest;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,6 +21,7 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Speaker;
 import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
+import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting speakers
@@ -34,7 +31,7 @@ import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
 @Path("/speaker")
 public class SpeakerRestService {
 	@Inject
-	private Validator validator;
+	private InputValidator inputValidator;
 	
 	@Inject
 	private SpeakerService speakerService;
@@ -45,7 +42,7 @@ public class SpeakerRestService {
 	public Response saveSpeaker(final Speaker speaker) {
 		Response.ResponseBuilder builder;
 		try {
-			validateSpeaker(speaker);
+			inputValidator.validateSpeaker(speaker);
 			
 			speakerService.saveSpeaker(speaker);
 			
@@ -91,7 +88,7 @@ public class SpeakerRestService {
 	public Response updateSpeaker(final Speaker speaker) {
 		Response.ResponseBuilder builder;
 		try {
-			validateSpeaker(speaker);
+			inputValidator.validateSpeaker(speaker);
 			
 			speakerService.updateSpeaker(speaker);
 			
@@ -110,15 +107,5 @@ public class SpeakerRestService {
 	@Path("{id}")
 	public void deleteSpeaker(@PathParam("id") final long id) {
 		speakerService.deleteSpeaker(id);
-	}
-	
-	private void validateSpeaker(final Speaker speaker) {
-		final Set<ConstraintViolation<Speaker>> violations = validator
-				.validate(speaker);
-
-		if (!violations.isEmpty()) {
-			throw new ConstraintViolationException(
-					new HashSet<ConstraintViolation<?>>(violations));
-		}
 	}
 }
