@@ -14,8 +14,8 @@ import javax.management.ObjectName;
 import com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean;
 
 /**
- * interceptor which intercepts all method calls of service classes and reports and logs
- * information about their runtimes
+ * interceptor which intercepts all method calls of service classes; it reports
+ * time to a JMX bean and logs information about their elapsed times
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -29,6 +29,18 @@ public class MeasuringInterceptor {
 	@Inject
 	private MBeanServer mBeanServer;
 
+	/**
+	 * will be called for all service methods intercepted<br>
+	 * measure elapsed time for service methods calls, log information and
+	 * report it to JMX bean
+	 * 
+	 * @param context
+	 *            {@link InvocationContext} for intercepted method containing
+	 *            information about service, method and parameters
+	 * @return pass return value of intercepted method to caller
+	 * @throws Exception
+	 *             pass all exceptions to caller which could handle them
+	 */
 	@AroundInvoke
 	public Object onMethodCall(final InvocationContext context)
 			throws Exception {
@@ -47,20 +59,20 @@ public class MeasuringInterceptor {
 
 		logger.info(buildLogMessage(service, method, parameters, duration));
 		
-		MeasuringMXBean mxBean = getInstance();
+		final MeasuringMXBean mxBean = getInstance();
 		mxBean.report(service, method, duration);
 
 		return result;
 	}
 	
 	private MeasuringMXBean getInstance() throws MalformedObjectNameException {
-		ObjectName on = new ObjectName("com.prodyna.pac.mmonshausen.conference:service=MeasuringBean");
+		final ObjectName on = new ObjectName("com.prodyna.pac.mmonshausen.conference:service=MeasuringBean");
 		return MBeanServerInvocationHandler.newProxyInstance(mBeanServer, on, MeasuringMXBean.class, false);
 	}
 
 	private String buildLogMessage(final String service, final String method,
 			final String parameters, final long duration) {
-		StringBuffer buffer = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 		buffer.append("Aufruf ");
 		buffer.append(service + ".");
 		buffer.append(method);

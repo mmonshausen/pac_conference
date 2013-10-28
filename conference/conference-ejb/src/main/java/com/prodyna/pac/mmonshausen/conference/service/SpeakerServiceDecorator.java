@@ -9,7 +9,8 @@ import com.prodyna.pac.mmonshausen.conference.model.Speaker;
 import com.prodyna.pac.mmonshausen.conference.util.DecoratorHelper;
 
 /**
- * Decorator which intercepts methods and sends notifications to observers and queue messages
+ * Decorator which intercepts {@link SpeakerService} methods and sends
+ * notifications to observers and queue messages
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -25,30 +26,46 @@ public abstract class SpeakerServiceDecorator implements SpeakerService {
 	@Inject
 	private DecoratorHelper decoHelper;
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.SpeakerService#createSpeaker(com.prodyna.pac.mmonshausen.conference.model.Speaker)
+	 */
 	@Override
-	public Speaker saveSpeaker(final Speaker speaker) {
-		event.fire(speaker);
+	public Speaker createSpeaker(final Speaker speaker) {
+		final Speaker resultSpeaker = speakerService.createSpeaker(speaker);
+		
+		event.fire(resultSpeaker);
 		
 		decoHelper.sendQueueMessage("speaker [id="+speaker.getId()+" name="+speaker.getName()+ "] erstellt");
 		
-		return speakerService.saveSpeaker(speaker);
+		return resultSpeaker;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.SpeakerService#updateSpeaker(com.prodyna.pac.mmonshausen.conference.model.Speaker)
+	 */
 	@Override
 	public Speaker updateSpeaker(final Speaker speaker) {
-		event.fire(speaker);
+		final Speaker resultSpeaker = speakerService.updateSpeaker(speaker);
+		
+		event.fire(resultSpeaker);
 		
 		decoHelper.sendQueueMessage("speaker [id="+speaker.getId()+" name="+speaker.getName()+ "] upgedated");
 		
-		return speakerService.updateSpeaker(speaker);
+		return resultSpeaker;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.SpeakerService#deleteSpeaker(long)
+	 */
 	@Override
 	public void deleteSpeaker(final long id) {
+		speakerService.deleteSpeaker(id);
+		
 		event.fire(new Speaker());
 		
-		decoHelper.sendQueueMessage("speaker [id="+id+ "] geloescht");	
-		
-		deleteSpeaker(id);
+		decoHelper.sendQueueMessage("speaker [id="+id+ "] geloescht");
 	}
 }

@@ -7,7 +7,12 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Details zum Speaker #{speaker.name}</h1>
-
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück zur Übersicht" />
+		</h:link>
+		<hr />
 		<f:metadata>
 			<f:viewParam name="id" value="#{speakerController.id}"></f:viewParam>
 		</f:metadata>
@@ -18,19 +23,25 @@
 		<h2>Beschreibung</h2>
 		<h:outputText value="#{speaker.description}" />
 
-		<h2>Übersicht der Talks</h2>
+		<h2>
+			<h:graphicImage library="default" name="img/group.png" />
+			<h:outputText value=" Übersicht der Talks" />
+		</h2>
+		<hr />
 		<ul>
-			<ui:repeat var="talk" value="#{speaker.talks}">
+			<c:forEach items="#{speaker.talks}" var="talk">
 				<li>
 					<h:outputText value="#{talk.name} am " />
-					<h:outputText value="#{talk.date}">
+					<h:outputText value="#{talk.date} ">
 						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputText>
-					<h:link value="Details" outcome="talk" includeViewParams="true">
+					<h:link outcome="talk" includeViewParams="true">
+						<h:graphicImage library="default" name="img/zoom.png" />
+						<h:outputText value=" Details" />
 						<f:param name="id" value="#{talk.id}" />
 					</h:link>
 				</li>
-			</ui:repeat>
+			</c:forEach>
 		</ul>
 	</ui:define>
 </ui:composition>

@@ -10,6 +10,14 @@ import javax.validation.ConstraintViolationException;
  */
 public class JSFMessageHelper {
 	
+	/**
+	 * traverse through exception hierarchy until reaching root cause of the
+	 * exception; get error message of that exception
+	 * 
+	 * @param e
+	 *            exception for which root cause should be determined
+	 * @return error message of exceptions root cause
+	 */
 	public String getRootErrorMessage(final Exception e) {
         // Default to general error message that registration failed.
         String errorMessage = "interner Fehler aufgetreten; bitte Administrator benachrichtigen";
@@ -23,7 +31,16 @@ public class JSFMessageHelper {
         // This is the root cause message
         return errorMessage;
     }
-
+	
+	/**
+	 * append error messages of {@link ConstraintViolationException} and its
+	 * sub-exceptions to a result string
+	 * 
+	 * @param e
+	 *            {@link ConstraintViolationException} for which error messages
+	 *            should be extracted
+	 * @return messages string containing all {@link ConstraintViolation}s
+	 */
 	public String getConstraintViolationMessage(final ConstraintViolationException e) {
 		final StringBuffer buffer = new StringBuffer();
     	for (final ConstraintViolation<?> violation : e.getConstraintViolations()) {

@@ -3,7 +3,10 @@ package com.prodyna.pac.mmonshausen.conference.util;
 import java.util.Date;
 
 /**
- * holder class used to check if talks are use in the context of speakers and rooms correctly
+ * holder class used to check if talks are use in the context of speakers and
+ * rooms correctly<br>
+ * class has special equals method which returns true if two objects have same
+ * date and if startTimes and endTimes overlap or are the same
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -12,8 +15,7 @@ public class TalkKey {
 	private final Date startTime;
 	private final Date endTime;
 
-	public TalkKey(final Date date, final Date startTime,
-			final Date endTime) {
+	public TalkKey(final Date date, final Date startTime, final Date endTime) {
 		super();
 		this.date = date;
 		this.startTime = startTime;
@@ -73,5 +75,4 @@ public class TalkKey {
 			return false;
 		}
 	}
-
 }

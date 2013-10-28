@@ -3,9 +3,7 @@ package com.prodyna.pac.mmonshausen.conference.model;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -37,7 +35,7 @@ public class Speaker implements Serializable {
 	@Size(min=1)
 	private String description;
 	
-	@ManyToMany (cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@ManyToMany
 	@JoinTable(name="TalkSpeakerMapping",
 	joinColumns={@JoinColumn(name="speaker_id", referencedColumnName="id")},
 	inverseJoinColumns={@JoinColumn(name="talk_id", referencedColumnName="id")})
@@ -75,11 +73,6 @@ public class Speaker implements Serializable {
 
 	public void setTalks(final List<Talk> talks) {
 		this.talks = talks;
-		for(Talk talk : talks) {
-			if(!talk.getSpeakers().contains(this)) {
-				talk.getSpeakers().add(this);
-			}
-		}
 	}
 
 	public Long getId() {
@@ -133,6 +126,6 @@ public class Speaker implements Serializable {
 	@Override
 	public String toString() {
 		return "Speaker [id=" + id + ", name=" + name + ", description="
-				+ description + ", talks=" + talks + "]";
+				+ description + "]";
 	}
 }

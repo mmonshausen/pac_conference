@@ -27,26 +27,42 @@ public class TalkServiceBean implements TalkService {
 	@Inject
 	private Logger logger;
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#createTalk(com.prodyna.pac.mmonshausen.conference.model.Talk)
+	 */
 	@Override
 	public Talk createTalk(final Talk talk) {
 		em.persist(talk);
-		logger.info("talk successfully persisted");
 		return talk;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#getTalkById(long)
+	 */
 	@Override
 	public Talk getTalkById(final long id) {
-		final Talk talk = em.find(Talk.class, id);
+		final String queryString = "SELECT talk FROM Talk talk left join fetch talk.speakers WHERE talk.id = :talkId";
+		final TypedQuery<Talk> query = em.createQuery(queryString,
+				Talk.class);
+		query.setParameter("talkId", id);
+		final List<Talk> resultList = query.getResultList();
 
-		if(talk == null) {
+		if(resultList.isEmpty()) {
 			logger.warning("talk (id="+id+") not found");
-		}
-
-		return talk;
+			return null;
+		} else {
+			return resultList.get(0);
+		}		
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#getConferenceTalksOrderedByDateTime(java.lang.Long)
+	 */
 	@Override
-	public List<Talk> getConferenceTalksOrderedByDateTime(Long conferenceId) {
+	public List<Talk> getConferenceTalksOrderedByDateTime(final Long conferenceId) {
 		final String queryString = "SELECT talk FROM Talk talk where talk.conference.id = :conferenceId order by talk.date, talk.startTime";
 		final TypedQuery<Talk> query = em.createQuery(queryString,
 				Talk.class);
@@ -60,8 +76,12 @@ public class TalkServiceBean implements TalkService {
 		return resultList;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#getRoomTalksOrderedByDateTime(java.lang.Long)
+	 */
 	@Override
-	public List<Talk> getRoomTalksOrderedByDateTime(Long roomId) {
+	public List<Talk> getRoomTalksOrderedByDateTime(final Long roomId) {
 		final String queryString = "SELECT talk FROM Talk talk where talk.room.id = :roomId order by talk.date, talk.startTime";
 		final TypedQuery<Talk> query = em.createQuery(queryString,
 				Talk.class);
@@ -75,9 +95,13 @@ public class TalkServiceBean implements TalkService {
 		return resultList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#listAllTalks()
+	 */
 	@Override
 	public List<Talk> listAllTalks() {
-		final String queryString = "SELECT talk FROM Talk talk";
+		final String queryString = "SELECT talk FROM Talk talk left join fetch talk.speakers";
 		final TypedQuery<Talk> query = em.createQuery(queryString,
 				Talk.class);
 		final List<Talk> resultList = query.getResultList();
@@ -89,11 +113,14 @@ public class TalkServiceBean implements TalkService {
 		return resultList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#updateTalk(com.prodyna.pac.mmonshausen.conference.model.Talk)
+	 */
 	@Override
 	public Talk updateTalk(final Talk talk) {
 		final Long id = talk.getId();
 
-		//TODO: validation & error handling
 		if(id != null) {
 			final Talk persistedTalk = getTalkById(id);
 
@@ -118,6 +145,10 @@ public class TalkServiceBean implements TalkService {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#deleteTalk(long)
+	 */
 	@Override
 	public void deleteTalk(final long id) {
 		final Talk talk = getTalkById(id);

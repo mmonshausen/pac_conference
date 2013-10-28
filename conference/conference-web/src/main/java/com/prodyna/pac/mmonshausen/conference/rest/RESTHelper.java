@@ -31,7 +31,6 @@ public class RESTHelper {
 			responseObj.put(violation.getPropertyPath().toString(),
 					violation.getMessage());
 		}
-
 		return Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 	}
 }

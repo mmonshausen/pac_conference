@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * this class holds information about rooms
+ * entity holding information about rooms
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -83,9 +83,6 @@ public class Room implements Serializable {
 
 	public void setLocation(final Location location) {
 		this.location = location;
-		if (!location.getRooms().contains(this)) {
-            location.getRooms().add(this);
-        }
 	}
 	
 	public List<Talk> getTalks() {

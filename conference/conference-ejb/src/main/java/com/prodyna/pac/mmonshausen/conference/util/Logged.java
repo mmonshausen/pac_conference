@@ -8,6 +8,11 @@ import java.lang.annotation.Target;
 
 import javax.interceptor.InterceptorBinding;
 
+/**
+ * definition of annotation used as interceptor binding
+ * 
+ * @author Martin Monshausen, PRODYNA AG
+ */
 @Inherited
 @InterceptorBinding
 @Retention(RetentionPolicy.RUNTIME)

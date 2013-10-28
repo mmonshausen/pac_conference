@@ -66,7 +66,6 @@ public class TalkRestService {
 		if (talk == null) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
-
 		return talk;
 	}
 
@@ -79,7 +78,6 @@ public class TalkRestService {
 		if (talkList == null || talkList.isEmpty()) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
-
 		return talkList;
 	}
 
@@ -91,7 +89,6 @@ public class TalkRestService {
 		if (talkList == null || talkList.isEmpty()) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
-
 		return talkList;
 	}
 

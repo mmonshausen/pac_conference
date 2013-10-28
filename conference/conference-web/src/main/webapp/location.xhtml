@@ -7,7 +7,12 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Details zur Location #{location.name}</h1>
-
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück zur Übersicht" />
+		</h:link>
+		<hr />
 		<f:metadata>
 			<f:viewParam name="id" value="#{locationController.id}"></f:viewParam>
 		</f:metadata>
@@ -16,20 +21,26 @@
 		<h:outputText value="#{location.name}" />
 
 		<h2>Adresse</h2>
-		<h:outputText value="#{location.street}" />
-		<h:outputText value="#{location.zipCode} #{location.city}" />
-		<h:outputText value="#{location.country}" />
+		<h:outputText value="#{location.street}" /><br/>
+		<h:outputText value="#{location.zipCode} #{location.city}" /><br/>
+		<h:outputText value="#{location.country}" /><br/>
 
-		<h2>Übersicht der Räume</h2>
+		<h2>
+			<h:graphicImage library="default" name="img/door.png" />
+			<h:outputText value=" Übersicht der Räume" />
+		</h2>
+		<hr/>
 		<ul>
-			<ui:repeat var="room" value="#{locationController.rooms}">
+			<c:forEach items="#{location.rooms}" var="room">
 				<li>
-					<h:outputText value="#{room.name} (Kapazität: #{room.capacity})" />
-					<h:link value="Details" outcome="room" includeViewParams="true">
-						<f:param name="id" value="#{room.id}" />
+					<h:outputText value="#{room.name} (Kapazität: #{room.capacity}) " />
+					<h:link outcome="room" includeViewParams="true">
+							<h:graphicImage library="default" name="img/zoom.png" />
+							<h:outputText value=" Details" />
+							<f:param name="id" value="#{room.id}" />
 					</h:link>
 				</li>
-			</ui:repeat>
+			</c:forEach>
 		</ul>
 	</ui:define>
 </ui:composition>

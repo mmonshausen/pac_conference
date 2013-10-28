@@ -7,19 +7,16 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Talk-Verwaltung</h1>
-
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück" />
+		</h:link>
+		<hr />
 		<f:metadata>
 			<f:viewParam name="id" value="#{talkController.id}"></f:viewParam>
 			<f:viewParam name="mode" value="#{talkController.mode}"></f:viewParam>
 		</f:metadata>
-
-		<h2>Speaker</h2>
-		<ui:repeat var="speaker" value="#{talk.speakers}">
-			<li><h:outputText>#{speaker.name}</h:outputText> <h:link
-					value="Details" outcome="speaker">
-					<f:param name="id" value="#{speaker.id}" />
-				</h:link></li>
-		</ui:repeat>
 
 		<h:panelGroup>
 			<h:form>
@@ -50,9 +47,10 @@
 						<f:convertDateTime pattern="H:mm" />
 					</h:inputText>
 					<h:message for="endTime" errorClass="invalid" />
-					
+
 					<h:outputLabel for="conference" value="Konferenz:" />
-					<h:selectOneMenu value="#{talkController.conferenceId}" name="conference">
+					<h:selectOneMenu value="#{talkController.conferenceId}"
+						name="conference">
 						<f:selectItems value="#{talkController.conferenceList}" var="c"
 							itemLabel="#{c.name}" itemValue="#{c.id}" />
 					</h:selectOneMenu>
@@ -79,69 +77,78 @@
 
 				<h:commandButton value="erstellen"
 					action="#{talkController.createTalk}" />
-				<h:commandButton value="speichern"
+				<h:commandButton value="Änderungen speichern"
 					action="#{talkController.saveChanges}" />
 			</h:form>
 		</h:panelGroup>
 
 		<h2>
-			<h:outputText>Liste der Talk</h:outputText>
+			<h:outputText value="Liste der Talk" />
 		</h2>
+		<hr />
 		<h:panelGroup rendered="#{empty talks}">
 			<em>sind in Planung...</em>
 		</h:panelGroup>
-		<h:link value="Talk anlegen" outcome="talk_admin"
-			includeViewParams="true">
+		<h:link outcome="talk_admin" includeViewParams="true">
+			<h:graphicImage library="default" name="img/add.png" />
+			<h:outputText value=" Talk anlegen" />
 			<f:param name="mode" value="create" />
 		</h:link>
-		<h:dataTable var="currentTalk" value="#{talks}"
-			rendered="#{not empty talks}" styleClass="simpletablestyle">
+		<h:form>
+			<h:dataTable var="currentTalk" value="#{talks}"
+				rendered="#{not empty talks}" styleClass="simpletablestyle">
 
-			<h:column>
-				<f:facet name="header">Name</f:facet>
+				<h:column>
+					<f:facet name="header">Name</f:facet>
                 #{currentTalk.name}
           	</h:column>
-			<h:column>
-				<f:facet name="header">Beschreibung</f:facet>
+				<h:column>
+					<f:facet name="header">Beschreibung</f:facet>
                 #{currentTalk.description}
          	</h:column>
-			<h:column>
-				<f:facet name="header">Datum</f:facet>
-				<h:outputText value="#{currentTalk.date}">
-					<f:convertDateTime pattern="dd.MM.yyyy" timeZone="UTC" />
-				</h:outputText>
-			</h:column>
-			<h:column>
-				<f:facet name="header">Zeitraum</f:facet>
-				<h:outputText value="#{currentTalk.startTime}">
-					<f:convertDateTime pattern="H:mm" />
-				</h:outputText> - 
-      			<h:outputText value="#{currentTalk.endTime}">
-					<f:convertDateTime pattern="H:mm" />
-				</h:outputText>
-			</h:column>
-			<h:column>
-				<f:facet name="header">Raum</f:facet>
+				<h:column>
+					<f:facet name="header">Datum</f:facet>
+					<h:outputText value="#{currentTalk.date}">
+						<f:convertDateTime pattern="dd.MM.yyyy" timeZone="UTC" />
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Zeitraum</f:facet>
+					<h:outputText value="#{currentTalk.startTime}">
+						<f:convertDateTime pattern="H:mm" />
+					</h:outputText> - 
+      				<h:outputText value="#{currentTalk.endTime}">
+						<f:convertDateTime pattern="H:mm" />
+					</h:outputText>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Raum</f:facet>
                 #{currentTalk.room.name}
-         	</h:column>
-			<h:column>
-				<f:facet name="header">Speakers</f:facet>
-				<ui:repeat var="speaker" value="#{currentTalk.speakers}"
-					varStatus="status">
-					<h:outputText>#{speaker.name}</h:outputText>
-					<h:outputText rendered="#{not status.last}">, </h:outputText>
-				</ui:repeat>
-			</h:column>
-			<h:column>
-				<f:facet name="header">Aktionen</f:facet>
-				<h:link value="bearbeiten" outcome="talk_admin"
-					includeViewParams="true">
-					<f:param name="id" value="#{currentTalk.id}" />
-					<f:param name="mode" value="edit" />
-				</h:link>
-				<h:commandButton value="löschen"
-					action="#{talkController.deleteTalk(currentTalk.id)}" />
-			</h:column>
-		</h:dataTable>
+         		</h:column>
+				<h:column>
+					<f:facet name="header">Speakers</f:facet>
+					<c:forEach items="#{currentTalk.speakers}" var="speaker"
+						varStatus="status">
+						<h:outputText value="#{speaker.name}" />
+						<h:outputText rendered="#{not status.last}" value=", " />
+					</c:forEach>
+				</h:column>
+				<h:column>
+					<h:link outcome="talk_admin" includeViewParams="true">
+						<h:graphicImage library="default" name="img/pencil.png" />
+						<h:outputText value=" bearbeiten" />
+						<f:param name="id" value="#{currentTalk.id}" />
+						<f:param name="mode" value="edit" />
+					</h:link>
+				</h:column>
+				<h:column>
+					<h:commandLink
+						action="#{talkController.deleteTalk(currentTalk.id)}">
+						<h:graphicImage library="default" name="img/cross.png" />
+						<h:outputText value=" löschen" />
+					</h:commandLink>
+				</h:column>
+			</h:dataTable>
+		</h:form>
 	</ui:define>
 </ui:composition>

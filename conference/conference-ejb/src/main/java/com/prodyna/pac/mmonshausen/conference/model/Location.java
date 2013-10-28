@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * this class holds information about conferences location
+ * entity holding information about locations
  * 
  * @author Martin Monshausen, PRODYNA AG
  */

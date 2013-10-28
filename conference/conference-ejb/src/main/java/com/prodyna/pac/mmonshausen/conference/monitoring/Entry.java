@@ -1,7 +1,9 @@
 package com.prodyna.pac.mmonshausen.conference.monitoring;
 
 /**
- * save information about runtimes of service methods
+ * save information about elapsed time of services method<br>
+ * each Entry represents one method of a service; stored values correspond to
+ * this method
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -13,12 +15,17 @@ public class Entry {
 	private long sum;
 	private long minTime = Long.MAX_VALUE;
 	private long maxTime = Long.MIN_VALUE;
-	
+
 	public Entry(final String service, final String method) {
 		this.service = service;
 		this.method = method;
 	}
-	
+
+	/**
+	 * method for reporting new results for methods calls
+	 * 
+	 * @param time	elapsed time for method call
+	 */
 	public void report(final long time) {
 		if(time < minTime) {
 			minTime = time;
@@ -29,7 +36,7 @@ public class Entry {
 		sum += time;
 		count++;
 	}
-	
+
 	public float getAverage() {
 		if (count == 0) {
 			return 0f;

@@ -11,7 +11,8 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 /**
- * MessageDrivenBean which writes received asynchronous queue messages into logfile
+ * MessageDrivenBean which writes received asynchronous queue messages into log<br>
+ * queue messages are send by services decorators<br>
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -25,6 +26,10 @@ public class LoggingMDB  implements MessageListener {
 	@Inject
 	private Logger logger;
 
+	/*
+	 * (non-Javadoc)
+	 * @see javax.jms.MessageListener#onMessage(javax.jms.Message)
+	 */
 	@Override
 	public void onMessage(Message msg) {
 		if(msg instanceof TextMessage) {

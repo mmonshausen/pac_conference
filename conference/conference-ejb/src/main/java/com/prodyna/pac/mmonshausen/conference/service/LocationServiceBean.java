@@ -28,25 +28,38 @@ public class LocationServiceBean implements LocationService {
 	private Logger logger;
 
 	@Override
-	public Location saveLocation(final Location location) {
+	public Location createLocation(final Location location) {
 		em.persist(location);
 		return location;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.LocationService#getLocationById(long)
+	 */
 	@Override
 	public Location getLocationById(final long id) {
-		final Location location = em.find(Location.class, id);
-		
-		if(location == null) {
+		final String queryString = "SELECT location FROM Location location left join fetch location.rooms WHERE location.id = :locationId";
+		final TypedQuery<Location> query = em.createQuery(queryString,
+				Location.class);
+		query.setParameter("locationId", id);
+		final List<Location> resultList = query.getResultList();
+
+		if(resultList.isEmpty()) {
 			logger.warning("location (id="+id+") not found");
+			return null;
+		} else {
+			return resultList.get(0);
 		}
-		
-		return location;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.LocationService#listAllLocations()
+	 */
 	@Override
 	public List<Location> listAllLocations() {
-		final String queryString = "SELECT location FROM Location location";
+		final String queryString = "SELECT location FROM Location location left join fetch location.rooms";
 		final TypedQuery<Location> query = em.createQuery(queryString,
 				Location.class);
 		final List<Location> resultList = query.getResultList();
@@ -58,11 +71,14 @@ public class LocationServiceBean implements LocationService {
 		return resultList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.LocationService#updateLocation(com.prodyna.pac.mmonshausen.conference.model.Location)
+	 */
 	@Override
 	public Location updateLocation(final Location location) {
-		Long id = location.getId();
+		final Long id = location.getId();
 		
-		//TODO: validation & error handling
 		if(id != null) {
 			final Location persistedLocation = getLocationById(id);
 
@@ -84,6 +100,10 @@ public class LocationServiceBean implements LocationService {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.LocationService#deleteLocation(long)
+	 */
 	@Override
 	public void deleteLocation(final long id) {
 		final Location location = getLocationById(id);
@@ -92,7 +112,6 @@ public class LocationServiceBean implements LocationService {
 			em.remove(location);
 			logger.info("location (id="+id+") successfully deleted");
 		} else {
-			//TODO: error handling
 			logger.warning("location (id="+id+") not found; nothing deleted!");
 		}
 	}

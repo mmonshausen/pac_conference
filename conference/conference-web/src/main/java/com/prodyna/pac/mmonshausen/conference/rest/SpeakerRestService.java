@@ -44,7 +44,7 @@ public class SpeakerRestService {
 		try {
 			inputValidator.validateSpeaker(speaker);
 			
-			speakerService.saveSpeaker(speaker);
+			speakerService.createSpeaker(speaker);
 			
 			builder = Response.ok();
 		} catch (final ConstraintViolationException e) {
@@ -66,7 +66,6 @@ public class SpeakerRestService {
 		if (speaker == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-		
 		return speaker;
 	}
 	
@@ -78,7 +77,6 @@ public class SpeakerRestService {
 		if (speakerList == null || speakerList.isEmpty()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-		
 		return speakerList;
 	}
 	

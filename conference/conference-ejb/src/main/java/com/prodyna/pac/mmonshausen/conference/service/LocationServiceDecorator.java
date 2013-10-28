@@ -9,7 +9,8 @@ import com.prodyna.pac.mmonshausen.conference.model.Location;
 import com.prodyna.pac.mmonshausen.conference.util.DecoratorHelper;
 
 /**
- * Decorator which intercepts methods and sends notifications to observers and queue messages
+ * Decorator which intercepts {@link LocationService} methods and sends
+ * notifications to observers and queue messages
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -25,30 +26,46 @@ public abstract class LocationServiceDecorator implements LocationService {
 	@Inject
 	DecoratorHelper decoHelper;
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.LocationService#saveLocation(com.prodyna.pac.mmonshausen.conference.model.Location)
+	 */
 	@Override
-	public Location saveLocation(final Location location) {
-		event.fire(location);
+	public Location createLocation(final Location location) {
+		final Location resultLocation = locationService.createLocation(location);
+		
+		event.fire(resultLocation);
 		
 		decoHelper.sendQueueMessage("location [id="+location.getId()+" name="+location.getName()+ "] erstellt");
 		
-		return locationService.saveLocation(location);
+		return resultLocation;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.LocationService#updateLocation(com.prodyna.pac.mmonshausen.conference.model.Location)
+	 */
 	@Override
 	public Location updateLocation(final Location location) {
-		event.fire(location);
+		final Location resultLocation = locationService.updateLocation(location);
+		
+		event.fire(resultLocation);
 
 		decoHelper.sendQueueMessage("location [id="+location.getId()+" name="+location.getName()+ "] upgedated");
 
-		return locationService.updateLocation(location);
+		return resultLocation;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.LocationService#deleteLocation(long)
+	 */
 	@Override
 	public void deleteLocation(final long id) {
+		locationService.deleteLocation(id);
+		
 		event.fire(new Location());
 		
 		decoHelper.sendQueueMessage("location [id="+id+ "] geloescht");	
-		
-		deleteLocation(id);
 	}
 }

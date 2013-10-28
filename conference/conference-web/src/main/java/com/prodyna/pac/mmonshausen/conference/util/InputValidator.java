@@ -27,6 +27,13 @@ public class InputValidator {
 	@Inject
 	private Validator validator;
 	
+	/**
+	 * validate creation and updating of {@link Conference} entities using
+	 * bean validations
+	 * 
+	 * @param conference
+	 *            {@link Conference} to validate
+	 */
 	public void validateConference(final Conference conference) {
 		final Set<ConstraintViolation<Conference>> violations = validator
 				.validate(conference);
@@ -37,6 +44,13 @@ public class InputValidator {
 		}
 	}
 	
+	/**
+	 * validate creation and updating of {@link Location} entities using
+	 * bean validations
+	 * 
+	 * @param location
+	 *            {@link Location} to validate
+	 */
 	public void validateLocation(final Location location) {
 		final Set<ConstraintViolation<Location>> violations = validator
 				.validate(location);
@@ -47,12 +61,21 @@ public class InputValidator {
 		}
 	}
 	
+	/**
+	 * validate creation and updating of {@link Room} entities using
+	 * bean validations<br>
+	 * additionally the method will proof that there no talks at same time in
+	 * that room
+	 * 
+	 * @param room	{@link Room} to validate
+	 */
 	public void validateRoom(final Room room) {
 		final Set<ConstraintViolation<Room>> violations = validator
 				.validate(room);
 		
 		if(!isRoomTalkValid(room)) {
-			throw new ValidationException("nicht moeglich, dass mehrere Talks in Raum zur gleichen Zeit stattfinden!");
+			throw new ValidationException(
+					"nicht moeglich, dass mehrere Talks in Raum zur gleichen Zeit stattfinden!");
 		}
 
 		if (!violations.isEmpty()) {
@@ -80,12 +103,21 @@ public class InputValidator {
 		return true;
 	}
 	
+	/**
+	 * validate creation and updating of {@link Speaker} entities using bean
+	 * validations<br>
+	 * additionally the method will proof that the speaker is not involve in
+	 * more than one talk at same time
+	 * 
+	 * @param speaker	{@link Speaker} to validate
+	 */
 	public void validateSpeaker(final Speaker speaker) {
 		final Set<ConstraintViolation<Speaker>> violations = validator
 				.validate(speaker);
 		
 		if(!isSpeakerTalkValid(speaker)) {
-			throw new ValidationException("Speaker kann nicht mehrere Talks zur gleichen Zeit halten");
+			throw new ValidationException(
+					"Speaker kann nicht mehrere Talks zur gleichen Zeit halten");
 		}
 
 		if (!violations.isEmpty()) {
@@ -114,6 +146,13 @@ public class InputValidator {
 		return true;
 	}
 	
+	/**
+	 * validate creation and updating of {@link Talk} entities using bean
+	 * validations<br>
+	 * additionally the method will proof that the talk takes place during conferences times
+	 * 
+	 * @param talk	{@link Talk} to validate
+	 */
 	public void validateTalk(final Talk talk) {
 		final Set<ConstraintViolation<Talk>> violations = validator
 				.validate(talk);

@@ -27,28 +27,43 @@ public class ConferenceServiceBean implements ConferenceService {
 	@Inject
 	private Logger logger;
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.ConferenceService#saveConference(com.prodyna.pac.mmonshausen.conference.model.Conference)
+	 */
 	@Override
-	public Conference saveConference(final Conference conference) {
-		//TODO: validation & error handling
+	public Conference createConference(final Conference conference) {
 		em.persist(conference);
 		return conference;
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.ConferenceService#getConferenceById(long)
+	 */
 	@Override
 	public Conference getConferenceById(final long id) {
-		final Conference conference = em.find(Conference.class, id);
+		final String queryString = "SELECT conference FROM Conference conference left join fetch conference.talks WHERE conference.id = :conferenceId";
+		final TypedQuery<Conference> query = em.createQuery(queryString,
+				Conference.class);
+		query.setParameter("conferenceId", id);
+		final List<Conference> resultList = query.getResultList();
 
-		if(conference == null) {
-			//TODO: error handling
+		if(resultList.isEmpty()) {
 			logger.warning("conference (id=" +id+ ") not found!");
+			return null;
+		} else {
+			return resultList.get(0);
 		}
-
-		return conference;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.ConferenceService#listAllConferences()
+	 */
 	@Override
 	public List<Conference> listAllConferences() {
-		final String queryString = "SELECT conference FROM Conference conference";
+		final String queryString = "SELECT conference FROM Conference conference left join fetch conference.talks";
 		final TypedQuery<Conference> query = em.createQuery(queryString,
 				Conference.class);
 		final List<Conference> resultList = query.getResultList();
@@ -60,11 +75,14 @@ public class ConferenceServiceBean implements ConferenceService {
 		return resultList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.ConferenceService#updateConference(com.prodyna.pac.mmonshausen.conference.model.Conference)
+	 */
 	@Override
 	public Conference updateConference(final Conference conference) {
 		final Long id = conference.getId();
 
-		//TODO: validation & error handling
 		if (id != null) {
 			final Conference persistedConference = getConferenceById(id);
 
@@ -84,6 +102,10 @@ public class ConferenceServiceBean implements ConferenceService {
 		return null;
 	}
 
+	/* 
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.ConferenceService#deleteConference(long)
+	 */
 	@Override
 	public void deleteConference(final long id) {
 		final Conference conference = getConferenceById(id);
@@ -92,23 +114,7 @@ public class ConferenceServiceBean implements ConferenceService {
 			em.remove(conference);
 			logger.info("conference (id="+id+") successfully deleted");
 		} else {
-			//TODO: error handling
 			logger.warning("conference (id="+id+") not found. conference could not be deleted.");
 		}
-	}
-
-	@Override
-	public List<Conference> getConferenceForLocation(long id) {
-		final String queryString = "SELECT conference FROM Conference conference WHERE conference.location.id = :locationId";
-		final TypedQuery<Conference> query = em.createQuery(queryString,
-				Conference.class);
-		query.setParameter("locationId", id);
-		final List<Conference> resultList = query.getResultList();
-
-		if(resultList.isEmpty()) {
-			logger.warning("no conferences existing!");
-		}
-
-		return resultList;
 	}
 }

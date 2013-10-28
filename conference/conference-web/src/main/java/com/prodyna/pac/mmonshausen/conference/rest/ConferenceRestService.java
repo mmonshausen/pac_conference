@@ -44,7 +44,7 @@ public class ConferenceRestService {
 		try {
 			inputValidator.validateConference(conference);
 			
-			conferenceService.saveConference(conference);
+			conferenceService.createConference(conference);
 			
 			builder = Response.ok();
 		} catch (final ConstraintViolationException e) {
@@ -66,7 +66,6 @@ public class ConferenceRestService {
 		if (conference == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-		
 		return conference;
 	}
 	
@@ -78,7 +77,6 @@ public class ConferenceRestService {
 		if (conferenceList == null || conferenceList.isEmpty()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-		
 		return conferenceList;
 	}
 	

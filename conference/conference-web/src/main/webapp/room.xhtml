@@ -7,7 +7,12 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Details zum Raum #{room.name}</h1>
-
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück zur Übersicht" />
+		</h:link>
+		<hr />
 		<f:metadata>
 			<f:viewParam name="id" value="#{roomController.id}"></f:viewParam>
 		</f:metadata>
@@ -21,7 +26,11 @@
 		<h2>Location</h2>
 		<h:outputText value="#{room.location.name}" />
 
-		<h2>Übersicht der stattfindenden Talks</h2>
+		<h2>
+			<h:graphicImage library="default" name="img/group.png" />
+			<h:outputText value=" Übersicht der Talks" />
+		</h2>
+		<hr/>
 		<h:panelGroup rendered="#{empty roomController.talksByDay}">
 			<em>sind in Planung...</em>
 		</h:panelGroup>
@@ -40,9 +49,10 @@
 						<h:outputText value="#{talk.endTime}">
 							<f:convertDateTime pattern="H:mm" />
 						</h:outputText> -
-						<h:outputText value="#{talk.name} - " /> 
-						<h:link
-							value="Details" outcome="talk" includeViewParams="true">
+						<h:outputText value="#{talk.name} " />
+						<h:link outcome="talk" includeViewParams="true">
+							<h:graphicImage library="default" name="img/zoom.png" />
+							<h:outputText value=" Details" />
 							<f:param name="id" value="#{talk.id}" />
 						</h:link>
 					</li>

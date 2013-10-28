@@ -56,11 +56,10 @@ public class ConferenceController {
 	private String mode;
 	private Long locationId;
 	
-	
 	@Produces
 	@Named
 	public Conference getConference() {
-		if(conference != null) {
+		if (conference != null) {
 			return conference;
 		} else {
 			return new Conference();
@@ -88,11 +87,9 @@ public class ConferenceController {
 			if(talkList == null) {
 				talkList = new ArrayList<Talk>();
 				talksGroupedByDate.put(date, talkList);
-			}
-			
+			}			
 			talkList.add(talk);
 		}
-		
 		return talksGroupedByDate;
 	}
 	
@@ -102,15 +99,15 @@ public class ConferenceController {
 			
 			inputValidator.validateConference(conference);
 			
-			conferenceService.saveConference(conference);
+			conferenceService.createConference(conference);
         }  catch (final ConstraintViolationException e) {
-        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e) , msgHelper.getConstraintViolationMessage(e));
             facesContext.addMessage(null, m);
 		} catch (final ValidationException e) {
-			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), e.getMessage());
             facesContext.addMessage(null, m);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
 	}
@@ -123,13 +120,13 @@ public class ConferenceController {
 			
 			conferenceService.updateConference(conference);
         }  catch (final ConstraintViolationException e) {
-        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
             facesContext.addMessage(null, m);
 		} catch (final ValidationException e) {
-			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), e.getMessage());
             facesContext.addMessage(null, m);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }		
 	}
@@ -139,13 +136,14 @@ public class ConferenceController {
 		conference.setLocation(location);
 	}
 	
-	public void deleteConference(final long id) {
+	public String deleteConference(final long id) {
 		try {
 			conferenceService.deleteConference(id);
         } catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
+		return "conference_admin";
 	}
 	
 	@PostConstruct

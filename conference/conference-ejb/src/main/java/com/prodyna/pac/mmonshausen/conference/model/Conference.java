@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
+ * entity holding information about conferences 
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -89,9 +90,6 @@ public class Conference implements Serializable {
 
 	public void setLocation(final Location location) {
 		this.location = location;
-		if (!location.getConferences().contains(this)) {
-            location.getConferences().add(this);
-        }
 	}
 
 	public String getDescription() {

@@ -16,7 +16,7 @@ import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
 /**
- * JSF-Controller for conferences
+ * JSF-Controller for speakers
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -51,15 +51,15 @@ public class SpeakerController {
 	public void createSpeaker() {
 		try {
 			inputValidator.validateSpeaker(speaker);
-			speakerService.saveSpeaker(speaker);
+			speakerService.createSpeaker(speaker);
         }  catch (final ConstraintViolationException e) {
-        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
             facesContext.addMessage(null, m);
 		} catch (final ValidationException e) {
-			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), e.getMessage());
             facesContext.addMessage(null, m);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
 	}
@@ -69,24 +69,25 @@ public class SpeakerController {
 			inputValidator.validateSpeaker(speaker);
 			speakerService.updateSpeaker(speaker);
         }  catch (final ConstraintViolationException e) {
-        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
             facesContext.addMessage(null, m);
 		} catch (final ValidationException e) {
-			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), e.getMessage());
             facesContext.addMessage(null, m);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
 	}
 	
-	public void deleteChanges(final long id) {
+	public String deleteSpeaker(final long id) {
 		try {
 			speakerService.deleteSpeaker(id);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
+		return "speaker_admin";
 	}
 	
 	@PostConstruct

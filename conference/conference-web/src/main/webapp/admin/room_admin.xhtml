@@ -7,7 +7,12 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Raum-Verwaltung</h1>
-
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück" />
+		</h:link>
+		<hr />
 		<f:metadata>
 			<f:viewParam name="id" value="#{roomController.id}"></f:viewParam>
 			<f:viewParam name="mode" value="#{roomController.mode}"></f:viewParam>
@@ -25,8 +30,8 @@
 					<h:message for="capacity" errorClass="invalid" />
 
 					<h:outputLabel for="location" value="Location:" />
-					<h:selectOneMenu
-						value="#{roomController.locationId}" name="location">
+					<h:selectOneMenu value="#{roomController.locationId}"
+						name="location">
 						<f:selectItems value="#{roomController.locationList}" var="l"
 							itemLabel="#{l.name}" itemValue="#{l.id}" />
 					</h:selectOneMenu>
@@ -38,44 +43,53 @@
 
 				<h:commandButton value="erstellen"
 					action="#{roomController.createRoom}" />
-				<h:commandButton value="speichern"
+				<h:commandButton value="Änderungen speichern"
 					action="#{roomController.saveChanges}" />
 			</h:form>
 		</h:panelGroup>
-
 		<h2>
-			<h:outputText>Liste der Räume</h:outputText>
+			<h:outputText value="Liste der Räume" />
 		</h2>
+		<hr />
 		<h:panelGroup rendered="#{empty rooms}">
 			<em>sind in Planung...</em>
 		</h:panelGroup>
-		<h:link value="Raum anlegen" outcome="room_admin"
-			includeViewParams="true">
+		<h:link outcome="room_admin" includeViewParams="true">
+			<h:graphicImage library="default" name="img/add.png" />
+			<h:outputText value=" Room anlegen" />
 			<f:param name="mode" value="create" />
 		</h:link>
-		<h:dataTable var="currentRoom" value="#{rooms}"
-			rendered="#{not empty rooms}" styleClass="simpletablestyle">
-			<h:column>
-				<f:facet name="header">Name</f:facet>
+		<h:form>
+			<h:dataTable var="currentRoom" value="#{rooms}"
+				rendered="#{not empty rooms}" styleClass="simpletablestyle">
+				<h:column>
+					<f:facet name="header">Name</f:facet>
                 #{currentRoom.name}
-          	</h:column>
-			<h:column>
-				<f:facet name="header">Raumgröße</f:facet>
+          		</h:column>
+				<h:column>
+					<f:facet name="header">Raumgröße</f:facet>
                 #{currentRoom.capacity}
-         	</h:column>
-			<h:column>
-				<f:facet name="header">Location</f:facet>
+         		</h:column>
+				<h:column>
+					<f:facet name="header">Location</f:facet>
                 #{currentRoom.location.name}
-         	</h:column>
-			<h:column>
-				<f:facet name="header">Aktionen</f:facet>
-				<h:link value="bearbeiten" outcome="room_admin" includeViewParams="true">
-					<f:param name="id" value="#{currentRoom.id}" />
-					<f:param name="mode" value="edit" />
-				</h:link>
-				<h:commandButton value="löschen"
-					action="#{roomController.deleteRoom(currentRoom.id)}" />
-			</h:column>
-		</h:dataTable>
+         		</h:column>
+				<h:column>
+					<h:link outcome="room_admin" includeViewParams="true">
+						<h:graphicImage library="default" name="img/pencil.png" />
+						<h:outputText value=" bearbeiten" />
+						<f:param name="id" value="#{currentRoom.id}" />
+						<f:param name="mode" value="edit" />
+					</h:link>
+				</h:column>
+				<h:column>
+					<h:commandLink
+						action="#{roomController.deleteRoom(currentRoom.id)}">
+						<h:graphicImage library="default" name="img/cross.png" />
+						<h:outputText value=" löschen" />
+					</h:commandLink>
+				</h:column>
+			</h:dataTable>
+		</h:form>
 	</ui:define>
 </ui:composition>

@@ -29,26 +29,37 @@ public class RoomServiceBean implements RoomService {
 
 	@Override
 	public Room createRoom(final Room room) {
-		//TODO: validation & error handling
 		em.persist(room);
 		return room;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.RoomService#getRoomById(long)
+	 */
 	@Override
 	public Room getRoomById(final long id) {
-		final Room room = em.find(Room.class, id);
+		final String queryString = "SELECT room FROM Room room left join fetch room.talks WHERE room.id = :roomId";
+		final TypedQuery<Room> query = em.createQuery(queryString,
+				Room.class);
+		query.setParameter("roomId", id);
+		final List<Room> resultList = query.getResultList();
 
-		if(room == null) {
-			//TODO: error handling
+		if(resultList.isEmpty()) {
 			logger.warning("room (id="+id+") not found!");
+			return null;
+		} else {
+			return resultList.get(0);
 		}
-
-		return room;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.RoomService#listAllRooms()
+	 */
 	@Override
 	public List<Room> listAllRooms() {
-		final String queryString = "SELECT room FROM Room room";
+		final String queryString = "SELECT room FROM Room room left join fetch room.talks";
 		final TypedQuery<Room> query = em.createQuery(queryString,
 				Room.class);
 		final List<Room> resultList = query.getResultList();
@@ -60,11 +71,14 @@ public class RoomServiceBean implements RoomService {
 		return resultList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.RoomService#updateRoom(com.prodyna.pac.mmonshausen.conference.model.Room)
+	 */
 	@Override
 	public Room updateRoom(final Room room) {
 		final Long id = room.getId();
 		
-		//TODO: validation & error handling
 		if(id != null) {
 			final Room persistedRoom = getRoomById(id);
 			
@@ -83,6 +97,10 @@ public class RoomServiceBean implements RoomService {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.RoomService#deleteRoom(long)
+	 */
 	@Override
 	public void deleteRoom(final long id) {
 		final Room room = getRoomById(id);
@@ -91,23 +109,7 @@ public class RoomServiceBean implements RoomService {
 			em.remove(room);
 			logger.info("room (id="+id+") successfully deleted");
 		} else {
-			//TODO: error handling
 			logger.warning("room (id="+id+") not found; nothing deleted!");
 		}
-	}
-
-	@Override
-	public List<Room> getRoomsForLocation(long id) {
-		final String queryString = "SELECT room FROM Room room where room.location.id = :locationId";
-		final TypedQuery<Room> query = em.createQuery(queryString,
-				Room.class);
-		query.setParameter("locationId", id);
-		final List<Room> resultList = query.getResultList();
-
-		if(resultList.isEmpty()) {
-			logger.warning("no rooms for that parameters existing!");
-		}
-
-		return resultList;
 	}
 }

@@ -29,6 +29,12 @@ public class DecoratorHelper {
 	@Inject
 	private QueueConnectionFactory qcf;
 	
+	/**
+	 * send given text message to queue
+	 * 
+	 * @param message
+	 *            text message to send to queue
+	 */
 	public void sendQueueMessage(final String message) {
 		try {
 			final Queue queue = (Queue) ctx.lookup( "queue/log" );

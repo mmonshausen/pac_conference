@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -63,10 +62,10 @@ public class Talk implements Serializable {
 	private Room room;
 
 	@NotNull
-	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="talks")
-//	@JoinTable(name="TalkSpeakerMapping",
-//	joinColumns={@JoinColumn(name="talk_id", referencedColumnName="id")},
-//	inverseJoinColumns={@JoinColumn(name="speaker_id", referencedColumnName="id")})
+	@ManyToMany
+	@JoinTable(name="TalkSpeakerMapping",
+	joinColumns={@JoinColumn(name="talk_id", referencedColumnName="id")},
+	inverseJoinColumns={@JoinColumn(name="speaker_id", referencedColumnName="id")})
 	private List<Speaker> speakers;
 	
 	public Talk(final String name, final String description, final Date date, final Date startTime,
@@ -138,9 +137,6 @@ public class Talk implements Serializable {
 
 	public void setConference(final Conference conference) {
 		this.conference = conference;
-		if (!conference.getTalks().contains(this)) {
-            conference.getTalks().add(this);
-        }
 	}
 
 	public Room getRoom() {
@@ -149,9 +145,6 @@ public class Talk implements Serializable {
 
 	public void setRoom(final Room room) {
 		this.room = room;
-		if (!room.getTalks().contains(this)) {
-            room.getTalks().add(this);
-        }
 	}
 
 	public List<Speaker> getSpeakers() {
@@ -160,11 +153,6 @@ public class Talk implements Serializable {
 
 	public void setSpeakers(final List<Speaker> speakers) {
 		this.speakers = speakers;
-		for(Speaker speaker : speakers) {
-			if(!speaker.getTalks().contains(this)) {
-				speaker.getTalks().add(this);
-			}
-		}
 	}
 
 	@Override
@@ -248,7 +236,7 @@ public class Talk implements Serializable {
 	public String toString() {
 		return "Talk [id=" + id + ", name=" + name + ", description="
 				+ description + ", date=" + date + ", startTime=" + startTime
-				+ ", endTime=" + endTime + ", conference=" + conference
-				+ ", room=" + room + ", speakers=" + speakers + "]";
+				+ ", endTime=" + endTime + ", conference=" + conference.getId()
+				+ ", room=" + room.getId() + "]";
 	}
 }

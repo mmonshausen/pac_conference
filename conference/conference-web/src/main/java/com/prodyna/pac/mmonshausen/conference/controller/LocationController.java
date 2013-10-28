@@ -1,7 +1,5 @@
 package com.prodyna.pac.mmonshausen.conference.controller;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
@@ -13,9 +11,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
 import com.prodyna.pac.mmonshausen.conference.model.Location;
-import com.prodyna.pac.mmonshausen.conference.model.Room;
 import com.prodyna.pac.mmonshausen.conference.service.LocationService;
-import com.prodyna.pac.mmonshausen.conference.service.RoomService;
 import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
@@ -31,9 +27,6 @@ public class LocationController {
 	
 	@Inject
 	private LocationService locationService;
-	
-	@Inject
-	private RoomService roomService;
 	
 	@Inject
 	private FacesContext facesContext;
@@ -55,22 +48,18 @@ public class LocationController {
 		}
 	}
 	
-	public List<Room> getRooms() {
-		return roomService.getRoomsForLocation(id);
-	}
-	
 	public void createLocation() {
 		try {
 			inputValidator.validateLocation(location);
-			locationService.saveLocation(location);
+			locationService.createLocation(location);
         }  catch (final ConstraintViolationException e) {
-        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
             facesContext.addMessage(null, m);
 		} catch (final ValidationException e) {
-			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), e.getMessage());
             facesContext.addMessage(null, m);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }	
 	}
@@ -80,24 +69,25 @@ public class LocationController {
 			inputValidator.validateLocation(location);
 			locationService.updateLocation(location);
         }  catch (final ConstraintViolationException e) {
-        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
             facesContext.addMessage(null, m);
 		} catch (final ValidationException e) {
-			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), e.getMessage());
             facesContext.addMessage(null, m);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
 	}
 	
-	public void deleteLocation(final long id) {
+	public String deleteLocation(final long id) {
 		try {
 			locationService.deleteLocation(id);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
+		return "location_admin";
 	}
 	
 	@PostConstruct

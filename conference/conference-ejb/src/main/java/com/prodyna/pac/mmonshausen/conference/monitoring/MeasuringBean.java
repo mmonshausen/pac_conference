@@ -13,11 +13,19 @@ import java.util.List;
 public class MeasuringBean implements MeasuringMXBean {
 	private final HashMap<String, Entry> entries = new HashMap<String, Entry>();
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#reset()
+	 */
 	@Override
 	public void reset() {
 		entries.clear();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#report(java.lang.String, java.lang.String, long)
+	 */
 	@Override
 	public synchronized void report(final String service, final String method, final long time) {
 		final String key = service + ":" + method;
@@ -30,16 +38,28 @@ public class MeasuringBean implements MeasuringMXBean {
 		entry.report(time);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getAll()
+	 */
 	@Override
 	public List<Entry> getAll() {
 		return new ArrayList<Entry> (entries.values());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getCount()
+	 */
 	@Override
 	public int getCount() {
 		return entries.size();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getSumEntry()
+	 */
 	@Override
 	public Entry getSumEntry() {
 		final Collection<Entry> entryCollection = entries.values();
@@ -56,13 +76,20 @@ public class MeasuringBean implements MeasuringMXBean {
 		return sumEntry;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getSumTime()
+	 */
 	@Override
 	public long getSumTime() {
 		final Entry sumEntry = getSumEntry();
 		return sumEntry.getSum();
 	}
 	
-
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getMinEntry()
+	 */
 	@Override
 	public Entry getMinEntry() {
 		final Collection<Entry> entryCollection = entries.values();
@@ -79,12 +106,20 @@ public class MeasuringBean implements MeasuringMXBean {
 		return minEntry;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getMinTime()
+	 */
 	@Override
 	public long getMinTime() {
 		final Entry minEntry = getMinEntry();
 		return minEntry.getMinTime();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getMaxEntry()
+	 */
 	@Override
 	public Entry getMaxEntry() {
 		final Collection<Entry> entryCollection = entries.values();
@@ -101,12 +136,20 @@ public class MeasuringBean implements MeasuringMXBean {
 		return worstEntry;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getMaxTime()
+	 */
 	@Override
 	public long getMaxTime() {
 		final Entry maxEntry = getMaxEntry();
 		return maxEntry.getMaxTime();
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getAverageEntry()
+	 */
 	@Override
 	public Entry getAverageEntry() {
 		final Collection<Entry> entryCollection = entries.values();
@@ -123,6 +166,10 @@ public class MeasuringBean implements MeasuringMXBean {
 		return averageEntry;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.monitoring.MeasuringMXBean#getAverageTime()
+	 */
 	@Override
 	public float getAverageTime() {
 		final Entry averageEntry = getAverageEntry();

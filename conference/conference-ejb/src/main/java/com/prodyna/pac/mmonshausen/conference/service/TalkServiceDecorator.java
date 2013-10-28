@@ -9,7 +9,8 @@ import com.prodyna.pac.mmonshausen.conference.model.Talk;
 import com.prodyna.pac.mmonshausen.conference.util.DecoratorHelper;
 
 /**
- * Decorator which intercepts methods and sends notifications to observers and queue messages
+ * Decorator which intercepts {@link TalkService} methods and sends
+ * notifications to observers and queue messages
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -24,31 +25,46 @@ public abstract class TalkServiceDecorator implements TalkService {
 	
 	private DecoratorHelper decoHelper;
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#createTalk(com.prodyna.pac.mmonshausen.conference.model.Talk)
+	 */
 	@Override
 	public Talk createTalk(final Talk talk) {
-		event.fire(talk);
+		final Talk resultTalk = talkService.createTalk(talk);
+		
+		event.fire(resultTalk);
 		
 		decoHelper.sendQueueMessage("talk ["+talk.getId()+" "+talk.getName()+ "] erstellt");
 		
-		return talkService.createTalk(talk);
+		return resultTalk;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#updateTalk(com.prodyna.pac.mmonshausen.conference.model.Talk)
+	 */
 	@Override
 	public Talk updateTalk(final Talk talk) {
-		event.fire(talk);
+		final Talk resultTalk = talkService.updateTalk(talk);
+		
+		event.fire(resultTalk);
 		
 		decoHelper.sendQueueMessage("talk ["+talk.getId()+" "+talk.getName()+ "] upgedated");
 		
-		return talkService.updateTalk(talk);
+		return resultTalk;
 	}
 
-
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.TalkService#deleteTalk(long)
+	 */
 	@Override
 	public void deleteTalk(final long id) {
+		talkService.deleteTalk(id);
+		
 		event.fire(new Talk());
 		
-		decoHelper.sendQueueMessage("talk ["+id+" ] geloescht");	
-		
-		deleteTalk(id);
+		decoHelper.sendQueueMessage("talk ["+id+" ] geloescht");
 	}	
 }

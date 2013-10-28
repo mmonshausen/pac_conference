@@ -66,7 +66,6 @@ public class RoomRestService {
 		if (room == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-		
 		return room;
 	}
 	
@@ -78,7 +77,6 @@ public class RoomRestService {
 		if (roomList == null || roomList.isEmpty()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-		
 		return roomList;
 	}
 	

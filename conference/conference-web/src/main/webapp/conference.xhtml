@@ -7,7 +7,12 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Details zur Konferenz #{conference.name}</h1>
-
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück zur Übersicht" />
+		</h:link>
+		<hr />
 		<f:metadata>
 			<f:viewParam name="id" value="#{conferenceController.id}"></f:viewParam>
 		</f:metadata>
@@ -16,8 +21,10 @@
 		<h:outputText value="#{conference.name}" />
 
 		<h2>Ort</h2>
-		<h:outputText value="#{conference.location.name}, #{conference.location.city}" />
-		<h:link value="Details" outcome="location">
+		<h:outputText value="#{conference.location.name}, #{conference.location.city} " />
+		<h:link outcome="location" includeViewParams="true">
+			<h:graphicImage library="default" name="img/zoom.png" />
+			<h:outputText value=" Details" />
 			<f:param name="id" value="#{conference.location.id}" />
 		</h:link>
 
@@ -35,8 +42,10 @@
 		</h:outputText>
 
 		<h2>
-			<h:outputText>Konferenz-Übersicht</h:outputText>
+			<h:graphicImage library="default" name="img/date.png" />
+			<h:outputText value=" Konferenz-Übersicht" />
 		</h2>
+		<hr/>
 		<h:panelGroup rendered="#{empty conferenceController.talksByDay}">
 			<em>sind in Planung...</em>
 		</h:panelGroup>
@@ -55,8 +64,10 @@
 						<h:outputText value="#{talk.endTime}">
 							<f:convertDateTime pattern="H:mm" />
 						</h:outputText> -
-						<h:outputText value="#{talk.name} - " /> 
-						<h:link value="Details" outcome="talk" includeViewParams="true">
+						<h:outputText value="#{talk.name} - " />
+						<h:link outcome="talk" includeViewParams="true">
+							<h:graphicImage library="default" name="img/zoom.png" />
+							<h:outputText value=" Details" />
 							<f:param name="id" value="#{talk.id}" />
 						</h:link>
 					</li>

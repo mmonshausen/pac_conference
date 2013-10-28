@@ -3,6 +3,7 @@ package com.prodyna.pac.mmonshausen.conference.monitoring;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
@@ -28,6 +29,9 @@ public class MeasuringEnabler {
 	@Inject
 	private Logger logger;
 
+	/**
+	 * register JMX bean
+	 */
 	@PostConstruct
 	public void postConstruct() {
 		try {
@@ -43,13 +47,17 @@ public class MeasuringEnabler {
 			logger.warning(e.getMessage());
 		}
 	}
-
+	
+	/**
+	 * unregister JMX bean
+	 */
+	@PreDestroy
 	public void preDestroy() {
 		try {
 			final ObjectName on = new ObjectName("com.prodyna.pac.mmonshausen.conference:service=MeasuringBean");
 			mbServer.unregisterMBean(on);
 		} catch(final Exception e) {
-			e.printStackTrace();
+			logger.warning(e.getMessage());
 		}
 	}
 }

@@ -9,7 +9,8 @@ import com.prodyna.pac.mmonshausen.conference.model.Room;
 import com.prodyna.pac.mmonshausen.conference.util.DecoratorHelper;
 
 /**
- * Decorator which intercepts methods and sends notifications to observers and queue messages
+ * Decorator which intercepts {@link RoomService} methods and sends
+ * notifications to observers and queue messages
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -25,30 +26,46 @@ public abstract class RoomServiceDecorator implements RoomService {
 	@Inject
 	private DecoratorHelper decoHelper;
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.RoomService#createRoom(com.prodyna.pac.mmonshausen.conference.model.Room)
+	 */
 	@Override
 	public Room createRoom(final Room room) {
-		event.fire(room);
+		final Room resultRoom = roomService.createRoom(room);
+		
+		event.fire(resultRoom);
 		
 		decoHelper.sendQueueMessage("room [id="+room.getId()+" name="+room.getName()+ "] erstellt");
 		
-		return roomService.createRoom(room);
+		return resultRoom;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.RoomService#updateRoom(com.prodyna.pac.mmonshausen.conference.model.Room)
+	 */
 	@Override
 	public Room updateRoom(final Room room) {
-		event.fire(room);
+		final Room resultRoom = roomService.updateRoom(room);
+		
+		event.fire(resultRoom);
 		
 		decoHelper.sendQueueMessage("room [id="+room.getId()+" name="+room.getName()+ "] upgedated");
 		
-		return roomService.updateRoom(room);
+		return resultRoom;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.RoomService#deleteRoom(long)
+	 */
 	@Override
 	public void deleteRoom(final long id) {
+		roomService.deleteRoom(id);
+		
 		event.fire(new Room());
 		
 		decoHelper.sendQueueMessage("room [id="+id+ "] geloescht");
-		
-		deleteRoom(id);
 	}
 }

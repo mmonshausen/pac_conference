@@ -7,7 +7,12 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Details zum Talk #{talk.name}</h1>
-
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück zur Übersicht" />
+		</h:link>
+		<hr />
 		<f:metadata>
 			<f:viewParam name="id" value="#{talkController.id}"></f:viewParam>
 		</f:metadata>
@@ -34,20 +39,23 @@
 		</h:outputText>
 
 		<h2>Raum</h2>
-		<h:outputText value="#{talk.room.name}" />
-		<h:link value="Details" outcome="room">
+		<h:outputText value="#{talk.room.name} " />
+		<h:link outcome="room" includeViewParams="true">
+			<h:graphicImage library="default" name="img/zoom.png" />
+			<h:outputText value=" Details" />
 			<f:param name="id" value="#{talk.room.id}" />
 		</h:link>
 
 		<h2>Speaker</h2>
-		<ui:repeat var="speaker" value="#{talk.speakers}">
+		<c:forEach items="#{talk.speakers}" var="speaker">
 			<li>
-				<h:outputText value="#{speaker.name}" />
-				<h:link
-					value="Details" outcome="speaker" includeViewParams="true">
+				<h:outputText value="#{speaker.name} " />
+				<h:link outcome="speaker" includeViewParams="true">
+					<h:graphicImage library="default" name="img/zoom.png" />
+					<h:outputText value=" Details" />
 					<f:param name="id" value="#{speaker.id}" />
 				</h:link>
 			</li>
-		</ui:repeat>
+		</c:forEach>
 	</ui:define>
 </ui:composition>

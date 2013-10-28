@@ -7,7 +7,12 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Konferenz-Verwaltung</h1>
-		
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück" />
+		</h:link>
+		<hr />
 		<f:metadata>
 			<f:viewParam name="id" value="#{conferenceController.id}"></f:viewParam>
 			<f:viewParam name="mode" value="#{conferenceController.mode}"></f:viewParam>
@@ -50,48 +55,58 @@
 
 				<h:commandButton value="erstellen"
 					action="#{conferenceController.createConference}" />
-				<h:commandButton value="speichern"
-					rendered="#{conferenceController.mode == 'edit'}" />
+				<h:commandButton value="Änderungen speichern" />
 			</h:form>
 		</h:panelGroup>
 
 		<h2>
-			<h:outputText>Liste der Konferenzen</h:outputText>
+			<h:outputText value="Liste der Konferenzen" />
 		</h2>
+		<hr />
 		<h:panelGroup rendered="#{empty conferences}">
 			<em>sind in Planung...</em>
 		</h:panelGroup>
-		<h:link value="Konferenz anlegen" outcome="conference_admin" includeViewParams="true">
+		<h:link outcome="conference_admin" includeViewParams="true">
+			<h:graphicImage library="default" name="img/add.png" />
+			<h:outputText value=" Konferenz anlegen" />
 			<f:param name="mode" value="create" />
 		</h:link>
-		<h:dataTable var="currentConference" value="#{conferences}"
-			rendered="#{not empty conferences}" styleClass="simpletablestyle">
-			<h:column>
-				<f:facet name="header">Name</f:facet>
+		<h:form>
+			<h:dataTable var="currentConference" value="#{conferences}"
+				rendered="#{not empty conferences}" styleClass="simpletablestyle">
+				<h:column>
+					<f:facet name="header">Name</f:facet>
                 #{currentConference.name}
-          </h:column>
-			<h:column>
-				<f:facet name="header">Zeitraum</f:facet>
-				<h:outputText value="#{currentConference.startDate}">
-					<f:convertDateTime pattern="dd.MM.yyyy" timeZone="UTC" />
-				</h:outputText> - 
+          		</h:column>
+				<h:column>
+					<f:facet name="header">Zeitraum</f:facet>
+					<h:outputText value="#{currentConference.startDate}">
+						<f:convertDateTime pattern="dd.MM.yyyy" timeZone="UTC" />
+					</h:outputText> - 
       			<h:outputText value="#{currentConference.endDate}">
-					<f:convertDateTime pattern="dd.MM.yyyy" timeZone="UTC"/>
+						<f:convertDateTime pattern="dd.MM.yyyy" timeZone="UTC" />
 				</h:outputText>
-			</h:column>
-			<h:column>
-				<f:facet name="header">Ort</f:facet>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Ort</f:facet>
                 #{currentConference.location.name}
-         </h:column>
-			<h:column>
-				<f:facet name="header">Aktionen</f:facet>
-				<h:link value="bearbeiten" outcome="conference_admin" includeViewParams="true">
-					<f:param name="id" value="#{currentConference.id}" />
-					<f:param name="mode" value="edit" />
-				</h:link>
-				<h:commandButton value="löschen"
-					action="#{conferenceController.deleteConference(currentConference.id)}" />
-			</h:column>
-		</h:dataTable>
+         		</h:column>
+				<h:column>
+					<h:link outcome="conference_admin" includeViewParams="true">
+						<h:graphicImage library="default" name="img/pencil.png" />
+						<h:outputText value=" bearbeiten" />
+						<f:param name="id" value="#{currentConference.id}" />
+						<f:param name="mode" value="edit" />
+					</h:link>
+				</h:column>
+				<h:column>
+					<h:commandLink
+						action="#{conferenceController.deleteConference(currentConference.id)}">
+						<h:graphicImage library="default" name="img/cross.png" />
+						<h:outputText value=" löschen" />
+					</h:commandLink>
+				</h:column>
+			</h:dataTable>
+		</h:form>
 	</ui:define>
 </ui:composition>

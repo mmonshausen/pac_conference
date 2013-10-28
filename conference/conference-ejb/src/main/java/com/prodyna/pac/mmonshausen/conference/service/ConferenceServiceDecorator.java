@@ -9,47 +9,69 @@ import com.prodyna.pac.mmonshausen.conference.model.Conference;
 import com.prodyna.pac.mmonshausen.conference.util.DecoratorHelper;
 
 /**
- * Decorator which intercepts methods and sends notifications to observers and queue messages
+ * Decorator which intercepts {@link ConferenceService} methods and sends
+ * notifications to observers and queue messages
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
 @Decorator
 public abstract class ConferenceServiceDecorator implements ConferenceService {
-	
-	@Inject @Invaded
+
+	@Inject
+	@Invaded
 	private Event<Conference> event;
 
 	@Inject
 	@Delegate
 	private ConferenceService conferenceService;
-	
+
 	@Inject
 	private DecoratorHelper decoHelper;
 
+	/* 
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.ConferenceService#saveConference(com.prodyna.pac.mmonshausen.conference.model.Conference)
+	 */
 	@Override
-	public Conference saveConference(final Conference conference) {
-		event.fire(conference);
-		
-		decoHelper.sendQueueMessage("conference [id="+conference.getId()+" name="+conference.getName()+ "] erstellt");
-		
-		return conferenceService.saveConference(conference);
+	public Conference createConference(final Conference conference) {
+		final Conference resultConference = conferenceService
+				.createConference(conference);
+
+		event.fire(resultConference);
+
+		decoHelper.sendQueueMessage("conference [id=" + conference.getId()
+				+ " name=" + conference.getName() + "] erstellt");
+
+		return resultConference;
 	}
 
+	/* 
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.ConferenceService#updateConference(com.prodyna.pac.mmonshausen.conference.model.Conference)
+	 */
 	@Override
 	public Conference updateConference(final Conference conference) {
-		event.fire(conference);
-		
-		decoHelper.sendQueueMessage("conference [id="+conference.getId()+" name="+conference.getName()+ "] upgedated");
-		
-		return conferenceService.updateConference(conference);
+		final Conference resultConference = conferenceService
+				.updateConference(conference);
+
+		event.fire(resultConference);
+
+		decoHelper.sendQueueMessage("conference [id=" + conference.getId()
+				+ " name=" + conference.getName() + "] upgedated");
+
+		return resultConference;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.ConferenceService#deleteConference(long)
+	 */
 	@Override
 	public void deleteConference(final long id) {
+		conferenceService.deleteConference(id);
+
 		event.fire(new Conference());
-		
-		decoHelper.sendQueueMessage("conference [id="+id+ "] geloescht");	
-		
-		deleteConference(id);
+
+		decoHelper.sendQueueMessage("conference [id=" + id + "] geloescht");
 	}
 }

@@ -26,7 +26,7 @@ import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
 /**
- * JSF-Controller for conferences
+ * JSF-Controller for rooms
  * 
  * @author Martin Monshausen, PRODYNA AG
  */
@@ -67,10 +67,8 @@ public class RoomController {
 				talkList = new ArrayList<Talk>();
 				talksGroupedByDate.put(date, talkList);
 			}
-			
 			talkList.add(talk);
 		}
-		
 		return talksGroupedByDate;
 	}
 	
@@ -100,13 +98,13 @@ public class RoomController {
 			inputValidator.validateRoom(room);
 			roomService.createRoom(room);
         }  catch (final ConstraintViolationException e) {
-        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
             facesContext.addMessage(null, m);
 		} catch (final ValidationException e) {
-			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), e.getMessage());
             facesContext.addMessage(null, m);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
 	}
@@ -117,13 +115,13 @@ public class RoomController {
 			inputValidator.validateRoom(room);
 			roomService.updateRoom(room);
         }  catch (final ConstraintViolationException e) {
-        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", msgHelper.getConstraintViolationMessage(e));
+        	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
             facesContext.addMessage(null, m);
 		} catch (final ValidationException e) {
-			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, "Validierungsfehler", e.getMessage());
+			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, e.getMessage(), e.getMessage());
             facesContext.addMessage(null, m);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
 	}
@@ -133,13 +131,14 @@ public class RoomController {
 		room.setLocation(location);
 	}
 	
-	public void deleteRoom(final long id) {
+	public String deleteRoom(final long id) {
 		try {
 			roomService.deleteRoom(id);
 		} catch (final Exception e) {
-            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "interner Fehler", msgHelper.getRootErrorMessage(e));
+            final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, msgHelper.getRootErrorMessage(e), msgHelper.getRootErrorMessage(e));
             facesContext.addMessage(null, m);
         }
+		return "room_admin";
 	}
 	
 	@PostConstruct

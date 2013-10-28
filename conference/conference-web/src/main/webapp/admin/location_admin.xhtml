@@ -7,7 +7,12 @@
 	template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="content">
 		<h1>Location-Verwaltung</h1>
-
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück" />
+		</h:link>
+		<hr />
 		<f:metadata>
 			<f:viewParam name="id" value="#{locationController.id}"></f:viewParam>
 			<f:viewParam name="mode" value="#{locationController.mode}"></f:viewParam>
@@ -44,55 +49,63 @@
 					action="#{locationController.createLocation}">
 					<f:param name="mode" value="create" />
 				</h:commandButton>
-				<h:commandButton value="speichern"
+				<h:commandButton value="Änderungen speichern"
 					action="#{locationController.saveChanges}">
 					<f:param name="mode" value="edit" />
 				</h:commandButton>
 			</h:form>
 		</h:panelGroup>
-
 		<h2>
-			<h:outputText>Liste der Locations</h:outputText>
+			<h:outputText value="Liste der Locations" />
 		</h2>
+		<hr />
 		<h:panelGroup rendered="#{empty locations}">
 			<em>sind in Planung...</em>
 			<br />
 		</h:panelGroup>
-		<h:link value="Location anlegen" outcome="location_admin"
-			includeViewParams="true">
+		<h:link outcome="location_admin" includeViewParams="true">
+			<h:graphicImage library="default" name="img/add.png" />
+			<h:outputText value=" Location anlegen" />
 			<f:param name="mode" value="create" />
 		</h:link>
-		<h:dataTable var="currentLocation" value="#{locations}"
-			rendered="#{not empty locations}" styleClass="simpletablestyle">
-			<h:column>
-				<f:facet name="header">Name</f:facet>
+		<h:form>
+			<h:dataTable var="currentLocation" value="#{locations}"
+				rendered="#{not empty locations}" styleClass="simpletablestyle">
+				<h:column>
+					<f:facet name="header">Name</f:facet>
                 #{currentLocation.name}
-          </h:column>
-			<h:column>
-				<f:facet name="header">Straße</f:facet>
+          		</h:column>
+				<h:column>
+					<f:facet name="header">Straße</f:facet>
                 #{currentLocation.street}
-         </h:column>
-			<h:column>
-				<f:facet name="header">PLZ</f:facet>
+         		</h:column>
+				<h:column>
+					<f:facet name="header">PLZ</f:facet>
                 #{currentLocation.zipCode}
-         </h:column>
-			<h:column>
-				<f:facet name="header">Stadt</f:facet>
+         		</h:column>
+				<h:column>
+					<f:facet name="header">Stadt</f:facet>
                 #{currentLocation.city}
-         </h:column>
-			<h:column>
-				<f:facet name="header">Land</f:facet>
+         		</h:column>
+				<h:column>
+					<f:facet name="header">Land</f:facet>
                 #{currentLocation.country}
-         </h:column>
-			<h:column>
-				<f:facet name="header">Aktionen</f:facet>
-				<h:link value="bearbeiten" outcome="location_admin" includeViewParams="true">
-					<f:param name="id" value="#{currentLocation.id}" />
-					<f:param name="mode" value="edit" />
-				</h:link>
-				<h:commandButton value="löschen"
-					action="#{locationController.deleteLocation(currentLocation.id)}" />
-			</h:column>
-		</h:dataTable>
+         		</h:column>
+				<h:column>
+					<h:link outcome="location_admin" includeViewParams="true">
+						<h:graphicImage library="default" name="img/pencil.png" />
+						<h:outputText value=" bearbeiten" />
+						<f:param name="id" value="#{currentLocation.id}" />
+						<f:param name="mode" value="edit" />
+					</h:link> 
+				</h:column>
+				<h:column>
+					<h:commandLink action="#{locationController.deleteLocation(currentLocation.id)}">
+						<h:graphicImage library="default" name="img/cross.png" />
+						<h:outputText value=" löschen" />
+					</h:commandLink>
+				</h:column>
+			</h:dataTable>
+		</h:form>
 	</ui:define>
 </ui:composition>

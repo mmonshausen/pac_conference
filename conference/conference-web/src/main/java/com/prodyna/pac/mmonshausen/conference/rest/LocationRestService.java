@@ -44,7 +44,7 @@ public class LocationRestService {
 		try {
 			inputValidator.validateLocation(location);
 			
-			locationService.saveLocation(location);
+			locationService.createLocation(location);
 			
 			builder = Response.ok();
 		} catch (final ConstraintViolationException e) {
@@ -65,8 +65,7 @@ public class LocationRestService {
 		
 		if (location == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-		
+        }		
 		return location;
 	}
 	
@@ -78,7 +77,6 @@ public class LocationRestService {
 		if (locationList == null || locationList.isEmpty()) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-		
 		return locationList;
 	}
 	
