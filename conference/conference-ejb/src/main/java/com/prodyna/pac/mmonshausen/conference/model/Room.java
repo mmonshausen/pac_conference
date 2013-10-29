@@ -43,10 +43,11 @@ public class Room implements Serializable {
 	@OneToMany(mappedBy="room")
 	private List<Talk> talks;
 
-	public Room(final String name, final int capacity) {
+	public Room(final String name, final int capacity, final Location location) {
 		super();
 		this.name = name;
 		this.capacity = capacity;
+		this.location = location;
 	}
 
 	public Room() {
