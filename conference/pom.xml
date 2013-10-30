@@ -9,8 +9,10 @@
 
 	<modules>
 		<module>conference-ear</module>
-		<module>conference-ejb</module>
-		<module>conference-web</module>
+		<module>conference-backend</module>
+		<module>conference-client-jsf</module>
+		<module>conference-client-rest</module>
+		<module>conference-client-common</module>
 	</modules>
 
 	<properties>
@@ -34,15 +36,29 @@
 		<dependencies>
 			<dependency>
 				<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
-				<artifactId>conference-ejb</artifactId>
+				<artifactId>conference-backend</artifactId>
 				<version>${project.version}</version>
 				<type>ejb</type>
 			</dependency>
 			<dependency>
 				<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
-				<artifactId>conference-web</artifactId>
+				<artifactId>conference-client-jsf</artifactId>
 				<version>${project.version}</version>
 				<type>war</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
+				<artifactId>conference-client-rest</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
+				<artifactId>conference-client-common</artifactId>
+				<version>${project.version}</version>
+				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>

@@ -8,9 +8,9 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>conference-ejb</artifactId>
+	<artifactId>conference-backend</artifactId>
 	<packaging>ejb</packaging>
-	<name>conference-ejb</name>
+	<name>conference-backend</name>
 
 	<dependencies>
 		<dependency>

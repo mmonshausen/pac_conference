@@ -12,14 +12,24 @@
 	<name>conference-ear</name>
 
 	<dependencies>
+	<dependency>
+			<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
+			<artifactId>conference-client-common</artifactId>
+			<type>jar</type>
+		</dependency>
 		<dependency>
 			<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
-			<artifactId>conference-web</artifactId>
+			<artifactId>conference-client-jsf</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
 			<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
-			<artifactId>conference-ejb</artifactId>
+			<artifactId>conference-client-rest</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
+			<artifactId>conference-backend</artifactId>
 			<type>ejb</type>
 		</dependency>
 	</dependencies>
