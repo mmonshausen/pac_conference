@@ -41,7 +41,9 @@ public class ConferenceServiceTest {
 				.create(WebArchive.class, "test.war")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.model")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.service")
+				.addPackage("com.prodyna.pac.mmonshausen.conference.monitoring")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.util")
+				.addClass(TestHelper.class)
 				.addAsResource("META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
@@ -89,7 +91,7 @@ public class ConferenceServiceTest {
 	}
 
 	@Test
-	public void deleteConference() {
+	public void testDeleteConference() {
 		final Location testLocation = testHelper.createTestLocation();
 		final Conference testConference = testHelper.createTestConference(testLocation);
 		assertNotNull(testConference);

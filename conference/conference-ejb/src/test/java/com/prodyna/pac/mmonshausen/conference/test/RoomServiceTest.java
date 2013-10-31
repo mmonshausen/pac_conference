@@ -41,7 +41,9 @@ public class RoomServiceTest {
 				.create(WebArchive.class, "test.war")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.model")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.service")
+				.addPackage("com.prodyna.pac.mmonshausen.conference.monitoring")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.util")
+				.addClass(TestHelper.class)
 				.addAsResource("META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
@@ -91,7 +93,7 @@ public class RoomServiceTest {
 	}
 	
 	@Test
-	public void deleteRoom() {
+	public void testDeleteRoom() {
 		final Location testLocation = testHelper.createTestLocation();
 		final Room testRoom = testHelper.createTestRoom(testLocation);
 		assertNotNull(testRoom);

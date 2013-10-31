@@ -40,7 +40,9 @@ public class LocationServiceTest {
 				.create(WebArchive.class, "test.war")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.model")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.service")
+				.addPackage("com.prodyna.pac.mmonshausen.conference.monitoring")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.util")
+				.addClass(TestHelper.class)
 				.addAsResource("META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
@@ -88,7 +90,7 @@ public class LocationServiceTest {
 	}
 	
 	@Test
-	public void deleteLocation() {
+	public void testDeleteLocation() {
 		final Location testLocation = testHelper.createTestLocation();
 		assertNotNull(testLocation);
 		final Long id = testLocation.getId();

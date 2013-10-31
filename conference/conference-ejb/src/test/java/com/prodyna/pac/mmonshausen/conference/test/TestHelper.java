@@ -15,6 +15,7 @@ import com.prodyna.pac.mmonshausen.conference.model.Talk;
 import com.prodyna.pac.mmonshausen.conference.service.ConferenceService;
 import com.prodyna.pac.mmonshausen.conference.service.LocationService;
 import com.prodyna.pac.mmonshausen.conference.service.RoomService;
+import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
 import com.prodyna.pac.mmonshausen.conference.service.TalkService;
 
 /**
@@ -33,6 +34,8 @@ public class TestHelper {
 	private ConferenceService conferenceService;
 	@Inject
 	private TalkService talkService;
+	@Inject
+	private SpeakerService speakerService;
 	
 	public Location createTestLocation() {
 		final Location location = new Location("Test-Halle", "Test-Straße 1", "68782", "Brühl", "Deutschland");
@@ -53,7 +56,8 @@ public class TestHelper {
 	}
 	
 	public Speaker createTestSpeaker() {
-		return new Speaker("Test Tester", "Ein Experte auf dem Gebiet JavaEE");
+		final Speaker speaker = new Speaker("Test Tester", "Ein Experte auf dem Gebiet JavaEE");
+		return speakerService.createSpeaker(speaker);
 	}
 	
 	public Talk createTestTalk(final Conference conference, final Room room, final Speaker speaker){

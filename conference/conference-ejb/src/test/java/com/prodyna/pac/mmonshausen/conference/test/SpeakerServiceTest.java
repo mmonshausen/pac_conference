@@ -40,15 +40,18 @@ public class SpeakerServiceTest {
 		return ShrinkWrap.create(WebArchive.class, "test.war")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.model")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.service")
+				.addPackage("com.prodyna.pac.mmonshausen.conference.monitoring")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.util")
+				.addClass(TestHelper.class)
 				.addAsResource("META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
 
 	@Test
 	public void testCreateSpeaker() {
-		final Speaker pSpeaker = new Speaker("Test Tester", "Ein Experte auf dem Gebiet JavaEE");
-
+		final Speaker speaker = new Speaker("Test Tester", "Ein Experte auf dem Gebiet JavaEE");
+		final Speaker pSpeaker = speakerService.createSpeaker(speaker);
+		
 		assertNotNull(pSpeaker);
 		assertNotNull(pSpeaker.getId());
 		assertTrue(pSpeaker.getId() > 0);
@@ -56,7 +59,8 @@ public class SpeakerServiceTest {
 
 	@Test
 	public void testGetSpeakerById() {
-		final Speaker pSpeaker = testHelper.createTestSpeaker();
+		final Speaker speaker = testHelper.createTestSpeaker();
+		final Speaker pSpeaker = speakerService.createSpeaker(speaker);
 
 		assertNotNull(pSpeaker);
 		assertNotNull(pSpeaker.getId());
@@ -89,7 +93,7 @@ public class SpeakerServiceTest {
 	}
 
 	@Test
-	public void deleteSpeaker() {
+	public void testDeleteSpeaker() {
 		final Speaker pSpeaker = testHelper.createTestSpeaker();
 		assertNotNull(pSpeaker);
 

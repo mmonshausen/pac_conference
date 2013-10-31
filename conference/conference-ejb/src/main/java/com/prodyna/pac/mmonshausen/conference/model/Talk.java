@@ -78,7 +78,7 @@ public class Talk implements Serializable {
 		this.endTime = endTime;
 		this.room = room;
 		this.conference = conference;
-		this.speakers.addAll(speakers);
+		this.speakers = speakers;
 	}
 
 	public Talk() {

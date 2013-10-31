@@ -47,7 +47,9 @@ public class TalkServiceTest {
 				.create(WebArchive.class, "test.war")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.model")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.service")
+				.addPackage("com.prodyna.pac.mmonshausen.conference.monitoring")
 				.addPackage("com.prodyna.pac.mmonshausen.conference.util")
+				.addClass(TestHelper.class)
 				.addAsResource("META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
@@ -93,7 +95,7 @@ public class TalkServiceTest {
 	@Test
 	public void testListAllTalks() {
 		final List<Talk> listAllTalks = talkService.listAllTalks();
-		
+
 		assertNotNull(listAllTalks);
 		assertTrue(listAllTalks.size() > 0);
 	}
