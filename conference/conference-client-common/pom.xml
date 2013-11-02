@@ -49,8 +49,8 @@
       <finalName>${project.artifactId}</finalName>
       <plugins>
          <plugin>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>${version.jar.plugin}</version>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${version.compiler.plugin}</version>
          </plugin>
       </plugins>
    </build>
