@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Details zur Konferenz #{conference.name}</h1>
+		<hr />
+		<h:link outcome="index">
+			<h:graphicImage library="default" name="img/arrow_left.png" />
+			<h:outputText value=" zurück zur Übersicht" />
+		</h:link>
+		<hr />
+		<f:metadata>
+			<f:viewParam name="id" value="#{conferenceController.id}"></f:viewParam>
+		</f:metadata>
+
+		<h2>Name</h2>
+		<h:outputText value="#{conference.name}" />
+
+		<h2>Ort</h2>
+		<h:outputText value="#{conference.location.name}, #{conference.location.city} " />
+		<h:link outcome="location" includeViewParams="true">
+			<h:graphicImage library="default" name="img/zoom.png" />
+			<h:outputText value=" Details" />
+			<f:param name="id" value="#{conference.location.id}" />
+		</h:link>
+
+		<h2>Beschreibung</h2>
+		<h:outputText value="#{conference.description}"/>
+
+		<h2>Beginn</h2>
+		<h:outputText value="#{conference.startDate}">
+			<f:convertDateTime pattern="dd.MM.yyyy" />
+		</h:outputText>
+
+		<h2>Ende</h2>
+		<h:outputText value="#{conference.endDate}">
+			<f:convertDateTime pattern="dd.MM.yyyy" />
+		</h:outputText>
+
+		<h2>
+			<h:graphicImage library="default" name="img/date.png" />
+			<h:outputText value=" Konferenz-Übersicht" />
+		</h2>
+		<hr/>
+		<h:panelGroup rendered="#{empty conferenceController.talksByDay}">
+			<em>sind in Planung...</em>
+		</h:panelGroup>
+		<c:forEach items="#{conferenceController.talksByDay}" var="entry">
+			<h3>
+				<h:outputText value="#{entry.key}">
+					<f:convertDateTime pattern="E dd.MM" timeZone="UTC" />
+				</h:outputText>
+			</h3>
+			<ul>
+				<c:forEach items="#{entry.value}" var="talk" varStatus="loop">
+					<li>
+						<h:outputText value="#{talk.startTime}">
+							<f:convertDateTime pattern="H:mm" />
+						</h:outputText> -
+						<h:outputText value="#{talk.endTime}">
+							<f:convertDateTime pattern="H:mm" />
+						</h:outputText> -
+						<h:outputText value="#{talk.name} - " />
+						<h:link outcome="talk" includeViewParams="true">
+							<h:graphicImage library="default" name="img/zoom.png" />
+							<h:outputText value=" Details" />
+							<f:param name="id" value="#{talk.id}" />
+						</h:link>
+					</li>
+				</c:forEach>
+			</ul>
+			<br/>
+		</c:forEach>
+	</ui:define>
+</ui:composition>
