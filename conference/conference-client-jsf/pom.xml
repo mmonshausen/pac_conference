@@ -13,12 +13,6 @@
 	<name>conference-jsf</name>
 
 	<dependencies>
-	<dependency>
-         <groupId>com.prodyna.pac.mmonshausen.conference</groupId>
-         <artifactId>conference-client-common</artifactId>
-         <type>jar</type>
-         <scope>provided</scope>
-      </dependency>
       <dependency>
          <groupId>com.prodyna.pac.mmonshausen.conference</groupId>
          <artifactId>conference-backend</artifactId>

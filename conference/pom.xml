@@ -12,7 +12,6 @@
 		<module>conference-backend</module>
 		<module>conference-client-jsf</module>
 		<module>conference-client-rest</module>
-		<module>conference-client-common</module>
 	</modules>
 
 	<properties>
@@ -52,13 +51,6 @@
 				<artifactId>conference-client-rest</artifactId>
 				<version>${project.version}</version>
 				<type>war</type>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
-				<artifactId>conference-client-common</artifactId>
-				<version>${project.version}</version>
-				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>

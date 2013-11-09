@@ -43,8 +43,7 @@ public class TalkServiceBean implements TalkService {
 	 */
 	@Override
 	public Talk getTalkById(final long id) {
-		final String queryString = "";
-		final TypedQuery<Talk> query = em.createNamedQuery(queryString,
+		final TypedQuery<Talk> query = em.createNamedQuery("selectTalkById",
 				Talk.class);
 		query.setParameter("talkId", id);
 		final List<Talk> resultList = query.getResultList();
@@ -81,7 +80,7 @@ public class TalkServiceBean implements TalkService {
 	 */
 	@Override
 	public List<Talk> getRoomTalksOrderedByDateTime(final Long roomId) {
-		final TypedQuery<Talk> query = em.createQuery("selectRoomTalksOrderedByDateTime",
+		final TypedQuery<Talk> query = em.createNamedQuery("selectRoomTalksOrderedByDateTime",
 				Talk.class);
 		query.setParameter("roomId", roomId);
 		final List<Talk> resultList = query.getResultList();
@@ -99,8 +98,7 @@ public class TalkServiceBean implements TalkService {
 	 */
 	@Override
 	public List<Talk> listAllTalks() {
-		final String queryString = "SELECT talk FROM Talk talk left join fetch talk.speakers";
-		final TypedQuery<Talk> query = em.createQuery(queryString,
+		final TypedQuery<Talk> query = em.createNamedQuery("selectAllTalks",
 				Talk.class);
 		final List<Talk> resultList = query.getResultList();
 

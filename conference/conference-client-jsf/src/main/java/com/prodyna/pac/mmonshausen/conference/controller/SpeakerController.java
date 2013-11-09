@@ -12,7 +12,6 @@ import javax.validation.ValidationException;
 
 import com.prodyna.pac.mmonshausen.conference.model.Speaker;
 import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
-import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
 /**
@@ -22,8 +21,6 @@ import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
  */
 @Model
 public class SpeakerController {
-	@Inject
-	private InputValidator inputValidator;
 	
 	@Inject
 	private FacesContext facesContext;
@@ -50,7 +47,6 @@ public class SpeakerController {
 	
 	public void createSpeaker() {
 		try {
-			inputValidator.validateSpeaker(speaker);
 			speakerService.createSpeaker(speaker);
         }  catch (final ConstraintViolationException e) {
         	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
@@ -66,7 +62,6 @@ public class SpeakerController {
 	
 	public void saveChanges() {
 		try {
-			inputValidator.validateSpeaker(speaker);
 			speakerService.updateSpeaker(speaker);
         }  catch (final ConstraintViolationException e) {
         	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));

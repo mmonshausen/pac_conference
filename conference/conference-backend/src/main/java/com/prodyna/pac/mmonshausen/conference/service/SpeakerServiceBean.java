@@ -42,9 +42,8 @@ public class SpeakerServiceBean implements SpeakerService {
 	 * @see com.prodyna.pac.mmonshausen.conference.service.SpeakerService#getSpeakerById(long)
 	 */
 	@Override
-	public Speaker getSpeakerById(final long id) {
-		final String queryString = "SELECT speaker FROM Speaker speaker left join fetch speaker.talks WHERE speaker.id = :speakerId";
-		final TypedQuery<Speaker> query = em.createNamedQuery(queryString,
+	public Speaker getSpeakerById(final long id) {		
+		final TypedQuery<Speaker> query = em.createNamedQuery("selectSpeakerById",
 				Speaker.class);
 		query.setParameter("speakerId", id);
 		final List<Speaker> resultList = query.getResultList();
@@ -63,8 +62,7 @@ public class SpeakerServiceBean implements SpeakerService {
 	 */
 	@Override
 	public List<Speaker> listAllSpeakers() {
-		final String queryString = "SELECT speaker FROM Speaker speaker left join fetch speaker.talks";
-		final TypedQuery<Speaker> query = em.createNamedQuery(queryString,
+		final TypedQuery<Speaker> query = em.createNamedQuery("selectAllSpeakers",
 				Speaker.class);
 		final List<Speaker> resultList = query.getResultList();
 

@@ -31,7 +31,7 @@
 		</h2>
 		<hr/>
 		<ul>
-			<c:forEach items="#{location.rooms}" var="room">
+			<c:forEach items="#{locationController.rooms}" var="room">
 				<li>
 					<h:outputText value="#{room.name} (Kapazität: #{room.capacity}) " />
 					<h:link outcome="room" includeViewParams="true">

@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,7 +28,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name="talk")
 @NamedQueries({
-	@NamedQuery(name="selectTalksById", query="SELECT talk FROM Talk talk left join fetch talk.speakers WHERE talk.id = :talkId"),
+	@NamedQuery(name="selectTalkById", query="SELECT currentTalk FROM Talk currentTalk left join fetch currentTalk.speakers WHERE currentTalk.id = :talkId"),
+	@NamedQuery(name="selectAllTalks", query="SELECT currentTalk FROM Talk currentTalk left join fetch currentTalk.speakers"),
 	@NamedQuery(name="selectConferenceTalksOrderedByDateTime", query="SELECT currentTalk FROM Talk currentTalk where currentTalk.conference.id = :conferenceId order by currentTalk.date, currentTalk.startTime"),
 	@NamedQuery(name="selectRoomTalksOrderedByDateTime", query="SELECT currentTalk FROM Talk currentTalk where currentTalk.room.id = :roomId order by currentTalk.date, currentTalk.startTime")
 })
@@ -162,6 +164,18 @@ public class Talk implements Serializable {
 
 	public void setSpeakers(final List<Speaker> speakers) {
 		this.speakers = speakers;
+	}
+	
+	@AssertTrue(message="talks date is not inside conference")
+	private boolean isTalkInsideConference() {
+		final Date conferenceStartDate = conference.getStartDate();
+		final Date conferenceEndDate = conference.getEndDate();
+		
+		final boolean onStartDate = date.equals(conferenceStartDate);
+		final boolean onEndeDate = date.equals(conferenceEndDate);
+		final boolean between = date.after(conferenceStartDate) && date.before(conferenceEndDate);
+		
+		return onStartDate || onEndeDate || between;
 	}
 
 	@Override

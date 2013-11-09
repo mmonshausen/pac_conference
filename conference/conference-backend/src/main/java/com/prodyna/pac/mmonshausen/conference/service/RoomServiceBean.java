@@ -39,8 +39,7 @@ public class RoomServiceBean implements RoomService {
 	 */
 	@Override
 	public Room getRoomById(final long id) {
-		final String queryString = "SELECT room FROM Room room left join fetch room.talks WHERE room.id = :roomId";
-		final TypedQuery<Room> query = em.createNamedQuery(queryString,
+		final TypedQuery<Room> query = em.createNamedQuery("selectRoomById",
 				Room.class);
 		query.setParameter("roomId", id);
 		final List<Room> resultList = query.getResultList();
@@ -59,8 +58,7 @@ public class RoomServiceBean implements RoomService {
 	 */
 	@Override
 	public List<Room> listAllRooms() {
-		final String queryString = "SELECT room FROM Room room left join fetch room.talks";
-		final TypedQuery<Room> query = em.createNamedQuery(queryString,
+		final TypedQuery<Room> query = em.createNamedQuery("selectAllRooms",
 				Room.class);
 		final List<Room> resultList = query.getResultList();
 
@@ -69,6 +67,25 @@ public class RoomServiceBean implements RoomService {
 		}
 
 		return resultList;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.prodyna.pac.mmonshausen.conference.service.RoomService#listAllRooms()
+	 */
+	@Override
+	public List<Room> getLocationRooms(long id) {
+		final TypedQuery<Room> query = em.createNamedQuery("selectLocationRooms",
+				Room.class);
+		query.setParameter("locationId", id);
+		final List<Room> resultList = query.getResultList();
+
+		if(resultList.isEmpty()) {
+			logger.warning("room (id="+id+") not found!");
+			return null;
+		} else {
+			return resultList;
+		}
 	}
 
 	/*

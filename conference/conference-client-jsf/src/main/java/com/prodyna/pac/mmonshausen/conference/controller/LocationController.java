@@ -1,5 +1,7 @@
 package com.prodyna.pac.mmonshausen.conference.controller;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
@@ -11,8 +13,9 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
 import com.prodyna.pac.mmonshausen.conference.model.Location;
+import com.prodyna.pac.mmonshausen.conference.model.Room;
 import com.prodyna.pac.mmonshausen.conference.service.LocationService;
-import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
+import com.prodyna.pac.mmonshausen.conference.service.RoomService;
 import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
 /**
@@ -22,11 +25,12 @@ import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
  */
 @Model
 public class LocationController {
-	@Inject
-	private InputValidator inputValidator;
 	
 	@Inject
 	private LocationService locationService;
+	
+	@Inject
+	private RoomService roomService;
 	
 	@Inject
 	private FacesContext facesContext;
@@ -48,9 +52,12 @@ public class LocationController {
 		}
 	}
 	
+	public List<Room> getRooms() {
+		return roomService.getLocationRooms(id);
+	}
+	
 	public void createLocation() {
 		try {
-			inputValidator.validateLocation(location);
 			locationService.createLocation(location);
         }  catch (final ConstraintViolationException e) {
         	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
@@ -66,7 +73,6 @@ public class LocationController {
 	
 	public void saveChanges() {
 		try {
-			inputValidator.validateLocation(location);
 			locationService.updateLocation(location);
         }  catch (final ConstraintViolationException e) {
         	final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));

@@ -21,7 +21,6 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Conference;
 import com.prodyna.pac.mmonshausen.conference.service.ConferenceService;
-import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting conferences
@@ -30,9 +29,7 @@ import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
  */
 @Path("/conference")
 public class ConferenceRestService {
-	@Inject
-	private InputValidator inputValidator;
-	
+
 	@Inject
 	private ConferenceService conferenceService;
 	
@@ -42,8 +39,6 @@ public class ConferenceRestService {
 	public Response saveConference(final Conference conference) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateConference(conference);
-			
 			conferenceService.createConference(conference);
 			
 			builder = Response.ok();
@@ -86,8 +81,6 @@ public class ConferenceRestService {
 	public Response updateConference(final Conference conference) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateConference(conference);
-			
 			conferenceService.updateConference(conference);
 			
 			builder = Response.ok();

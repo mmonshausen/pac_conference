@@ -2,14 +2,14 @@ package com.prodyna.pac.mmonshausen.conference.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,6 +23,10 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name="conference")
+@NamedQueries({
+	@NamedQuery(name="selectConferenceById", query="SELECT currentConference FROM Conference currentConference WHERE currentConference.id = :conferenceId"),
+	@NamedQuery(name="selectAllConferences", query="SELECT currentConference FROM Conference currentConference")
+})
 public class Conference implements Serializable {
 	private static final long serialVersionUID = 19599280434654539L;
 
@@ -51,8 +55,8 @@ public class Conference implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
-	@OneToMany(mappedBy="conference")
-	private List<Talk> talks;
+//	@OneToMany(mappedBy="conference")
+//	private List<Talk> talks;
 
 	public Conference(final String name, final Location location, final String description,
 			final Date startDate, final Date endDate) {
@@ -116,9 +120,9 @@ public class Conference implements Serializable {
 		this.endDate = endDate;
 	}
 	
-	public List<Talk> getTalks() {
-		return talks;
-	}
+//	public List<Talk> getTalks() {
+//		return talks;
+//	}
 	
 	@Override
 	public int hashCode() {

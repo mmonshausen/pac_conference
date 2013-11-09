@@ -1,12 +1,12 @@
 package com.prodyna.pac.mmonshausen.conference.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,6 +18,10 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name="location")
+@NamedQueries({
+	@NamedQuery(name="selectLocationById", query="SELECT currentLocation FROM Location currentLocation WHERE currentLocation.id = :locationId"),
+	@NamedQuery(name="selectAllLocations", query="SELECT currentLocation FROM Location currentLocation")
+})
 public class Location implements Serializable {
 
 	private static final long serialVersionUID = -8697948682589642253L;
@@ -45,11 +49,11 @@ public class Location implements Serializable {
 	@Size(min=1)
 	private String country;
 	
-	@OneToMany(mappedBy="location")
-	private List<Room> rooms;
+//	@OneToMany(mappedBy="location")
+//	private List<Room> rooms;
 	
-	@OneToMany(mappedBy="location")
-	private List<Conference> conferences;
+//	@OneToMany(mappedBy="location")
+//	private List<Conference> conferences;
 	
 	public Location(String name, String street, String zipCode, String city,
 			String country) {
@@ -113,13 +117,13 @@ public class Location implements Serializable {
 		this.country = country;
 	}
 	
-	public List<Room> getRooms() {
-		return rooms;
-	}
-
-	public List<Conference> getConferences() {
-		return conferences;
-	}
+//	public List<Room> getRooms() {
+//		return rooms;
+//	}
+//
+//	public List<Conference> getConferences() {
+//		return conferences;
+//	}
 
 	@Override
 	public int hashCode() {

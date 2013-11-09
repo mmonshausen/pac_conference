@@ -21,7 +21,6 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Speaker;
 import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
-import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting speakers
@@ -30,8 +29,6 @@ import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
  */
 @Path("/speaker")
 public class SpeakerRestService {
-	@Inject
-	private InputValidator inputValidator;
 	
 	@Inject
 	private SpeakerService speakerService;
@@ -42,8 +39,6 @@ public class SpeakerRestService {
 	public Response saveSpeaker(final Speaker speaker) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateSpeaker(speaker);
-			
 			speakerService.createSpeaker(speaker);
 			
 			builder = Response.ok();
@@ -86,8 +81,6 @@ public class SpeakerRestService {
 	public Response updateSpeaker(final Speaker speaker) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateSpeaker(speaker);
-			
 			speakerService.updateSpeaker(speaker);
 			
 			builder = Response.ok();

@@ -21,7 +21,6 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Talk;
 import com.prodyna.pac.mmonshausen.conference.service.TalkService;
-import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting talks
@@ -30,8 +29,6 @@ import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
  */
 @Path("/talk")
 public class TalkRestService {
-	@Inject
-	private InputValidator inputValidator;
 
 	@Inject
 	private TalkService talkService;
@@ -42,8 +39,6 @@ public class TalkRestService {
 	public Response createTalk(final Talk talk) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateTalk(talk);
-
 			talkService.createTalk(talk);
 
 			builder = Response.ok();
@@ -98,8 +93,6 @@ public class TalkRestService {
 	public Response updateTalk(final Talk talk) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateTalk(talk);
-
 			talkService.updateTalk(talk);
 
 			builder = Response.ok();

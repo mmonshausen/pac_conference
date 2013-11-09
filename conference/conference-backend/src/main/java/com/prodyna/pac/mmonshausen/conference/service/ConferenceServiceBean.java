@@ -43,8 +43,7 @@ public class ConferenceServiceBean implements ConferenceService {
 	 */
 	@Override
 	public Conference getConferenceById(final long id) {
-		final String queryString = "SELECT conference FROM Conference conference left join fetch conference.talks WHERE conference.id = :conferenceId";
-		final TypedQuery<Conference> query = em.createNamedQuery(queryString,
+		final TypedQuery<Conference> query = em.createNamedQuery("selectConferenceById",
 				Conference.class);
 		query.setParameter("conferenceId", id);
 		final List<Conference> resultList = query.getResultList();
@@ -63,8 +62,7 @@ public class ConferenceServiceBean implements ConferenceService {
 	 */
 	@Override
 	public List<Conference> listAllConferences() {
-		final String queryString = "SELECT conference FROM Conference conference left join fetch conference.talks";
-		final TypedQuery<Conference> query = em.createNamedQuery(queryString,
+		final TypedQuery<Conference> query = em.createNamedQuery("selectAllConferences",
 				Conference.class);
 		final List<Conference> resultList = query.getResultList();
 

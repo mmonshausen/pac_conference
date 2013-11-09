@@ -21,7 +21,6 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Room;
 import com.prodyna.pac.mmonshausen.conference.service.RoomService;
-import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting rooms
@@ -30,9 +29,7 @@ import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
  */
 @Path("/room")
 public class RoomRestService {
-	@Inject
-	private InputValidator inputValidator;
-	
+
 	@Inject
 	private RoomService roomService;
 	
@@ -42,8 +39,6 @@ public class RoomRestService {
 	public Response createRoom(final Room room) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateRoom(room);
-			
 			roomService.createRoom(room);
 			
 			builder = Response.ok();
@@ -86,8 +81,6 @@ public class RoomRestService {
 	public Response updateRoom(final Room room) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateRoom(room);
-			
 			roomService.updateRoom(room);
 			
 			builder = Response.ok();

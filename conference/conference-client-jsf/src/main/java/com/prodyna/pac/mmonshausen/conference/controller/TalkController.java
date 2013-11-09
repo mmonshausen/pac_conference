@@ -21,7 +21,6 @@ import com.prodyna.pac.mmonshausen.conference.service.ConferenceService;
 import com.prodyna.pac.mmonshausen.conference.service.RoomService;
 import com.prodyna.pac.mmonshausen.conference.service.SpeakerService;
 import com.prodyna.pac.mmonshausen.conference.service.TalkService;
-import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
 
 /**
@@ -31,8 +30,6 @@ import com.prodyna.pac.mmonshausen.conference.util.JSFMessageHelper;
  */
 @Model
 public class TalkController {
-	@Inject
-	private InputValidator inputValidator;
 	
 	@Inject
 	private FacesContext facesContext;
@@ -103,8 +100,6 @@ public class TalkController {
 		try {
 			resolveIdsToObjects();
 			
-			inputValidator.validateTalk(talk);
-			
 			talkService.createTalk(talk);
 		}  catch (final ConstraintViolationException e) {
 			final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_WARN, msgHelper.getConstraintViolationMessage(e), msgHelper.getConstraintViolationMessage(e));
@@ -121,8 +116,6 @@ public class TalkController {
 	public void saveChanges() {
 		try {
 			resolveIdsToObjects();
-			
-			inputValidator.validateTalk(talk);
 			
 			talkService.updateTalk(talk);
         }  catch (final ConstraintViolationException e) {

@@ -33,6 +33,16 @@ public interface RoomService {
 	public Room getRoomById(long id);
 	
 	/**
+	 * reads {@link Room} for database for given locationId<br>
+	 * if nothing found for id warning will be logged
+	 * 
+	 * @param id
+	 *            id of {@link Location} for which all rooms should be read from database
+	 * @return if found corresponding {@link Room} object, otherwise null
+	 */
+	public List<Room> getLocationRooms(long id);
+	
+	/**
 	 * reads all {@link Room} objects from database<br>
 	 * if there are no {@link Room} return empty list
 	 * 
@@ -57,4 +67,5 @@ public interface RoomService {
 	 *            id of {@link Room} to be deleted
 	 */
 	public void deleteRoom(long id);
+
 }

@@ -12,11 +12,6 @@
 	<name>conference-ear</name>
 
 	<dependencies>
-	<dependency>
-			<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
-			<artifactId>conference-client-common</artifactId>
-			<type>jar</type>
-		</dependency>
 		<dependency>
 			<groupId>com.prodyna.pac.mmonshausen.conference</groupId>
 			<artifactId>conference-client-jsf</artifactId>

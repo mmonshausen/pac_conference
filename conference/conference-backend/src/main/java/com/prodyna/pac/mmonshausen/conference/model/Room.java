@@ -1,14 +1,14 @@
 package com.prodyna.pac.mmonshausen.conference.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -21,6 +21,11 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name="room")
+@NamedQueries({
+	@NamedQuery(name="selectRoomById", query="SELECT currentRoom FROM Room currentRoom WHERE currentRoom.id = :roomId"),
+	@NamedQuery(name="selectAllRooms", query="SELECT currentRoom FROM Room currentRoom"),
+	@NamedQuery(name="selectLocationRooms", query="SELECT currentRoom FROM Room currentRoom WHERE currentRoom.location.id = :locationId")
+})
 public class Room implements Serializable {
 	private static final long serialVersionUID = 2802045871467759931L;
 
@@ -40,8 +45,8 @@ public class Room implements Serializable {
 	@JoinColumn(name="location_id", referencedColumnName="id")
 	private Location location;
 
-	@OneToMany(mappedBy="room")
-	private List<Talk> talks;
+//	@OneToMany(mappedBy="room")
+//	private List<Talk> talks;
 
 	public Room(final String name, final int capacity, final Location location) {
 		super();
@@ -86,9 +91,9 @@ public class Room implements Serializable {
 		this.location = location;
 	}
 	
-	public List<Talk> getTalks() {
-		return talks;
-	}
+//	public List<Talk> getTalks() {
+//		return talks;
+//	}
 
 	@Override
 	public int hashCode() {

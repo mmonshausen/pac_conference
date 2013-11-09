@@ -21,7 +21,6 @@ import javax.ws.rs.core.Response;
 
 import com.prodyna.pac.mmonshausen.conference.model.Location;
 import com.prodyna.pac.mmonshausen.conference.service.LocationService;
-import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
 
 /**
  * REST Service for creating, reading, updating and deleting locations
@@ -30,8 +29,6 @@ import com.prodyna.pac.mmonshausen.conference.util.InputValidator;
  */
 @Path("/location")
 public class LocationRestService {
-	@Inject
-	private InputValidator inputValidator;
 	
 	@Inject
 	private LocationService locationService;
@@ -42,8 +39,6 @@ public class LocationRestService {
 	public Response saveLocation(final Location location) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateLocation(location);
-			
 			locationService.createLocation(location);
 			
 			builder = Response.ok();
@@ -86,8 +81,6 @@ public class LocationRestService {
 	public Response updateLocation(final Location location) {
 		Response.ResponseBuilder builder;
 		try {
-			inputValidator.validateLocation(location);
-			
 			locationService.updateLocation(location);
 			
 			builder = Response.ok();

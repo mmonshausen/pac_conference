@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,6 +22,10 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name="speaker")
+@NamedQueries({
+	@NamedQuery(name="selectSpeakerById", query="SELECT currentSpeaker FROM Speaker currentSpeaker left join fetch currentSpeaker.talks WHERE currentSpeaker.id = :speakerId"),
+	@NamedQuery(name="selectAllSpeakers", query="SELECT currentSpeaker FROM Speaker currentSpeaker left join fetch currentSpeaker.talks")
+})
 public class Speaker implements Serializable {
 	private static final long serialVersionUID = 4998488952671917440L;
 

@@ -8,15 +8,9 @@
     
   	<artifactId>conference-client-rest</artifactId>
 	<packaging>war</packaging>
-	<name>conference-web</name>
+	<name>conference-client-rest</name>
 	
 	<dependencies>
-	<dependency>
-         <groupId>com.prodyna.pac.mmonshausen.conference</groupId>
-         <artifactId>conference-client-common</artifactId>
-         <type>jar</type>
-         <scope>provided</scope>
-      </dependency>
       <dependency>
          <groupId>com.prodyna.pac.mmonshausen.conference</groupId>
          <artifactId>conference-backend</artifactId>

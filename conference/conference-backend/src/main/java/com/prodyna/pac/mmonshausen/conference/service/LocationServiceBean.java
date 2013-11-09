@@ -39,8 +39,7 @@ public class LocationServiceBean implements LocationService {
 	 */
 	@Override
 	public Location getLocationById(final long id) {
-		final String queryString = "SELECT location FROM Location location left join fetch location.rooms WHERE location.id = :locationId";
-		final TypedQuery<Location> query = em.createNamedQuery(queryString,
+		final TypedQuery<Location> query = em.createNamedQuery("selectLocationById",
 				Location.class);
 		query.setParameter("locationId", id);
 		final List<Location> resultList = query.getResultList();
@@ -59,8 +58,7 @@ public class LocationServiceBean implements LocationService {
 	 */
 	@Override
 	public List<Location> listAllLocations() {
-		final String queryString = "SELECT location FROM Location location left join fetch location.rooms";
-		final TypedQuery<Location> query = em.createNamedQuery(queryString,
+		final TypedQuery<Location> query = em.createNamedQuery("selectAllLocations",
 				Location.class);
 		final List<Location> resultList = query.getResultList();
 
