@@ -39,15 +39,19 @@ public class ConferenceRestService {
 	public Response saveConference(final Conference conference) {
 		Response.ResponseBuilder builder;
 		try {
-			conferenceService.createConference(conference);
+			final Conference createConference = conferenceService.createConference(conference);
 			
-			builder = Response.ok();
+			builder = Response.status(Response.Status.OK).entity(createConference);
 		} catch (final ConstraintViolationException e) {
 			builder = RESTHelper.createViolationResponse(e.getConstraintViolations());
 		} catch (final ValidationException e) {
 			final Map<String, String> responseObj = new HashMap<String, String>();
             responseObj.put("message", e.getMessage());
             builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
+		} catch (final Exception e) {
+			final Map<String, String> responseObj = new HashMap<String, String>();
+            responseObj.put("message", e.getMessage());
+            builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseObj);
 		}
 		return builder.build();
 	}
@@ -81,22 +85,36 @@ public class ConferenceRestService {
 	public Response updateConference(final Conference conference) {
 		Response.ResponseBuilder builder;
 		try {
-			conferenceService.updateConference(conference);
+			final Conference updateConference = conferenceService.updateConference(conference);
 			
-			builder = Response.ok();
+			builder = Response.status(Response.Status.OK).entity(updateConference);
 		} catch (final ConstraintViolationException e) {
 			builder = RESTHelper.createViolationResponse(e.getConstraintViolations());
 		} catch (final ValidationException e) {
 			final Map<String, String> responseObj = new HashMap<String, String>();
             responseObj.put("message", e.getMessage());
             builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
+		} catch (final Exception e) {
+			final Map<String, String> responseObj = new HashMap<String, String>();
+            responseObj.put("message", e.getMessage());
+            builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseObj);
 		}
 		return builder.build();
 	}
 	
 	@DELETE
 	@Path("{id}")
-	public void deleteConference(@PathParam("id") final long id) {
-		conferenceService.deleteConference(id);
+	public Response deleteConference(@PathParam("id") final long id) {
+		Response.ResponseBuilder builder;
+		try {
+			conferenceService.deleteConference(id);
+			
+			builder = Response.status(Response.Status.OK);
+		} catch (final Exception e) {
+			final Map<String, String> responseObj = new HashMap<String, String>();
+            responseObj.put("message", e.getMessage());
+            builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseObj);
+		}
+		return builder.build();
 	}
 }
