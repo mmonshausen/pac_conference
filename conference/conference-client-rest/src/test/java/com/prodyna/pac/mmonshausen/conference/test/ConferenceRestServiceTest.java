@@ -44,12 +44,8 @@ public class ConferenceRestServiceTest {
 
 		final WebArchive archive = ShrinkWrap
                 .create(WebArchive.class, "test.war")
-                .addPackages(true, "com/prodyna/pac/conference")
-                .addAsResource("META-INF/test-persistence.xml",
-                                "META-INF/persistence.xml")
-                .addAsResource("META-INF/test-beans.xml", "META-INF/beans.xml")
-                // Deploy our test datasource
-                .addAsWebInfResource("test-ds.xml", "test-ds.xml")
+                .addPackages(true, "com/prodyna/pac/mmonshausen/conference/")
+                .addAsResource("META-INF/beans.xml", "WEB-INF/beans.xml")
                 .addAsLibraries(libs);
 		return archive;
 	}
@@ -68,7 +64,7 @@ public class ConferenceRestServiceTest {
             // Get Service proxies.
             final ConferenceRestService confRestService = ProxyFactory
                             .create(ConferenceRestService.class,
-                                            contextPath.toString() + "conference");
+                                            contextPath.toString() + "rest/conference");
 
             // Create conference
             final Calendar startCal = new GregorianCalendar(2013, Calendar.DECEMBER, 24);
